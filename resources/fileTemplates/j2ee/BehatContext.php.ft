@@ -1,0 +1,11 @@
+<?php
+
+use Behat\Behat\Context\BehatContext;
+
+/**
+ * Features context.
+ */
+class ${CLASS_NAME} extends BehatContext
+{
+
+}

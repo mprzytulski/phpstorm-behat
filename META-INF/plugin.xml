@@ -58,18 +58,40 @@
                 text="Create new feature file">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
+        <action id="GenerateActionForStep" class="pl.projectspace.idea.plugins.php.behat.action.GenerateActionForStep"
+                text="Generate method for this step">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
     </actions>
 
+    <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
+        <cucumberJvmExtensionPoint implementation="pl.projectspace.idea.plugins.php.behat.CucumberJavaExtension"/>
+    </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
         <!--<projectConfigurable instance="pl.projectspace.idea.plugins.php.phpspec.SettingsForm"/>-->
 
-        <!--<php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.phpspec.code.type.provider.WrappedObjectTypeProvider"/>-->
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.PageObjectTypeProvider"/>
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.ContextTypeProvider"/>
 
         <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>
+        <psi.referenceContributor language="Gherkin" implementation="pl.projectspace.idea.plugins.php.behat.code.completion.reference.contributor.BehatReferenceContributor"/>
+        <referencesSearch implementation="pl.projectspace.idea.plugins.php.behat.code.completion.reference.contributor.BehatReferenceSearch"/>
+
+
+        <localInspection language="Gherkin" shortName="CucumberUndefinedStep" bundle="pl.projectspace.idea.plugins.php.behat.PhpCucumberBundle"
+                         key="cucumber.inspection.undefined.step.name" groupKey="cucumber.inspection.group.name" enabledByDefault="true" level="WARNING"
+                         implementationClass="org.jetbrains.plugins.cucumber.inspections.CucumberStepInspection" unfair="true"/>
+
+        <!--<localInspection language="PHP" shortName="CucumberJavaStepDefClassInDefaultPackage" displayName="Step definition class is in default package"-->
+                         <!--groupBundle="org.jetbrains.plugins.cucumber.java.CucumberJavaBundle" groupKey="cucumber.java.inspection.group.name" enabledByDefault="true"-->
+                         <!--level="WARNING" implementationClass="org.jetbrains.plugins.cucumber.java.inspections.CucumberJavaStepDefClassInDefaultPackageInspection"/>-->
+
         <!--<psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.phpspec.code.SpecReferenceContributor"/>-->
 
-        <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.phpspec.Settings"/>-->
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.StepResolver"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.ContextLocator"/>
         <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.phpspec.command.Locator" />-->
         <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.phpspec.command.Executor" />-->
 

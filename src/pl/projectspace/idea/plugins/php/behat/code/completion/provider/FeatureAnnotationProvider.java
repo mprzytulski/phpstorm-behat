@@ -42,8 +42,6 @@ public class FeatureAnnotationProvider extends CompletionProvider<CompletionPara
             return;
         }
 
-
-        System.out.println("annot");
         // agile annotations
         result.addElement(new AnnotationLookup("sprint:"));
 

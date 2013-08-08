@@ -1,5 +1,6 @@
 package pl.projectspace.idea.plugins.php.behat;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -14,11 +15,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.Method;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.cucumber.CucumberJvmExtensionPoint;
@@ -29,13 +32,16 @@ import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition;
 import org.jetbrains.plugins.cucumber.steps.CucumberStepsIndex;
 import pl.projectspace.idea.plugins.php.behat.code.generator.BehatStepCreator;
+import pl.projectspace.idea.plugins.php.behat.psi.BehatStepDefinition;
+import pl.projectspace.idea.plugins.php.behat.psi.element.BehatContextClass;
+import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
 
 import java.util.*;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class CucumberJavaExtension implements CucumberJvmExtensionPoint {
+public class BehatJavaExtension implements CucumberJvmExtensionPoint {
 
     public static final String CUCUMBER_RUNTIME_JAVA_STEP_DEF_ANNOTATION = "cucumber.runtime.java.StepDefAnnotation";
 
@@ -167,6 +173,22 @@ public class CucumberJavaExtension implements CucumberJvmExtensionPoint {
             }
         }
         return null;
+    }
+
+    public List<AbstractStepDefinition> loadStepsFor(@Nullable PsiFile featureFile, @NotNull Module module) {
+        final GlobalSearchScope dependenciesScope = module.getModuleWithDependenciesAndLibrariesScope(true);
+
+        final List<AbstractStepDefinition> result = new ArrayList<AbstractStepDefinition>();
+
+        Collection<BehatContextClass> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getContextClasses(featureFile.getProject());
+
+        for (BehatContextClass behatContext : contextClasses) {
+            for(BehatStepDefinition step : (behatContext).getStepDefinitions()) {
+                result.add(step);
+            }
+        }
+
+        return result;
     }
 
 }

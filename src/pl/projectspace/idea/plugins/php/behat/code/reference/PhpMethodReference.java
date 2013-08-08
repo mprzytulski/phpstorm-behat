@@ -1,12 +1,9 @@
-package pl.projectspace.idea.plugins.php.behat.code.completion.reference;
+package pl.projectspace.idea.plugins.php.behat.code.reference;
 
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.*;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.completion.PhpClassLookupElement;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,32 +14,24 @@ import java.util.List;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PhpClassReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class PhpMethodReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
 
-    private String classFQN;
+    private String methodFQN;
     private boolean provideVariants = false;
 
-//    public PhpClassReference(@NotNull StringLiteralExpression element) {
-//        super(element);
-//        this.classFQN = PsiElementUtils.getMethodParameter(element);
-//    }
-
-    public PhpClassReference(@NotNull PsiElement element, String classFQN) {
+    public PhpMethodReference(@NotNull PsiElement element, String methodFQN) {
         super(element);
-        this.classFQN = classFQN;
+        this.methodFQN = methodFQN;
     }
-
-//    public PhpClassReference(@NotNull StringLiteralExpression element, boolean provideVariants) {
-//        this(element);
-//        this.provideVariants = provideVariants;
-//    }
 
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
 
+        System.out.println(methodFQN);
+
         PhpIndex phpIndex = PhpIndex.getInstance(getElement().getProject());
-        Collection<PhpClass> phpClasses = phpIndex.getClassesByFQN(classFQN);
+        Collection<PhpClass> phpClasses = phpIndex.getClassesByFQN(methodFQN);
 
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (PhpClass phpClass : phpClasses) {
@@ -72,12 +61,12 @@ public class PhpClassReference extends PsiReferenceBase<PsiElement> implements P
         }
 
         PhpIndex phpIndex = PhpIndex.getInstance(this.getElement().getProject());
-        for (String name : phpIndex.getAllClassNames(new CamelHumpMatcher(this.classFQN))) {
-            Collection<PhpClass> classes = phpIndex.getClassesByName(name);
-            for(PhpClass phpClass: classes) {
-                results.add(new PhpClassLookupElement(phpClass, true, PhpClassReferenceInsertHandler.getInstance()));
-            }
-        }
+//        for (String name : phpIndex.getAllClassNames(new CamelHumpMatcher(this.methodFQN))) {
+//            Collection<PhpClass> classes = phpIndex.getClassesByName(name);
+//            for(PhpClass phpClass: classes) {
+//                results.add(new PhpClassLookupElement(phpClass, true, PhpClassReferenceInsertHandler.getInstance()));
+//            }
+//        }
 
         return results.toArray();
     }

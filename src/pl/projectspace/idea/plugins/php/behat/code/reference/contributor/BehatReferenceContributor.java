@@ -1,10 +1,11 @@
-package pl.projectspace.idea.plugins.php.behat.code.completion.reference.contributor;
+package pl.projectspace.idea.plugins.php.behat.code.reference.contributor;
 
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceRegistrar;
+import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import org.jetbrains.plugins.cucumber.psi.GherkinTokenTypes;
-import pl.projectspace.idea.plugins.php.behat.code.completion.reference.provider.BehatStepScenarioReferenceProvider;
+import pl.projectspace.idea.plugins.php.behat.code.reference.provider.BehatStepScenarioReferenceProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -12,10 +13,10 @@ import pl.projectspace.idea.plugins.php.behat.code.completion.reference.provider
 public class BehatReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-        System.out.println("registry");
+//        System.out.println("registry");
 
         registrar.registerReferenceProvider(
-            PlatformPatterns.psiElement(),
+            PlatformPatterns.psiElement(GherkinStep.class),
             new BehatStepScenarioReferenceProvider()
         );
     }

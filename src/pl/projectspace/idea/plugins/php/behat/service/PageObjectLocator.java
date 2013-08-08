@@ -5,6 +5,7 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -33,6 +34,10 @@ public class PageObjectLocator {
             }
         }
         return null;
+    }
+
+    public Collection<PhpClass> getPages(Project project) {
+        return PhpIndex.getInstance(project).getAllSubclasses(PAGE_OBJECT_PAGE_CLASS);
     }
 
 }

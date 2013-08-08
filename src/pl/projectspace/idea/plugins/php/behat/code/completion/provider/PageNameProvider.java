@@ -53,6 +53,7 @@ public class PageNameProvider extends CompletionProvider<CompletionParameters>
             return;
         }
 
+
         if (!method.getName().equalsIgnoreCase("getPage")) {
             return;
         }

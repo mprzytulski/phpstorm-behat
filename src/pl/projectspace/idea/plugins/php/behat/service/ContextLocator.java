@@ -31,7 +31,7 @@ public class ContextLocator {
         Collection<BehatContextClass> contextClasses = new ArrayList<BehatContextClass>();
 
         for(PhpClass c : index.getAllSubclasses(BASE_CONTEXT_CLASS)) {
-            contextClasses.add((BehatContextClass) c);
+            contextClasses.add(new BehatContextClass(c));
         }
 
         return contextClasses;
@@ -44,12 +44,12 @@ public class ContextLocator {
             return null;
         }
 
-        for (PhpClass context : getContextClasses(phpClass.getProject())) {
-            PhpFile file = (PhpFile)PsiTreeUtil.getParentOfType(context, PhpFile.class);
+        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
+            PhpFile file = (PhpFile)PsiTreeUtil.getParentOfType(context.getPhpClass(), PhpFile.class);
 
             HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
 
-            getReferences(getUseContextMethod(phpClass), context, references);
+            getReferences(getUseContextMethod(phpClass), context.getPhpClass(), references);
 
             for (ClassReference r : references.values()) {
                 if (r.getFQN().equals(phpClass.getFQN())) {
@@ -115,10 +115,10 @@ public class ContextLocator {
             return null;
         }
 
-        for (PhpClass context : getContextClasses(phpClass.getProject())) {
+        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
             HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
 
-            getReferences(getUseContextMethod(phpClass), context, references);
+            getReferences(getUseContextMethod(phpClass), context.getPhpClass(), references);
 
             for (String contextName : references.keySet()) {
                 if (contextName.equals(alias)) {
@@ -146,9 +146,9 @@ public class ContextLocator {
 
         HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
 
-        for (PhpClass context : getContextClasses(phpClass.getProject())) {
+        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
 
-            getReferences(getUseContextMethod(phpClass), context, references);
+            getReferences(getUseContextMethod(phpClass), context.getPhpClass(), references);
         }
 
         return references;

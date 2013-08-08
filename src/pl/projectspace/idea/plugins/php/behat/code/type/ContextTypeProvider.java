@@ -6,10 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.ParameterList;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.PhpNamedElement;
+import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
 import org.jetbrains.annotations.Nullable;
@@ -43,38 +40,15 @@ public class ContextTypeProvider implements PhpTypeProvider2 {
 
             String type = null;
 
-            if (method.getName().equals("getMainContext")) {
+            if (method.getName().equalsIgnoreCase("getMainContext")) {
                 type = getMainContextType(method);
-            }
-            else if (method.getName().equals("getSubContext")) {
+            } else if (method.getName().equalsIgnoreCase("getSubContext")) {
                 type = getSubContextType(method);
+            } else if (method.getName().equalsIgnoreCase("getSubcontextByClassName")) {
+                type = getSubContextTypeByClassName(method);
             }
 
             return type;
-
-//            PhpClass phpClass = PsiTreeUtil.getContextOfType(psiElement, PhpClass.class, false);
-//
-//            PageObjectLocator locator = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class);
-//
-//            if (!locator.isPageObjectContext(phpClass)) {
-//                return null;
-//            }
-//
-//            ParameterList parameters = method.getParameterList();
-//            if (parameters == null || parameters.getFirstPsiChild() == null) {
-//                return null;
-//            }
-//
-//            PsiElement[] params = parameters.getParameters();
-//            StringLiteralExpressionImpl param = (StringLiteralExpressionImpl) params[0];
-//
-//            PhpClass returnType = locator.getPageObjectClass(psiElement.getProject(), param.getContents());
-//
-//            if (returnType == null) {
-//                return null;
-//            }
-//
-//            return returnType.getFQN();
         }
 
         return null;
@@ -104,7 +78,39 @@ public class ContextTypeProvider implements PhpTypeProvider2 {
     }
 
     private String getSubContextType(MethodReference method) {
-        return null;
+        PhpClass methodOwner = getClassForMethod(method);
+
+        if (method.getParameters().length == 0) {
+            return null;
+        }
+
+        ContextLocator locator = ServiceManager
+                .getService(method.getProject(), ContextLocator.class);
+
+        StringLiteralExpression name = (StringLiteralExpression) method.getParameters()[0];
+
+        PhpClass context = locator.getSubContextFor(methodOwner, name.getContents());
+
+        if (context == null) {
+            return null;
+        }
+
+        return context.getFQN();
+    }
+
+    private String getSubContextTypeByClassName(MethodReference method) {
+        if (method.getParameters().length == 0) {
+            return null;
+        }
+        StringLiteralExpression name = (StringLiteralExpression) method.getParameters()[0];
+
+        Collection<PhpClass> contextClasses = PhpIndex.getInstance(method.getProject()).getClassesByName(name.getContents());
+
+        if (contextClasses.isEmpty()) {
+            return null;
+        }
+
+        return contextClasses.iterator().next().getFQN();
     }
 
     private PhpClass getClassForMethod(MethodReference method) {

@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.code.completion.reference;
+package pl.projectspace.idea.plugins.php.behat.code.reference;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;

@@ -49,12 +49,7 @@ public class PageNameProvider extends CompletionProvider<CompletionParameters>
             return;
         }
 
-        if (!ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isContextClass(phpClass)) {
-            return;
-        }
-
-
-        if (!method.getName().equalsIgnoreCase("getPage")) {
+        if (!isCorrectContext(phpClass, method)) {
             return;
         }
 
@@ -63,5 +58,24 @@ public class PageNameProvider extends CompletionProvider<CompletionParameters>
         for (PhpClass page : pages) {
             result.addElement(new AnnotationLookup(page.getName()));
         }
+    }
+
+    private boolean isCorrectContext(PhpClass phpClass, MethodReference method) {
+        if (!ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isContextClass(phpClass)) {
+            return false;
+        }
+
+        if (!method.getName().equalsIgnoreCase("getPage")) {
+            return false;
+        }
+
+        PhpClass tmpSuperClass = phpClass.getSuperClass();
+        do {
+            if (tmpSuperClass.getName().equalsIgnoreCase("BehatContext")) {
+                return true;
+            }
+        } while ((tmpSuperClass = tmpSuperClass.getSuperClass()) != null);
+
+        return false;
     }
 }

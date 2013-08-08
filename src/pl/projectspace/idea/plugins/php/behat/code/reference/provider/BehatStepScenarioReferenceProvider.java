@@ -44,39 +44,18 @@ public class BehatStepScenarioReferenceProvider extends PsiReferenceProvider {
 
         ArrayList<PsiReference> references = new ArrayList<PsiReference>();
 
-        for (BehatContextClass behatContext : contextList) {
-
-            for (BehatStepDefinition behatStep : behatContext.getStepDefinitions()) {
-                if (behatStep.isImplementationOf(step)) {
-                    references.add(new PhpClassReference((PsiElement) behatContext, behatContext.getFQN()));
-                }
-            }
-
-//            Collection<Method> methods = phpClass.getMethods();
-//            for (Method method : methods) {
-//                if (!method.getAccess().isPublic()) {
-//                    continue;
-//                }
+//        for (BehatContextClass behatContext : contextList) {
 //
-//                PhpDocComment comment = method.getDocComment();
-//                PhpDocTag[] tags = comment.getTagElementsByName("@" + step.getKeyword().getText());
-//                if (tags.length > 0) {
-//                    String clean = "^(" + step.getKeyword().getText() + "\\s*)";
-//                    String stepText = element.getText().replaceAll(clean, "").trim();
-//                                        w
-//                    for (PhpDocTag tag : tags) {
-//                        d
-//                        if (stepText.matches(matcher)) {
-//                            System.out.println(method.getFQN());
-//
-////                            PhpClassReference r = new PhpClassReference(element, phpClass.getFQN());
-////
-////                            references.add(r);
-//                        }
-//                    }
+//            for (BehatStepDefinition behatStep : behatContext.getStepDefinitions()) {
+//                if (behatStep.isImplementationOf(step)) {
+//                    references.add(new PhpClassReference((PsiElement) behatContext.getPhpClass(), behatContext.getPhpClass().getFQN()));
 //                }
 //            }
-        }
+//        }
+
+//        references.add(element);
+
+        System.out.println(references.size());
 
         return references.toArray(new PsiReference[references.size()]);
     }

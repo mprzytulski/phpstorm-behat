@@ -13,8 +13,6 @@ import pl.projectspace.idea.plugins.php.behat.code.reference.provider.BehatStepS
 public class BehatReferenceContributor extends PsiReferenceContributor {
     @Override
     public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-//        System.out.println("registry");
-
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(GherkinStep.class),
             new BehatStepScenarioReferenceProvider()

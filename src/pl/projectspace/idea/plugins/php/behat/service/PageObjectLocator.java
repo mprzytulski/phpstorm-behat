@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectLocator {
+public class PageObjectLocator extends ProjectRelatedService{
 
     private final static String PAGE_OBJECT_CONTEXT_CLASS = "\\SensioLabs\\Behat\\PageObjectExtension\\Context\\PageObjectContext";
 
@@ -25,8 +25,8 @@ public class PageObjectLocator {
         return false;
     }
 
-    public PhpClass getPageObjectClass(Project project, String name) {
-        Collection<PhpClass> pages = PhpIndex.getInstance(project).getAllSubclasses(PAGE_OBJECT_PAGE_CLASS);
+    public PhpClass getPageObjectClass(String name) {
+        Collection<PhpClass> pages = index.getAllSubclasses(PAGE_OBJECT_PAGE_CLASS);
 
         for (PhpClass page : pages) {
             if (page.getName().equals(name)) {
@@ -36,8 +36,20 @@ public class PageObjectLocator {
         return null;
     }
 
-    public Collection<PhpClass> getPages(Project project) {
-        return PhpIndex.getInstance(project).getAllSubclasses(PAGE_OBJECT_PAGE_CLASS);
+    public Collection<PhpClass> getPages() {
+        return index.getAllSubclasses(PAGE_OBJECT_PAGE_CLASS);
     }
 
+    public boolean isPage(String name) {
+        return (getPage(name) != null);
+    }
+
+    public PhpClass getPage(String name) {
+        for (PhpClass page : getPages()) {
+            if (page.getName().equals(name)) {
+                return page;
+            }
+        }
+        return null;
+    }
 }

@@ -1,33 +1,25 @@
 package pl.projectspace.idea.plugins.php.behat.service;
 
-import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Queryable;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.findUsages.PhpFindUsagesHandlerFactory;
-import com.jetbrains.php.lang.findUsages.PhpFindUsagesProvider;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.*;
 import pl.projectspace.idea.plugins.php.behat.psi.element.BehatContextClass;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class ContextLocator {
+public class ContextLocator extends ProjectRelatedService {
 
     public static final String BASE_CONTEXT_CLASS = "\\Behat\\Behat\\Context\\BehatContext";
 
-    public Collection<BehatContextClass> getContextClasses(Project project){
-        final PhpIndex index = PhpIndex.getInstance(project);
-
+    public Collection<BehatContextClass> getContextClasses(){
         Collection<BehatContextClass> contextClasses = new ArrayList<BehatContextClass>();
 
         for(PhpClass c : index.getAllSubclasses(BASE_CONTEXT_CLASS)) {
@@ -44,7 +36,7 @@ public class ContextLocator {
             return null;
         }
 
-        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
+        for (BehatContextClass context : getContextClasses()) {
             PhpFile file = (PhpFile)PsiTreeUtil.getParentOfType(context.getPhpClass(), PhpFile.class);
 
             HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
@@ -53,7 +45,7 @@ public class ContextLocator {
 
             for (ClassReference r : references.values()) {
                 if (r.getFQN().equals(phpClass.getFQN())) {
-                    Collection<PhpClass> contextClasses = PhpIndex.getInstance(phpClass.getProject()).getClassesByFQN(r.getFQN());
+                    Collection<PhpClass> contextClasses = index.getClassesByFQN(r.getFQN());
 
                     if (contextClasses.isEmpty()) {
                         return null;
@@ -115,15 +107,14 @@ public class ContextLocator {
             return null;
         }
 
-        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
+        for (BehatContextClass context : getContextClasses()) {
             HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
 
             getReferences(getUseContextMethod(phpClass), context.getPhpClass(), references);
 
             for (String contextName : references.keySet()) {
                 if (contextName.equals(alias)) {
-                    Collection<PhpClass> contextClasses = PhpIndex.getInstance(phpClass.getProject())
-                        .getClassesByFQN(references.get(alias).getFQN());
+                    Collection<PhpClass> contextClasses = index.getClassesByFQN(references.get(alias).getFQN());
 
                     if (contextClasses.isEmpty()) {
                         return null;
@@ -146,7 +137,7 @@ public class ContextLocator {
 
         HashMap<String, ClassReference> references = new HashMap<String, ClassReference>();
 
-        for (BehatContextClass context : getContextClasses(phpClass.getProject())) {
+        for (BehatContextClass context : getContextClasses()) {
 
             getReferences(getUseContextMethod(phpClass), context.getPhpClass(), references);
         }
@@ -197,7 +188,7 @@ public class ContextLocator {
     }
 
     private PhpClass getBaseContextClass(Project project) {
-        Collection<PhpClass> baseClasses = PhpIndex.getInstance(project).getClassesByFQN(BASE_CONTEXT_CLASS);
+        Collection<PhpClass> baseClasses = index.getClassesByFQN(BASE_CONTEXT_CLASS);
         if (baseClasses.isEmpty()) {
             return null;
         }

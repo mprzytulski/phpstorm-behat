@@ -57,7 +57,7 @@ public class PageObjectTypeProvider implements PhpTypeProvider2 {
             PsiElement[] params = parameters.getParameters();
             StringLiteralExpressionImpl param = (StringLiteralExpressionImpl) params[0];
 
-            PhpClass returnType = locator.getPageObjectClass(psiElement.getProject(), param.getContents());
+            PhpClass returnType = locator.getPageObjectClass(param.getContents());
 
             if (returnType == null) {
                 return null;

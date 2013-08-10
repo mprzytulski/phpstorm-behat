@@ -58,7 +58,12 @@ public class PageNameProvider extends CompletionProvider<CompletionParameters>
             return;
         }
 
-        Collection<PhpClass> pages = ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).getPages(phpClass.getProject());
+//        PsiElement e = method.getPrevSibling();
+//        PsiElement e = method.getParent();
+//        PsiElement e1 = e.getPrevSibling();
+//        PsiElement e2 = e.getParent();
+
+        Collection<PhpClass> pages = ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).getPages();
 
         for (PhpClass page : pages) {
             result.addElement(new AnnotationLookup(page.getName()));

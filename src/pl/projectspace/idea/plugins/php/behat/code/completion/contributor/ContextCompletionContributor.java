@@ -17,7 +17,7 @@ import pl.projectspace.idea.plugins.php.behat.code.completion.provider.ContextAn
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.ContextNameProvider;
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.PageNameProvider;
 
-//import org.jetbrains.plugins.cucumber.psi.GherkinTokenTypes;
+//import org.jetbrains.plugins.cucumber.pl.projectspace.idea.plugins.commons.psi.GherkinTokenTypes;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

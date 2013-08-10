@@ -180,7 +180,7 @@ public class BehatJavaExtension implements CucumberJvmExtensionPoint {
 
         final List<AbstractStepDefinition> result = new ArrayList<AbstractStepDefinition>();
 
-        Collection<BehatContextClass> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getContextClasses(featureFile.getProject());
+        Collection<BehatContextClass> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getContextClasses();
 
         for (BehatContextClass behatContext : contextClasses) {
             for(BehatStepDefinition step : (behatContext).getStepDefinitions()) {

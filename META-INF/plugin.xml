@@ -98,9 +98,13 @@
 
         <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor" />
 
-        <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="WARNING"
+        <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
                          implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageNameInspection"
                          displayName="Missing page with given name" />
+
+        <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubcontextNameInspection"
+                         displayName="Missing subcontext with given name" />
 
         <!--<localInspection language="Gherkin" shortName="CucumberUndefinedStep" bundle="pl.projectspace.idea.plugins.php.behat.PhpCucumberBundle"-->
                          <!--key="cucumber.inspection.undefined.step.name" groupKey="cucumber.inspection.group.name" enabledByDefault="true" level="WARNING"-->

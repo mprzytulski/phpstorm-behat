@@ -9,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
 import com.jetbrains.php.lang.psi.stubs.PhpClassStub;
 import org.apache.commons.lang.ArrayUtils;
+import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
 import pl.projectspace.idea.plugins.php.behat.code.generator.BehatStepCreator;
 import pl.projectspace.idea.plugins.php.behat.psi.BehatStepDefinition;
@@ -34,7 +35,6 @@ public class BehatContextClass {
         ArrayList<BehatStepDefinition> list = new ArrayList<BehatStepDefinition>();
 
         for (Method method : this.phpClass.getMethods()) {
-            PhpDocComment comment = null;
             for(PsiElement def : getStepsFrom(method.getDocComment())) {
                 System.out.println(def.getText());
                 list.add(new BehatStepDefinition(def));
@@ -59,5 +59,15 @@ public class BehatContextClass {
 
     public PhpClass getPhpClass() {
         return this.phpClass;
+    }
+
+    public BehatStepDefinition getStepDefinitionFor(GherkinStep step) {
+        for (BehatStepDefinition definition : getStepDefinitions()) {
+            if (definition.isImplementationOf(step)) {
+                return definition;
+            }
+        }
+
+        return null;
     }
 }

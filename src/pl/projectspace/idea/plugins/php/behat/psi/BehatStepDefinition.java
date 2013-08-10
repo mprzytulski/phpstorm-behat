@@ -33,15 +33,19 @@ public class BehatStepDefinition extends AbstractStepDefinition {
     }
 
 
-    public static BehatStepDefinition getStepDefinition(final Method statement) {
-        return CachedValuesManager.getManager(statement.getProject()).getCachedValue(statement, new CachedValueProvider<BehatStepDefinition>() {
-            @Nullable
-            @Override
-            public Result<BehatStepDefinition> compute() {
-                final Document document = PsiDocumentManager.getInstance(statement.getProject()).getDocument(statement.getContainingFile());
-                return Result.create(new BehatStepDefinition(statement), document);
-            }
-        });
+//    public static BehatStepDefinition getStepDefinition(final Method statement) {
+//        return CachedValuesManager.getManager(statement.getProject()).getCachedValue(statement, new CachedValueProvider<BehatStepDefinition>() {
+//            @Nullable
+//            @Override
+//            public Result<BehatStepDefinition> compute() {
+//                final Document document = PsiDocumentManager.getInstance(statement.getProject()).getDocument(statement.getContainingFile());
+//                return Result.create(new BehatStepDefinition(statement), document);
+//            }
+//        });
+//    }
+
+    public PsiElement getImplementation(final GherkinStep step) {
+        return null;
     }
 
     public boolean isImplementationOf(GherkinStep step) {

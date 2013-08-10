@@ -42,9 +42,9 @@
   </application-components>
 
     <project-components>
-        <!--<component>-->
-            <!--<implementation-class>pl.projectspace.idea.plugins.php.phpspec.PhpSpecProjectComponent</implementation-class>-->
-        <!--</component>-->
+        <component>
+            <implementation-class>pl.projectspace.idea.plugins.php.behat.BehatProjectComponent</implementation-class>
+        </component>
     </project-components>
 
     <actions>
@@ -91,10 +91,16 @@
         <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>
         <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.ContextCompletionContributor"/>
 
-        <psi.referenceContributor language="Gherkin" implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor"/>
+        <!--<pl.projectspace.idea.plugins.commons.psi.referenceContributor language="Gherkin" implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor"/>-->
 
         <!--<referencesSearch implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceSearch"/>-->
 
+
+        <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor" />
+
+        <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="WARNING"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageNameInspection"
+                         displayName="Missing page with given name" />
 
         <!--<localInspection language="Gherkin" shortName="CucumberUndefinedStep" bundle="pl.projectspace.idea.plugins.php.behat.PhpCucumberBundle"-->
                          <!--key="cucumber.inspection.undefined.step.name" groupKey="cucumber.inspection.group.name" enabledByDefault="true" level="WARNING"-->
@@ -111,4 +117,5 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>cucumber</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>fr.adrienbrault.idea.symfony2plugin</depends>
 </idea-plugin>

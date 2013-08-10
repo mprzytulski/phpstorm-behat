@@ -1,16 +1,23 @@
 package pl.projectspace.idea.plugins.php.behat.service;
 
+import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Queryable;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.lang.findUsages.PhpFindUsagesHandlerFactory;
+import com.jetbrains.php.lang.findUsages.PhpFindUsagesProvider;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.*;
+import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.psi.element.BehatContextClass;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -89,7 +96,7 @@ public class ContextLocator extends ProjectRelatedService {
         }
     }
 
-    private boolean isMethod(PsiElement element, Method method) {
+    private boolean isMethod(@NotNull PsiElement element, @NotNull Method method) {
         if (element instanceof Method) {
             return ((Method)element).getName().equals(method.getName());
         }

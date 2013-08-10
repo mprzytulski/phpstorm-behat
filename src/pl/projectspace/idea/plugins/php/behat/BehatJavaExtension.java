@@ -21,7 +21,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.Method;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.cucumber.CucumberJvmExtensionPoint;
@@ -32,8 +31,8 @@ import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition;
 import org.jetbrains.plugins.cucumber.steps.CucumberStepsIndex;
 import pl.projectspace.idea.plugins.php.behat.code.generator.BehatStepCreator;
-import pl.projectspace.idea.plugins.php.behat.psi.BehatStepDefinition;
 import pl.projectspace.idea.plugins.php.behat.psi.element.BehatContextClass;
+import pl.projectspace.idea.plugins.php.behat.psi.element.BehatStepImplementation;
 import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
 
 import java.util.*;
@@ -175,16 +174,16 @@ public class BehatJavaExtension implements CucumberJvmExtensionPoint {
         return null;
     }
 
-    public List<AbstractStepDefinition> loadStepsFor(@Nullable PsiFile featureFile, @NotNull Module module) {
+    public List<GherkinStep> loadStepsFor(@Nullable PsiFile featureFile, @NotNull Module module) {
         final GlobalSearchScope dependenciesScope = module.getModuleWithDependenciesAndLibrariesScope(true);
 
-        final List<AbstractStepDefinition> result = new ArrayList<AbstractStepDefinition>();
+        final List<GherkinStep> result = new ArrayList<GherkinStep>();
 
         Collection<BehatContextClass> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getContextClasses();
 
         for (BehatContextClass behatContext : contextClasses) {
-            for(BehatStepDefinition step : (behatContext).getStepDefinitions()) {
-                result.add(step);
+            for(BehatStepImplementation step : (behatContext).getStepImplementations()) {
+                result.add(step.getDefinition());
             }
         }
 

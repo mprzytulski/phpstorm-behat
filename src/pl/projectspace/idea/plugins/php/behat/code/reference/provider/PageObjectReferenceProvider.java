@@ -8,7 +8,6 @@ import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.commons.psi.PhpClassReference;
 import pl.projectspace.idea.plugins.php.behat.psi.referene.PageObjectReference;
 import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
 

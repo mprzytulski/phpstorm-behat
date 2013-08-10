@@ -11,7 +11,6 @@ import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.psi.referene.PageObjectReference;
 import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
-import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>

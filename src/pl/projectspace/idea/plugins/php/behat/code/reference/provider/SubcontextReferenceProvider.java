@@ -28,12 +28,14 @@ public class SubcontextReferenceProvider extends PsiReferenceProvider {
 
         PhpClass mainContext = locator.getMainContextFor(PsiTreeUtil.getParentOfType(psiElement, PhpClass.class));
 
-        if (mainContext != null) {
-            subcontext = locator.getSubContextFor(
-                locator.getMainContextFor(PsiTreeUtil.getParentOfType(psiElement, PhpClass.class)),
-                name
-            );
+        if (mainContext == null) {
+            return new PsiReference[0];
         }
+
+        subcontext = locator.getSubContextFor(
+            locator.getMainContextFor(PsiTreeUtil.getParentOfType(psiElement, PhpClass.class)),
+            name
+        );
 
         PsiReference[] ref = { new PageObjectReference(subcontext, (StringLiteralExpressionImpl) psiElement) };
 

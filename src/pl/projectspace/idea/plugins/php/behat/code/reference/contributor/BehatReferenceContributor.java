@@ -9,6 +9,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.reference.provider.BehatStepReferenceProvider;
 import pl.projectspace.idea.plugins.php.behat.code.reference.provider.PageObjectReferenceProvider;
+import pl.projectspace.idea.plugins.php.behat.code.reference.provider.SubcontextReferenceProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -26,6 +27,13 @@ public class BehatReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(PhpLanguage.INSTANCE)
                 .withParent(ParameterList.class),
             new PageObjectReferenceProvider()
+        );
+
+        registrar.registerReferenceProvider(
+            PlatformPatterns.psiElement(StringLiteralExpression.class)
+                .withLanguage(PhpLanguage.INSTANCE)
+                .withParent(ParameterList.class),
+            new SubcontextReferenceProvider()
         );
     }
 }

@@ -117,5 +117,4 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>cucumber</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
-    <depends>fr.adrienbrault.idea.symfony2plugin</depends>
 </idea-plugin>

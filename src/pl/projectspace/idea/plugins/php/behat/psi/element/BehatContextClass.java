@@ -1,22 +1,16 @@
 package pl.projectspace.idea.plugins.php.behat.psi.element;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.elements.Method;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.impl.PhpClassImpl;
-import com.jetbrains.php.lang.psi.stubs.PhpClassStub;
-import org.apache.commons.lang.ArrayUtils;
+import org.jetbrains.plugins.cucumber.psi.GherkinPsiUtil;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
+import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
-import pl.projectspace.idea.plugins.php.behat.code.generator.BehatStepCreator;
-import pl.projectspace.idea.plugins.php.behat.psi.BehatStepDefinition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,25 +21,42 @@ public class BehatContextClass {
     private PhpClass phpClass;
 
     public BehatContextClass(PhpClass phpClass) {
-
         this.phpClass = phpClass;
     }
 
-    public List<BehatStepDefinition> getStepDefinitions() {
-        ArrayList<BehatStepDefinition> list = new ArrayList<BehatStepDefinition>();
+    public List<BehatStepImplementation> getStepImplementations() {
+        ArrayList<BehatStepImplementation> list = new ArrayList<BehatStepImplementation>();
 
         for (Method method : this.phpClass.getMethods()) {
-            for(PsiElement def : getStepsFrom(method.getDocComment())) {
-                System.out.println(def.getText());
-                list.add(new BehatStepDefinition(def));
+            if (!BehatStepImplementation.isStepImplementation(method)) {
+                continue;
+            }
+
+            for(PhpDocTag def : getStepsFrom(method.getDocComment())) {
+                list.add(new BehatStepImplementation(method));
             }
         }
 
         return list;
     }
 
-    private List<PsiElement> getStepsFrom(PhpDocComment comment) {
-        ArrayList<PsiElement> elements = new ArrayList<PsiElement>();
+    public PhpClass getPhpClass() {
+        return this.phpClass;
+    }
+
+    public BehatStepImplementation getStepImplementation(GherkinStep step) {
+        for (BehatStepImplementation implementation : getStepImplementations()) {
+            if (implementation.isImplementationOf(step)) {
+                implementation.setDefinition(step);
+                return implementation;
+            }
+        }
+
+        return null;
+    }
+
+    private List<PhpDocTag> getStepsFrom(PhpDocComment comment) {
+        ArrayList<PhpDocTag> elements = new ArrayList<PhpDocTag>();
         for (String step : BehatAnnotation.step) {
             if (comment == null) {
                 continue;
@@ -55,19 +66,5 @@ public class BehatContextClass {
         }
 
         return elements;
-    }
-
-    public PhpClass getPhpClass() {
-        return this.phpClass;
-    }
-
-    public BehatStepDefinition getStepDefinitionFor(GherkinStep step) {
-        for (BehatStepDefinition definition : getStepDefinitions()) {
-            if (definition.isImplementationOf(step)) {
-                return definition;
-            }
-        }
-
-        return null;
     }
 }

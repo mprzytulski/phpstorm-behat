@@ -4,9 +4,6 @@ import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiFile;
-import pl.projectspace.idea.plugins.php.behat.service.StepResolver;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

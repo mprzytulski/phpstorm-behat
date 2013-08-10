@@ -24,7 +24,7 @@ public class PhpMethodReference implements PsiReference {
     private PsiElement method;
     private PsiElement name;
 
-    public PhpMethodReference(Method method, final PsiElement name) {
+    public PhpMethodReference(@NotNull Method method, @NotNull final PsiElement name) {
         this.method = method;
         this.name = name;
     }

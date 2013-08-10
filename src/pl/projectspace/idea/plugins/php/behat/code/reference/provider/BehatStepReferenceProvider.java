@@ -44,8 +44,6 @@ public class BehatStepReferenceProvider extends PsiReferenceProvider {
             }
         }
 
-        System.out.println(references.size());
-
         return references.toArray(new PsiReference[references.size()]);
     }
 }

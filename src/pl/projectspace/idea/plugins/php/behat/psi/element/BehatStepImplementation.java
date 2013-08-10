@@ -37,10 +37,8 @@ public class BehatStepImplementation {
 
     public boolean isImplementationOf(GherkinStep step) {
         for (PhpDocTag tag : getStepsFrom(method.getDocComment())) {
-            System.out.println(tag.getTagValue());
             String pattern = tag.getTagValue().replaceAll("(\\?P<[^>]+>)", "");
             pattern = pattern.substring(1, pattern.length()-1);
-            System.out.println(pattern);
             if (step.getSubstitutedName().matches(pattern)) {
                 return true;
             }

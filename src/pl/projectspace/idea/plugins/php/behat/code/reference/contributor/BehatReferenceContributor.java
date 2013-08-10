@@ -11,6 +11,7 @@ import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import org.jetbrains.plugins.cucumber.psi.GherkinTokenTypes;
 import pl.projectspace.idea.plugins.php.behat.code.reference.provider.BehatStepScenarioReferenceProvider;
 import pl.projectspace.idea.plugins.php.behat.code.reference.provider.PageObjectReferenceProvider;
+import pl.projectspace.idea.plugins.php.behat.code.reference.provider.SubcontextReferenceProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -28,6 +29,13 @@ public class BehatReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(PhpLanguage.INSTANCE)
                 .withParent(ParameterList.class),
             new PageObjectReferenceProvider()
+        );
+
+        registrar.registerReferenceProvider(
+            PlatformPatterns.psiElement(StringLiteralExpression.class)
+                .withLanguage(PhpLanguage.INSTANCE)
+                .withParent(ParameterList.class),
+            new SubcontextReferenceProvider()
         );
     }
 }

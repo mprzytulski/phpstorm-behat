@@ -12,7 +12,7 @@ import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
 import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.step.BehatStepImplementation;
+import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
 
 import java.util.*;
@@ -30,28 +30,28 @@ public class BehatContext extends PhpClassDecorator {
         locator = ServiceManager.getService(phpClass.getProject(), ContextLocator.class);
     }
 
-    public List<BehatStepImplementation> getStepImplementations() {
-        ArrayList<BehatStepImplementation> list = new ArrayList<BehatStepImplementation>();
+    public List<BehatStep> getStepImplementations() {
+        ArrayList<BehatStep> list = new ArrayList<BehatStep>();
 
         for (Method method : this.phpClass.getMethods()) {
-            if (!BehatStepImplementation.isStepImplementation(method)) {
+            if (!BehatStep.isStepImplementation(method)) {
                 continue;
             }
 
             for(PhpDocTag def : getStepsFrom(method.getDocComment())) {
-                list.add(new BehatStepImplementation(method));
+                list.add(new BehatStep(method));
             }
         }
 
         return list;
     }
 
-    public BehatStepImplementation getStepImplementation(GherkinStep step) {
-        for (BehatStepImplementation implementation : getStepImplementations()) {
-            if (implementation.isImplementationOf(step)) {
-                implementation.setDefinition(step);
-                return implementation;
-            }
+    public BehatStep getStepImplementation(GherkinStep step) {
+        for (BehatStep implementation : getStepImplementations()) {
+//            if (implementation.isImplementationOf(step)) {
+//                implementation.setDefinition(step);
+//                return implementation;
+//            }
         }
 
         return null;

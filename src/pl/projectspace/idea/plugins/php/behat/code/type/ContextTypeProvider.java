@@ -86,10 +86,10 @@ public class ContextTypeProvider extends AbstractClassTypeProvider {
         }
 
         StringLiteralExpression name = (StringLiteralExpression) parameters[0];
-        BehatContext behatContext = new BehatContext(parentContext);
+        BehatContext behatStep = new BehatContext(parentContext);
 
         BehatContext subContext = null;
-        if ((subContext = behatContext.getSubContext(name.getContents())) == null) {
+        if ((subContext = behatStep.getSubContext(name.getContents())) == null) {
             return null;
         }
 

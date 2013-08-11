@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 public class PhpClassReference implements PsiReference {
 
     private PsiElement reference;
-    private StringLiteralExpression element;
+    private PsiElement element;
 
-    public PhpClassReference(PsiElement reference, StringLiteralExpression element)
+    public PhpClassReference(PsiElement reference, PsiElement element)
     {
         this.reference = reference;
         this.element = element;
@@ -50,7 +50,7 @@ public class PhpClassReference implements PsiReference {
     @NotNull
     @Override
     public String getCanonicalText() {
-        return this.element.getContents();
+        return ((StringLiteralExpression)this.element).getContents();
     }
 
     /**
@@ -80,7 +80,7 @@ public class PhpClassReference implements PsiReference {
     @Override
     public boolean isReferenceTo(PsiElement element) {
         if (element instanceof PhpClass) {
-            ((PhpClass) element).getName().equals(this.element.getContents());
+            ((PhpClass) element).getName().equals(((StringLiteralExpression)this.element).getContents());
         }
         return false;
     }

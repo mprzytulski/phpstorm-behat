@@ -2,7 +2,7 @@ package pl.projectspace.idea.plugins.php.behat.service.locator;
 
 import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedService;
 
 import java.util.Collection;

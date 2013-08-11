@@ -1,11 +1,10 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.context.step;
+package pl.projectspace.idea.plugins.php.behat.psi.element.step;
 
+import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.elements.Method;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
-import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
 
 import java.util.ArrayList;
@@ -16,27 +15,45 @@ import java.util.regex.Pattern;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class BehatStepImplementation {
+public class BehatStep {
 
     private final static Pattern implementationRegexp = Pattern.compile("(?s).*@(Given|When|Then).*");
 
     private final Method method;
 
+    private final PhpDocComment comment;
+
     private GherkinStep step;
 
-    public BehatStepImplementation(Method method, GherkinStep gherkinStep) {
+    public BehatStep(Method method, GherkinStep gherkinStep) {
         this.method = method;
         this.step = gherkinStep;
+        this.comment = null;
     }
 
-    public BehatStepImplementation(Method method) {
+    public BehatStep(PhpDocComment comment, GherkinStep gherkinStep) {
+        this.step = gherkinStep;
+        PsiElement method = comment.getNextSibling();
+        do {
+            if (method instanceof Method) {
+                break;
+            }
+        }
+        while ((method = method.getNextSibling()) != null);
+
+        this.method = (Method)method;
+        this.comment = comment;
+    }
+
+    public BehatStep(Method method) {
         this.method = method;
         this.step = null;
+        this.comment = null;
     }
 
 
-    public boolean isImplementationOf(GherkinStep step) {
-        for (PhpDocTag tag : getStepsFrom(method.getDocComment())) {
+    public static boolean isImplementationOf(PhpDocComment comment, GherkinStep step) {
+        for (PhpDocTag tag : getStepsFrom(comment)) {
             String pattern = tag.getTagValue().replaceAll("(\\?P<[^>]+>)", "");
             pattern = pattern.substring(1, pattern.length()-1);
             if (step.getSubstitutedName().matches(pattern)) {
@@ -68,7 +85,7 @@ public class BehatStepImplementation {
         return implementationRegexp.matcher(comment.getText()).matches();
     }
 
-    private List<PhpDocTag> getStepsFrom(PhpDocComment comment) {
+    private static List<PhpDocTag> getStepsFrom(PhpDocComment comment) {
         ArrayList<PhpDocTag> elements = new ArrayList<PhpDocTag>();
         for (String step : BehatAnnotation.step) {
             if (comment == null) {

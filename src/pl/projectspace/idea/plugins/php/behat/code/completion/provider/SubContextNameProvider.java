@@ -30,9 +30,9 @@ public class SubContextNameProvider extends CompletionProvider<CompletionParamet
             return;
         }
 
-        BehatContext behatContext = new BehatContext(phpClass);
+        BehatContext behatStep = new BehatContext(phpClass);
 
-        for (String name : behatContext.getSubContexts().keySet()) {
+        for (String name : behatStep.getSubContexts().keySet()) {
             result.addElement(new SimpleTextLookup(name));
         }
     }

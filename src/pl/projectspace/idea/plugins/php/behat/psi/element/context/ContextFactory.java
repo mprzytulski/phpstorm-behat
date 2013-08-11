@@ -20,7 +20,7 @@ public class ContextFactory {
      */
     public static BehatContext create(PhpClass phpClass) {
 
-        if (map.keySet().contains(phpClass.getFQN())) {
+        if (map.size() > 0 && map.keySet().contains(phpClass.getFQN())) {
             return map.get(phpClass.getFQN());
         }
 

@@ -11,7 +11,7 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.element.lookup.SimpleTextLookup;
 import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;

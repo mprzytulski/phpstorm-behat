@@ -1,6 +1,6 @@
 <idea-plugin version="2">
   <id>pl.projectspace.idea.plugins.php.behat</id>
-  <name>behat</name>
+  <name>Behat</name>
   <version>0.1</version>
   <vendor email="michal@przytulski.pl" url="http://przytulski.pl"></vendor>
 
@@ -29,7 +29,7 @@
   </change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="107.105"/>
+  <idea-version since-build="129.757"/>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
@@ -56,6 +56,10 @@
                 text="Generate method for this step">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
         </action>
+        <action id="GeneratePageObject" class="pl.projectspace.idea.plugins.php.behat.action.GeneratePageObject"
+                text="Generate Page Object ">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
@@ -74,15 +78,11 @@
 
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
                          implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageObjectNameInspection"
-                         displayName="Missing page with given name" />
+                         displayName="Missing page with given name" groupName="Probable bugs" />
 
         <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
                          implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
                          displayName="Missing subcontext with given name" />
-
-        <!--<intentionAction>-->
-            <!--<className>pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectIntention</className>-->
-        <!--</intentionAction>-->
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator"/>

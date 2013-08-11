@@ -1,0 +1,6 @@
+<?php
+
+class ${CLASS_NAME} extends Page
+{
+
+}

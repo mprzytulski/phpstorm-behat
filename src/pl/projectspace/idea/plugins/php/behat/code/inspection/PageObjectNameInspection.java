@@ -1,7 +1,6 @@
 package pl.projectspace.idea.plugins.php.behat.code.inspection;
 
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.*;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -10,8 +9,9 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectFix;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
@@ -50,7 +50,7 @@ public class PageObjectNameInspection extends LocalInspectionTool {
                 return;
             }
 
-            holder.registerProblem(reference, "Invalid PageObject reference name: " + name);
+            holder.registerProblem(parameters[0], "Invalid Page Object class name", new GeneratePageObjectFix());
         }
     }
 }

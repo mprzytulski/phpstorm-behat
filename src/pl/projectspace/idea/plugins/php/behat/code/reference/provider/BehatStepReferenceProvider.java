@@ -1,20 +1,24 @@
 package pl.projectspace.idea.plugins.php.behat.code.reference.provider;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopes;
+import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.ProcessingContext;
-import com.jetbrains.php.PhpIndex;
+import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.step.BehatStepImplementation;
-import pl.projectspace.idea.plugins.php.behat.psi.reference.php.MethodReference;
+import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
+import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatStepReference;
 import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -23,28 +27,41 @@ public class BehatStepReferenceProvider extends PsiReferenceProvider {
     @NotNull
     @Override
     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
-        return new PsiReference[0];
-//        if (!(element instanceof GherkinStep)) {
-//            return new PsiReference[0];
-//        }
+        if (!(element instanceof GherkinStep)) {
+            return new PsiReference[0];
+        }
 
-//        GherkinStep step = (GherkinStep) (element);
-//        PhpIndex index = PhpIndex.getInstance(element.getProject());
-//
-//        ContextLocator locator = ServiceManager.getService(element.getProject(), ContextLocator.class);
-//
-//        Collection<BehatContext> contextList = locator.getContextClasses();
-//
-//        ArrayList<PsiReference> references = new ArrayList<PsiReference>();
-//
-//        for (BehatContext behatContext : contextList) {
-//            BehatStepImplementation implementation = behatContext.getStepImplementation(step);
-//            if (implementation != null) {
-//                references.add(new MethodReference(implementation.getMethod(), (PsiElement)implementation.getDefinition()));
-//                break;
-//            }
-//        }
+        GherkinStep step = (GherkinStep) (element);
 
-//        return references.toArray(new PsiReference[references.size()]);
+        String[] phrases = step.getSubstitutedName().replaceAll("\"[^\"]*\"", "\"\"").split("\"");
+        int maxLen = 0;
+        String longest = "";
+        for (String phrase : phrases) {
+            if (phrase.length() > maxLen) {
+                longest = phrase;
+                maxLen = phrase.length();
+            }
+        }
+
+        VirtualFile baseContextDir = ServiceManager.getService(element.getProject(), ContextLocator.class).getBaseDir();
+
+        GlobalSearchScope scope = GlobalSearchScopes.directoryScope(element.getProject(), baseContextDir, true);
+
+        PsiElement[] result = PsiSearchHelper.SERVICE.getInstance(element.getProject())
+                .findCommentsContainingIdentifier(longest, scope);
+
+
+        Map<String, PsiReference> references = new HashMap<String, PsiReference>();
+
+        for (PsiElement el : result) {
+            if (BehatStep.isImplementationOf((PhpDocComment)el, step)) {
+                BehatStep behatStep = new BehatStep((PhpDocComment) el, step);
+                if (!references.containsKey(behatStep.getMethod().getFQN())) {
+                    references.put(behatStep.getMethod().getFQN(), new BehatStepReference(behatStep, (PsiElement)step));
+                }
+            }
+        }
+
+        return references.values().toArray(new PsiReference[references.size()]);
     }
 }

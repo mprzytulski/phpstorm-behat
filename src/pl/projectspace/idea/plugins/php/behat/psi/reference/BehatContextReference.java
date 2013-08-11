@@ -2,26 +2,25 @@ package pl.projectspace.idea.plugins.php.behat.psi.reference;
 
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class BehatContextReference extends PhpClassReference {
 
-    private BehatContext behatContext;
+    private BehatContext behatStep;
 
     /**
-     * @param behatContext
+     * @param behatStep
      * @param element
      */
-    public BehatContextReference(BehatContext behatContext, final StringLiteralExpression element) {
-        super(behatContext.getDecoratedObject(), element);
-        this.behatContext = behatContext;
+    public BehatContextReference(BehatContext behatStep, final StringLiteralExpression element) {
+        super(behatStep.getDecoratedObject(), element);
+        this.behatStep = behatStep;
     }
 
-    public BehatContext getBehatContext() {
-        return behatContext;
+    public BehatContext getBehatStep() {
+        return behatStep;
     }
 
 }

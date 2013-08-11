@@ -2,21 +2,14 @@ package pl.projectspace.idea.plugins.php.behat.code.type;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
 import org.jetbrains.annotations.Nullable;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

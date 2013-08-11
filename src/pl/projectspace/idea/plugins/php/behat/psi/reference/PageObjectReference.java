@@ -2,7 +2,7 @@ package pl.projectspace.idea.plugins.php.behat.psi.reference;
 
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

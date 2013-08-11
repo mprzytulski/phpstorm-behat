@@ -4,8 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
-import com.jetbrains.php.lang.psi.resolve.types.PhpType;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
 
 import java.util.Collection;
 import java.util.regex.Matcher;

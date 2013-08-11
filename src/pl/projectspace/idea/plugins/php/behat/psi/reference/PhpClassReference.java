@@ -1,13 +1,9 @@
-package pl.projectspace.idea.plugins.php.behat.psi.referene;
+package pl.projectspace.idea.plugins.php.behat.psi.reference;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.ProjectScope;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
@@ -18,31 +14,15 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectReference implements PsiReference {
+public class PhpClassReference implements PsiReference {
 
-    private PhpClass pageObject;
-    /**
-     * The template string from e.x. a controller
-     */
-    private StringLiteralExpression name;
+    private PsiElement reference;
+    private StringLiteralExpression element;
 
-    /**
-     *
-     * @param pageObject
-     * @param name
-     */
-    public PageObjectReference(PhpClass pageObject, final StringLiteralExpression name) {
-        this.pageObject = pageObject;
-        this.name = name;
-    }
-
-    /**
-     * @see com.intellij.psi.PsiReference#getElement()
-     * @return the full source element
-     */
-    @Override
-    public PsiElement getElement() {
-        return name;
+    public PhpClassReference(PsiElement reference, StringLiteralExpression element)
+    {
+        this.reference = reference;
+        this.element = element;
     }
 
     /**
@@ -51,7 +31,7 @@ public class PageObjectReference implements PsiReference {
      */
     @Override
     public TextRange getRangeInElement() {
-        return new TextRange(1, this.name.getTextLength() - 1);
+        return new TextRange(1, this.element.getTextLength() - 1);
     }
 
     /**
@@ -60,7 +40,7 @@ public class PageObjectReference implements PsiReference {
      */
     @Override
     public PsiElement resolve() {
-        return pageObject;
+        return reference;
     }
 
     /**
@@ -70,7 +50,7 @@ public class PageObjectReference implements PsiReference {
     @NotNull
     @Override
     public String getCanonicalText() {
-        return this.name.getContents();
+        return this.element.getContents();
     }
 
     /**
@@ -81,29 +61,30 @@ public class PageObjectReference implements PsiReference {
      */
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        ASTNode node = name.getNode();
+        ASTNode node = this.element.getNode();
         StringLiteralExpressionImpl se = new StringLiteralExpressionImpl(node);
 
-        String[] parts = name.getText().split(":");
+        String[] parts = this.element.getText().split(":");
         StringBuilder sb = new StringBuilder(parts[0]).append(":").append(parts[1]).append(":");
         sb.append(newElementName);
         se.updateText(sb.toString());
-        this.name = se;
-        return name;
+        this.element = se;
+        return this.element;
     }
 
     @Override
-    public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return resolve();
+    public PsiElement bindToElement(@NotNull PsiElement psiElement) throws IncorrectOperationException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
         if (element instanceof PhpClass) {
-            ((PhpClass) element).getName().equals(name.getContents());
+            ((PhpClass) element).getName().equals(this.element.getContents());
         }
         return false;
     }
+
 
     @NotNull
     @Override
@@ -116,4 +97,12 @@ public class PageObjectReference implements PsiReference {
         return true;
     }
 
+    /**
+     * @see com.intellij.psi.PsiReference#getElement()
+     * @return the full source element
+     */
+    @Override
+    public PsiElement getElement() {
+        return element;
+    }
 }

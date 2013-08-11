@@ -48,25 +48,6 @@
     </project-components>
 
     <actions>
-        <!--<group class="pl.projectspace.idea.plugins.php.phpspec.actions.PhpSpec" id="PhpSpecGroup" text="phpspec" description="phpspec actions" popup="true">-->
-            <!--<action id="InitialiseProject" class="pl.projectspace.idea.plugins.php.phpspec.actions.InitialiseProject"-->
-                    <!--text="Enable phpspec support for this project">-->
-            <!--</action>-->
-            <!--<add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>-->
-        <!--</group>-->
-        <!--<action id="CreateSpecForClass" class="pl.projectspace.idea.plugins.php.phpspec.actions.CreateSpecForClass"-->
-                <!--text="Create spec for class">-->
-            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
-        <!--</action>-->
-        <!--<action id="OpenSpecForClass" class="pl.projectspace.idea.plugins.php.phpspec.actions.PhpSpecSwitchContext"-->
-                <!--icon="/icons/phpspec.png"-->
-                <!--text="Go to class spec">-->
-            <!--<add-to-group group-id="GoToMenu" anchor="last"/>-->
-            <!--<add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>-->
-            <!--<add-to-group group-id="EditorActions" anchor="last"/>-->
-            <!--&lt;!&ndash;<add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>&ndash;&gt;-->
-            <!--<keyboard-shortcut keymap="$default" first-keystroke="alt meta S"/>-->
-        <!--</action>-->
         <action id="CreateFeature" class="pl.projectspace.idea.plugins.php.behat.action.CreateFeatureAction"
                 text="Create new feature file">
             <add-to-group group-id="NewGroup" anchor="last"/>
@@ -86,34 +67,26 @@
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.PageObjectTypeProvider"/>
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.ContextTypeProvider"/>
 
-        <!--<annotator language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.annotation.ContextAnnotator"/>-->
-
         <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>
         <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.ContextCompletionContributor"/>
-
-        <!--<pl.projectspace.idea.plugins.commons.psi.referenceContributor language="Gherkin" implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor"/>-->
-
-        <!--<referencesSearch implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceSearch"/>-->
-
 
         <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor" />
 
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
-                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageNameInspection"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageObjectNameInspection"
                          displayName="Missing page with given name" />
 
         <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
-                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubcontextNameInspection"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
                          displayName="Missing subcontext with given name" />
 
-        <!--<localInspection language="Gherkin" shortName="CucumberUndefinedStep" bundle="pl.projectspace.idea.plugins.php.behat.PhpCucumberBundle"-->
-                         <!--key="cucumber.inspection.undefined.step.name" groupKey="cucumber.inspection.group.name" enabledByDefault="true" level="WARNING"-->
-                         <!--implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PhpCucumberStepInspection" unfair="true"/>-->
+        <!--<intentionAction>-->
+            <!--<className>pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectIntention</className>-->
+        <!--</intentionAction>-->
 
-
-        <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.StepResolver"/>-->
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator"/>
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.ContextLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator"/>
 
     </extensions>
 

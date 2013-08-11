@@ -6,30 +6,34 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
 import pl.projectspace.idea.plugins.php.behat.psi.element.lookup.SimpleTextLookup;
+import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class ContextAnnotationProvider extends CompletionProvider<CompletionParameters>
+public class SubContextNameProvider extends CompletionProvider<CompletionParameters>
 {
+
     @Override
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
-        PsiElement parent = position.getParent();
 
-        PhpClass phpClass = PsiTreeUtil.getParentOfType(position, PhpClass.class);
-        if (phpClass == null || !BehatContext.is(phpClass)) {
+        MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
+        PhpClass phpClass = PsiUtils.getClass(reference);
+
+        if (!BehatContext.isReferenceCall(phpClass, reference)) {
             return;
         }
 
-        for (Object annotation : ArrayUtils.addAll(BehatAnnotation.tags, BehatAnnotation.hook)) {
-            result.addElement(new SimpleTextLookup("@" + (String)annotation));
+        BehatContext behatContext = new BehatContext(phpClass);
+
+        for (String name : behatContext.getSubContexts().keySet()) {
+            result.addElement(new SimpleTextLookup(name));
         }
     }
 }

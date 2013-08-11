@@ -4,12 +4,8 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
-//import org.jetbrains.plugins.cucumber.pl.projectspace.idea.plugins.commons.psi.GherkinTokenTypes;
 import org.jetbrains.plugins.cucumber.psi.GherkinTokenTypes;
-import org.jetbrains.yaml.YAMLLanguage;
-import org.jetbrains.yaml.YAMLTokenTypes;
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.FeatureAnnotationProvider;
 
 /**

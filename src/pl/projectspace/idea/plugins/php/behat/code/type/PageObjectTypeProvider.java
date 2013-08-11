@@ -10,7 +10,10 @@ import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
 import org.jetbrains.annotations.Nullable;
-import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,62 +21,36 @@ import java.util.Collection;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectTypeProvider implements PhpTypeProvider2 {
-
-    final static char TRIM_KEY = '\u0180';
-
-    @Override
-    public char getKey() {
-        return TRIM_KEY;
-    }
+public class PageObjectTypeProvider extends AbstractClassTypeProvider {
 
     @Nullable
     @Override
     public String getType(PsiElement psiElement) {
-        if (DumbService.isDumb(psiElement.getProject())) {
+        if (DumbService.isDumb(psiElement.getProject()) || !(psiElement instanceof MethodReference)) {
             return null;
         }
 
-        if (psiElement instanceof MethodReference) {
-            MethodReference method = (MethodReference)psiElement;
-
-            if (!method.getName().equals("getPage")) {
-                return null;
-            }
-
-            PhpClass phpClass = PsiTreeUtil.getContextOfType(psiElement, PhpClass.class, false);
-
-            PageObjectLocator locator = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class);
-
-            if (!locator.isPageObjectContext(phpClass)) {
-                return null;
-            }
-
-            ParameterList parameters = method.getParameterList();
-            if (parameters == null || parameters.getFirstPsiChild() == null) {
-                return null;
-            }
-
-            PsiElement[] params = parameters.getParameters();
-            StringLiteralExpressionImpl param = (StringLiteralExpressionImpl) params[0];
-
-            PhpClass returnType = locator.getPageObjectClass(param.getContents());
-
-            if (returnType == null) {
-                return null;
-            }
-
-            return returnType.getFQN();
+        MethodReference method = (MethodReference)psiElement;
+        if (!method.getName().equals("getPage")) {
+            return null;
         }
 
-        return null;
+        PhpClass phpClass = PsiUtils.getClass(method);
+        PsiElement[] parameters = method.getParameters();
+
+        if (phpClass == null || !PageObjectContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
+            return null;
+        }
+
+        PageObjectLocator locator = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class);
+
+        PageObject pageObject = null;
+
+        if ((pageObject= locator.get(((StringLiteralExpressionImpl) parameters[0]).getContents())) == null) {
+            return null;
+        }
+
+        return pageObject.getDecoratedObject().getFQN();
     }
 
-    @Override
-    public Collection<? extends PhpNamedElement> getBySignature(String expression, Project project) {
-        PhpIndex phpIndex = PhpIndex.getInstance(project);
-        PhpClass phpClass = phpIndex.getClassesByFQN(expression).iterator().next();
-
-        return Arrays.asList(phpClass);
-    }
 }

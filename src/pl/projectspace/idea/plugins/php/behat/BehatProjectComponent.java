@@ -5,8 +5,12 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.php.PhpIndex;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
-import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedServiceInterface;
+import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator;
+
+import java.lang.reflect.Array;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -21,6 +25,14 @@ public class BehatProjectComponent implements ProjectComponent {
 
     @Override
     public void projectOpened() {
+    }
+
+    @Override
+    public void projectClosed() {
+    }
+
+    @Override
+    public void initComponent() {
         PhpIndex index = PhpIndex.getInstance(project);
 
         PageObjectLocator pageObjectLocator = ServiceManager.getService(project, PageObjectLocator.class);
@@ -30,14 +42,10 @@ public class BehatProjectComponent implements ProjectComponent {
         ContextLocator contextLocator = ServiceManager.getService(project, ContextLocator.class);
         contextLocator.setIndex(index);
         contextLocator.setProject(project);
-    }
 
-    @Override
-    public void projectClosed() {
-    }
-
-    @Override
-    public void initComponent() {
+        StepLocator stepLocator = ServiceManager.getService(project, StepLocator.class);
+        stepLocator.setIndex(index);
+        stepLocator.setProject(project);
     }
 
     @Override

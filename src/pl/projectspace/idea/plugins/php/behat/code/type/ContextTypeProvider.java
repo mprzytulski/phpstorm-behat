@@ -2,32 +2,24 @@ package pl.projectspace.idea.plugins.php.behat.code.type;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
-import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
-import com.jetbrains.php.lang.psi.resolve.types.PhpTypeProvider2;
 import org.jetbrains.annotations.Nullable;
-import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
-import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
-
-import java.util.Arrays;
-import java.util.Collection;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class ContextTypeProvider implements PhpTypeProvider2 {
+public class ContextTypeProvider extends AbstractClassTypeProvider {
 
-    final static char TRIM_KEY = '\u0180';
-
-    @Override
-    public char getKey() {
-        return TRIM_KEY;
-    }
-
+    /**
+     * Return FQN of type for context retrieve methods of BehatContext classes
+     *
+     * @param psiElement
+     * @return
+     */
     @Nullable
     @Override
     public String getType(PsiElement psiElement) {
@@ -35,85 +27,94 @@ public class ContextTypeProvider implements PhpTypeProvider2 {
             return null;
         }
 
-        if (psiElement instanceof MethodReference) {
-            MethodReference method = (MethodReference)psiElement;
-
-            String type = null;
-
-            if (method.getName().equalsIgnoreCase("getMainContext")) {
-                type = getMainContextType(method);
-            } else if (method.getName().equalsIgnoreCase("getSubContext")) {
-                type = getSubContextType(method);
-            } else if (method.getName().equalsIgnoreCase("getSubcontextByClassName")) {
-                type = getSubContextTypeByClassName(method);
-            }
-
-            return type;
+        if (!(psiElement instanceof MethodReference)) {
+            return null;
         }
 
-        return null;
+        MethodReference method = (MethodReference)psiElement;
+        PhpClass callClass = PsiUtils.getClass(method);
+
+        if(!BehatContext.is(callClass)) {
+            return null;
+        }
+
+        String type = null;
+
+        if (method.getName().equalsIgnoreCase("getMainContext")) {
+            type = getMainContextType(method);
+        } else if (method.getName().equalsIgnoreCase("getSubContext")) {
+            type = getSubContextType(method);
+        } else if (method.getName().equalsIgnoreCase("getSubcontextByClassName")) {
+            type = getSubContextTypeByClassName(method);
+        }
+
+        return type;
     }
 
-    @Override
-    public Collection<? extends PhpNamedElement> getBySignature(String expression, Project project) {
-        PhpIndex phpIndex = PhpIndex.getInstance(project);
-        PhpClass phpClass = phpIndex.getClassesByFQN(expression).iterator().next();
-
-        return Arrays.asList(phpClass);
-    }
-
+    /**
+     * Return main context type for getMainContext() call
+     *
+     * @param method
+     * @return
+     */
     private String getMainContextType(MethodReference method) {
-        PhpClass methodOwner = getClassForMethod(method);
+        BehatContext context = null;
 
-        ContextLocator locator = ServiceManager
-            .getService(method.getProject(), ContextLocator.class);
-
-        PhpClass context = locator.getMainContextFor(methodOwner);
-
-        if (context == null) {
+        if ((context = ServiceManager.getService(method.getProject(), ContextLocator.class).getMainContext()) == null) {
             return null;
         }
 
-        return context.getFQN();
+        return context.getDecoratedObject().getFQN();
     }
 
+    /**
+     * Return SubContext type for getSubContext('name_of_sub_context') call
+     *
+     * @param method
+     * @return
+     */
     private String getSubContextType(MethodReference method) {
-        PhpClass methodOwner = getClassForMethod(method);
-
-        if (method.getParameters().length == 0) {
+        if (method.getParameters().length != 1) {
             return null;
         }
 
-        ContextLocator locator = ServiceManager
-                .getService(method.getProject(), ContextLocator.class);
+        PhpClass parentContext = PsiUtils.getClass(method);
+        PsiElement[] parameters = method.getParameters();
 
-        StringLiteralExpression name = (StringLiteralExpression) method.getParameters()[0];
-
-        PhpClass context = locator.getSubContextFor(methodOwner, name.getContents());
-
-        if (context == null) {
+        if (parentContext == null || !(parameters[0] instanceof StringLiteralExpression)) {
             return null;
         }
 
-        return context.getFQN();
+        StringLiteralExpression name = (StringLiteralExpression) parameters[0];
+        BehatContext behatContext = new BehatContext(parentContext);
+
+        BehatContext subContext = null;
+        if ((subContext = behatContext.getSubContext(name.getContents())) == null) {
+            return null;
+        }
+
+        return subContext.getDecoratedObject().getFQN();
     }
 
+    /**
+     * Return SubContext type for getSubContext('\Full\Name\Of\Context\Class') call
+     *
+     * @param method
+     * @return
+     */
     private String getSubContextTypeByClassName(MethodReference method) {
         if (method.getParameters().length == 0) {
             return null;
         }
         StringLiteralExpression name = (StringLiteralExpression) method.getParameters()[0];
 
-        Collection<PhpClass> contextClasses = PhpIndex.getInstance(method.getProject()).getClassesByName(name.getContents());
+        PhpClass context = PsiUtils.getClassByFQN(method.getProject(), name.getContents());
 
-        if (contextClasses.isEmpty()) {
+        if (context == null) {
             return null;
         }
 
-        return contextClasses.iterator().next().getFQN();
+        return context.getFQN();
     }
 
-    private PhpClass getClassForMethod(MethodReference method) {
-        return PsiTreeUtil.getParentOfType(method, PhpClass.class);
-    }
 }

@@ -4,12 +4,17 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.referene.PageObjectReference;
-import pl.projectspace.idea.plugins.php.behat.service.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.psi.reference.PageObjectReference;
+import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -19,11 +24,21 @@ public class PageObjectReferenceProvider extends PsiReferenceProvider {
     @NotNull
     @Override
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
+        MethodReference reference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
 
-        String name = ((StringLiteralExpressionImpl) psiElement).getContents();
+        if (!PageObjectContext.isReferenceCall(reference)) {
+            return new PsiReference[0];
+        }
 
-        PhpClass page = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class).getPage(name);
-        PsiReference[] ref = { new PageObjectReference(page, (StringLiteralExpressionImpl) psiElement) };
+        StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
+
+        PageObject page = null;
+
+        if((page = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class).get(name.getContents())) == null) {
+            return new PsiReference[0];
+        }
+
+        PsiReference[] ref = { new PageObjectReference(page, name) };
 
         return ref;
     }

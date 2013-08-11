@@ -2,19 +2,20 @@ package pl.projectspace.idea.plugins.php.behat.code.inspection;
 
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.lang.psi.elements.*;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.service.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>
  */
-public class SubcontextNameInspection extends LocalInspectionTool {
+public class SubContextNameInspection extends LocalInspectionTool {
 
     @NotNull
     @Override
@@ -31,31 +32,23 @@ public class SubcontextNameInspection extends LocalInspectionTool {
         }
 
         @Override
-        public void visitPhpMethodReference(MethodReference method) {
-            PsiElement[] parameters = method.getParameters();
+        public void visitPhpMethodReference(MethodReference reference) {
+            PhpClass phpClass = PsiUtils.getClass(reference);
+            PsiElement[] parameters = reference.getParameters();
 
-            ContextLocator locator = ServiceManager.getService(method.getProject(), ContextLocator.class);
-
-            if (!method.getName().equalsIgnoreCase("getSubcontext") || parameters.length != 1) {
-                return;
-            }
-
-            if (!(parameters[0] instanceof StringLiteralExpression)) {
+            if (!BehatContext.isReferenceCall(phpClass, reference) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
                 return;
             }
 
             String name = ((StringLiteralExpression) parameters[0]).getContents();
+            BehatContext context = new BehatContext(phpClass);
 
-            PhpClass subcontext = locator.getSubContextFor(
-                locator.getMainContextFor(PsiTreeUtil.getParentOfType(method, PhpClass.class)),
-                name
-            );
-
-            if (subcontext != null) {
+            BehatContext subContext = context.getSubContext(name);
+            if (subContext != null) {
                 return;
             }
 
-            holder.registerProblem(method, "Invalid subcontext reference name: " + name);
+            holder.registerProblem(reference, "Invalid sub context reference name: \"" + name + "\"");
         }
     }
 }

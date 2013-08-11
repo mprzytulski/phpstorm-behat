@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element;
+package pl.projectspace.idea.plugins.php.behat.psi.element.context.step;
 
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;

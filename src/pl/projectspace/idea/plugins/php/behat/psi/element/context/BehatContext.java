@@ -92,6 +92,9 @@ public class BehatContext extends PhpClassDecorator {
 
             String name = ((StringLiteralExpression) parameters[0]).getContents();
             PhpClass type = (PhpClass) (((NewExpression) parameters[1]).getClassReference().resolve());
+            if (type == null) {
+                continue;
+            }
             subContexts.put(name, ContextFactory.create(type));
         }
 

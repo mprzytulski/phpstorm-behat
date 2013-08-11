@@ -1,42 +1,21 @@
 package pl.projectspace.idea.plugins.php.behat.code.intention;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.find.FindModel;
-import com.intellij.find.impl.FindInProjectUtil;
+import com.intellij.ide.actions.OpenFileAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.file.PsiDirectoryFactory;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
 import com.jetbrains.php.lang.PhpFileType;
-import com.jetbrains.php.lang.psi.PhpCodeEditUtil;
 import com.jetbrains.php.lang.psi.PhpFile;
-import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
-import com.jetbrains.php.lang.psi.PhpPsiUtil;
-import com.jetbrains.php.lang.psi.elements.*;
-import com.jetbrains.php.lang.psi.resolve.types.PhpType;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.Properties;
@@ -66,6 +45,7 @@ public class GeneratePageObjectFix implements LocalQuickFix {
             return;
         }
         PhpFile phpFile = (PhpFile) createFile(project, ((StringLiteralExpression) problemDescriptor.getPsiElement()).getContents());
+        OpenFileAction.openFile(phpFile.getVirtualFile(), project);
     }
 
     private PsiElement createFile(Project project, String className) {

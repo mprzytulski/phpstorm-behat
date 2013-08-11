@@ -1,6 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.psi.element.context;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +19,8 @@ public class ContextFactory {
      * @param phpClass
      * @return
      */
-    public static BehatContext create(PhpClass phpClass) {
-
-        if (map.size() > 0 && map.keySet().contains(phpClass.getFQN())) {
+    public static BehatContext create(@NotNull PhpClass phpClass) {
+        if (map.keySet().contains(phpClass.getFQN())) {
             return map.get(phpClass.getFQN());
         }
 

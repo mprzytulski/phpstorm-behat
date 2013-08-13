@@ -115,10 +115,10 @@ public class ContextLocator extends ProjectRelatedService {
     }
 
     /**
-     * Check if give PhpClass implementation is Behat Context implementation
+     * Check if given PhpClass implementation is Behat Context implementation
      *
      * @param phpClass
-     * @return
+     * @return boolean
      */
     public boolean isBehatContext(PhpClass phpClass) {
         ensure(initiated);
@@ -129,7 +129,7 @@ public class ContextLocator extends ProjectRelatedService {
      * Check if give PhpClass instance is PageObject implementation
      *
      * @param phpClass
-     * @return
+     * @return boolean
      */
     public boolean isPageObjectContext(PhpClass phpClass) {
         ensure(initiated);

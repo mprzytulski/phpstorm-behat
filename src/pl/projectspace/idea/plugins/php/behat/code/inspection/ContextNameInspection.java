@@ -4,7 +4,9 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.NewExpression;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
@@ -15,7 +17,7 @@ import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 /**
  * @author Daniel Ancuta <whisller@gmail.com>
  */
-public class SubContextNameInspection extends LocalInspectionTool {
+public class ContextNameInspection extends LocalInspectionTool {
 
     @NotNull
     @Override
@@ -36,19 +38,17 @@ public class SubContextNameInspection extends LocalInspectionTool {
             PhpClass phpClass = PsiUtils.getClass(reference);
             PsiElement[] parameters = reference.getParameters();
 
-            if (!BehatContext.isReferenceCall(phpClass, reference, "getSubContext") || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
+            if (!BehatContext.isReferenceCall(phpClass, reference, "useContext") || parameters.length != 2 || !(parameters[0] instanceof StringLiteralExpression)) {
                 return;
             }
 
-            String name = ((StringLiteralExpression) parameters[0]).getContents();
-            BehatContext context = new BehatContext(phpClass);
-
-            BehatContext subContext = context.getSubContext(name);
-            if (subContext != null) {
+            PhpClass context = (PhpClass) (((NewExpression) parameters[1]).getClassReference().resolve());
+            System.out.println(parameters[1].getText());
+            if (BehatContext.is(context)) {
                 return;
             }
 
-            holder.registerProblem(reference, "Invalid sub context reference name: \"" + name + "\"");
+            holder.registerProblem(reference, "Invalid context reference name: \"" + parameters[1].getText() + "\"");
         }
     }
 }

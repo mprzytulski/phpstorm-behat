@@ -26,7 +26,7 @@ public class SubContextNameProvider extends CompletionProvider<CompletionParamet
         MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
         PhpClass phpClass = PsiUtils.getClass(reference);
 
-        if (!BehatContext.isReferenceCall(phpClass, reference)) {
+        if (!BehatContext.isReferenceCall(phpClass, reference, "getSubContext")) {
             return;
         }
 

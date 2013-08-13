@@ -139,7 +139,7 @@ public class BehatContext extends PhpClassDecorator {
         return ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isBehatContext(phpClass);
     }
 
-    public static boolean isReferenceCall(PhpClass phpClass, MethodReference reference) {
-        return (reference != null && reference.getName().equalsIgnoreCase("getSubContext") && is(phpClass));
+    public static boolean isReferenceCall(PhpClass phpClass, MethodReference reference, String expectedMethodName) {
+        return (reference != null && reference.getName().equalsIgnoreCase(expectedMethodName) && is(phpClass));
     }
 }

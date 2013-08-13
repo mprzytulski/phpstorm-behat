@@ -84,6 +84,10 @@
                          implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
                          displayName="Missing subcontext with given name" />
 
+        <localInspection language="PHP" shortName="InvalidContextNameReference" enabledByDefault="true" level="ERROR"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.ContextNameInspection"
+                         displayName="Missing context with given name" />
+
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator"/>

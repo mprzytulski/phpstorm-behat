@@ -24,7 +24,7 @@ public class PageObjectReferenceProvider extends PsiReferenceProvider {
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
         MethodReference reference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
 
-        if (!PageObjectContext.isReferenceCall(reference)) {
+        if (!PageObjectContext.is(reference)) {
             return new PsiReference[0];
         }
 

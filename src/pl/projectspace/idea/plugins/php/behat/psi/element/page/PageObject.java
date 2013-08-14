@@ -2,11 +2,13 @@ package pl.projectspace.idea.plugins.php.behat.psi.element.page;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.*;
 import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -32,5 +34,48 @@ public class PageObject extends PhpClassDecorator {
                 .get(((StringLiteralExpression) parameters[0]).getContents());
 
         return (page != null);
+    }
+
+    public Map<String, PsiElement> getElementLocators() {
+        Field elements = getDecoratedObject().findFieldByName("elements", false);
+        Map<String, PsiElement> map = new HashMap<String, PsiElement>();
+
+        if (elements == null || (elements.getChildren().length == 0)) {
+            return map;
+        }
+
+        PsiElement[] arrayElements = elements.getChildren()[0].getChildren();
+
+        if (arrayElements.length == 0) {
+            return map;
+        }
+
+        for (PsiElement element : arrayElements) {
+            StringLiteralExpression el = (StringLiteralExpression) element.getFirstChild().getFirstChild();
+            String key = el.getContents();
+            map.put(key, element);
+        }
+
+        return map;
+    }
+
+    /**
+     * Check if given class is instance of Page Object
+     *
+     * @param phpClass
+     * @return
+     */
+    public static boolean is(PhpClass phpClass) {
+        return ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).is(phpClass);
+    }
+
+    /**
+     * Check if given reference is used in instance of Page Object
+     *
+     * @param methodReference
+     * @return
+     */
+    public static boolean is(MethodReference methodReference) {
+        return ServiceManager.getService(methodReference.getProject(), PageObjectLocator.class).is(methodReference);
     }
 }

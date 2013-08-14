@@ -1,29 +1,56 @@
 <idea-plugin version="2">
   <id>pl.projectspace.idea.plugins.php.behat</id>
   <name>Behat</name>
-  <version>0.1</version>
+  <version>0.2.1</version>
   <vendor email="michal@przytulski.pl" url="http://przytulski.pl"></vendor>
 
   <description><![CDATA[
-      Very simple but useful plugin for faster behat development.
-      ]]></description>
+      <p>Very simple but useful plugin for faster behat development.</p>
 
-  <change-notes><![CDATA[
-      Feature file:
+      <h3>Feature file:</h3>
       <ul>
           <li>tag auto completion</li>
+          <li>reference provider for gherking steps</li>
       </ul>
-      Behat context:
+
+      <h3>Behat context:</h3>
       <ul>
+          <li>reference and inspection provider for PageObjcet names</li>
+          <li>reference and inspection provider for SubContext names</li>
+          <li>create PageObject quick fix for missing classes</li>
           <li>type hinting for getMainContext() method</li>
           <li>type hinting for getSubContext() method</li>
           <li>parameter auto completion for getSubContext() method with names of available contextes</li>
           <li>annotation hinting</li>
       </ul>
-      Page Objects extension:
+
+      <h3>Page Objects extension:</h3>
       <ul>
+          <li>reference provider for getElement method of PageObject classes</li>
           <li>type hinting for getPage() method</li>
           <li>parameter auto completion for getPage() method with names of available pages in current project</li>
+      </ul>
+      ]]></description>
+
+  <change-notes><![CDATA[
+      <h3>0.2.1</h3>
+      <ul>
+          <li>fixed application freeze during searching and indexing</li>
+          <li>added support for Page Object getElement reference names</li>
+      </ul>
+
+      <h3>0.2</h3>
+      <ul>
+          <li>added references resolving for PageObjects, SubContexts and step definitions</li>
+          <li>added code inspection for PageObject names and SubContext names</li>
+          <li>added missing Page Object class generation</li>
+      </ul>
+
+      <h3>0.1</h3>
+      <p>First pre public release</p>
+      <ul>
+          <li>basic type hints for contexts and page object</li>
+          <li>some annotation stuff</li>
       </ul>
       ]]>
   </change-notes>

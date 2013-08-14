@@ -10,6 +10,7 @@ import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedService;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -35,6 +36,13 @@ public class ContextLocator extends ProjectRelatedService {
      * Class name of main context
      */
     public static final String MAIN_CONTEXT_CLASS = "\\FeatureContext";
+
+    public static final LinkedList<String> BUILDIN_CONTEXT_NAMESPACES = new LinkedList<String>();
+
+    static {
+        // @todo create list of excluded namespaces
+        // BUILDIN_CONTEXT_NAMESPACES.add("");
+    }
 
     /**
      * Base Context
@@ -122,7 +130,7 @@ public class ContextLocator extends ProjectRelatedService {
      */
     public boolean isBehatContext(PhpClass phpClass) {
         ensure(initiated);
-        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(baseContext.getDecoratedObject(), phpClass, false) && isInProjectScope(phpClass));
+        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(baseContext.getDecoratedObject(), phpClass, false) && !isInExcludedNamespace(phpClass, ContextLocator.BUILDIN_CONTEXT_NAMESPACES));
     }
 
     /**

@@ -22,23 +22,27 @@ public class PageObjectContext extends BehatContext {
      * @return
      */
     public static boolean is(PhpClass phpClass) {
-        return (
-            ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isPageObjectContext(phpClass)
-        );
+        return ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isPageObjectContext(phpClass);
     }
 
     /**
      * Check if given method reference call is getPage call
      * @return
      */
-    public static boolean isReferenceCall(MethodReference reference) {
+    public static boolean is(MethodReference reference) {
         PhpClass phpClass = PsiUtils.getClass(reference);
 
-        return isReferenceCall(phpClass, reference);
+        return (phpClass != null && is(phpClass));
     }
 
-    public static boolean isReferenceCall(PhpClass phpClass, MethodReference reference) {
-        return (reference != null && reference.getName().equalsIgnoreCase("getPage") && is(phpClass));
+    /**
+     * Check if given reference contains proper page retrieval method
+     *
+     * @param reference
+     * @return
+     */
+    public static boolean isProperReferenceMethodName(MethodReference reference) {
+        return (reference != null && reference.getName().equalsIgnoreCase("getPage"));
     }
 
 }

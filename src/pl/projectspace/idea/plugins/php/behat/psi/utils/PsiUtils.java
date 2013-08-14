@@ -4,8 +4,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
+import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,16 +32,12 @@ public class PsiUtils {
      * @param fqn
      * @return
      */
-    public static PhpClass getClassByFQN(final Project project, final String fqn, String fromLocation) {
-        if (fromLocation == null) {
-            fromLocation = project.getBasePath();
-        }
-
+    public static PhpClass getClassByFQN(final Project project, final String fqn, List<String> excludedNamespaces) {
         Collection<PhpClass> result = PhpIndex.getInstance(project).getClassesByFQN(fqn);
         if (!result.isEmpty()) {
             PhpClass phpClass = null;
             while ((phpClass = result.iterator().next()) != null) {
-                if (phpClass.getContainingFile().getVirtualFile().getCanonicalPath().startsWith(fromLocation)) {
+                if (!excludedNamespaces.contains(phpClass.getNamespaceName())) {
                     return phpClass;
                 }
             }
@@ -48,7 +47,7 @@ public class PsiUtils {
     }
 
     public static PhpClass getClassByFQN(final Project project, final String fqn) {
-        return getClassByFQN(project, fqn, null);
+        return getClassByFQN(project, fqn, new LinkedList<String>());
     }
 
     /**
@@ -60,7 +59,7 @@ public class PsiUtils {
      * @param expression
      * @return
      */
-    public static PhpClass getClass(MethodReference expression, String fromLocation) {
+    public static PhpClass getClass(MethodReference expression, List<String> excludedNamespaces) {
 //        || !expression.getClassReference().getType().equals(PhpType.OBJECT)
         // @todo - better check if given expression belongs to proper calls
         if (expression == null || expression.getClassReference() == null) {
@@ -71,14 +70,14 @@ public class PsiUtils {
         Matcher matcher = pattern.matcher(expression.getClassReference().getType().toString());
 
         if (matcher.matches() && matcher.groupCount() == 3) {
-            return PsiUtils.getClassByFQN(expression.getProject(), matcher.group(2), fromLocation);
+            return PsiUtils.getClassByFQN(expression.getProject(), matcher.group(2), excludedNamespaces);
         }
 
         return null;
     }
 
     public static PhpClass getClass(MethodReference expression) {
-        return getClass(expression, null);
+        return getClass(expression, new LinkedList<String>());
     }
 
 }

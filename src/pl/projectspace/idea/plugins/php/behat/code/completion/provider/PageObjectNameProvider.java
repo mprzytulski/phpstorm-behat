@@ -28,9 +28,14 @@ public class PageObjectNameProvider extends CompletionProvider<CompletionParamet
         PsiElement position = parameters.getPosition();
 
         MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
+
+        if (!PageObjectContext.isProperReferenceMethodName(reference)) {
+            return;
+        }
+
         PhpClass phpClass = PsiUtils.getClass(reference);
 
-        if (!PageObjectContext.isReferenceCall(phpClass, reference)) {
+        if (!PageObjectContext.is(phpClass)) {
             return;
         }
 

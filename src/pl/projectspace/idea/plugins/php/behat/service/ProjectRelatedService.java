@@ -6,6 +6,8 @@ import com.intellij.psi.PsiDirectory;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 
+import java.util.List;
+
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
@@ -51,11 +53,9 @@ abstract public class ProjectRelatedService implements ProjectRelatedServiceInte
      * @param phpClass
      * @return
      */
-    public boolean isInProjectScope(PhpClass phpClass) {
+    public boolean isInExcludedNamespace(PhpClass phpClass, List<String> excludedNamespaces) {
         ensure(initiated);
-        return phpClass.getContainingFile().getOriginalFile().getContainingDirectory().getVirtualFile().getCanonicalPath().startsWith(
-            getBaseDir().getCanonicalPath()
-        );
+        return excludedNamespaces.contains(phpClass.getNamespaceName());
     }
 
     public VirtualFile getBaseDir() {

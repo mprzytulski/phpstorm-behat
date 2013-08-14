@@ -24,9 +24,14 @@ public class SubContextNameProvider extends CompletionProvider<CompletionParamet
         PsiElement position = parameters.getPosition();
 
         MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
+
+        if (!BehatContext.isProperReferenceCallMethodName(reference)) {
+            return;
+        }
+
         PhpClass phpClass = PsiUtils.getClass(reference);
 
-        if (!BehatContext.isReferenceCall(phpClass, reference)) {
+        if (!BehatContext.is(phpClass)) {
             return;
         }
 

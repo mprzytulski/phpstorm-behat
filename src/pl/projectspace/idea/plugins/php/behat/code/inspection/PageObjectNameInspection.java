@@ -36,10 +36,14 @@ public class PageObjectNameInspection extends LocalInspectionTool {
 
         @Override
         public void visitPhpMethodReference(MethodReference reference) {
+            if (!PageObjectContext.isProperReferenceMethodName(reference)) {
+                return;
+            }
+
             PhpClass phpClass = PsiUtils.getClass(reference);
             PsiElement[] parameters = reference.getParameters();
 
-            if (!PageObjectContext.isReferenceCall(phpClass, reference) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
+            if (!PageObjectContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
                 return;
             }
 

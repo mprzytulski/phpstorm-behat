@@ -27,7 +27,7 @@ public class SubContextReferenceProvider extends PsiReferenceProvider {
         String contextLocation = ServiceManager.getService(psiElement.getProject(), ContextLocator.class).getBaseDir().getCanonicalPath();
 
         MethodReference methodReference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
-        PhpClass phpClass = PsiUtils.getClass(methodReference, contextLocation);
+        PhpClass phpClass = PsiUtils.getClass(methodReference);
         if (methodReference == null || !methodReference.getName().equalsIgnoreCase("getSubContext") || !BehatContext.is(phpClass)) {
             return new PsiReference[0];
         }

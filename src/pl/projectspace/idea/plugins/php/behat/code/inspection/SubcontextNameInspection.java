@@ -33,10 +33,14 @@ public class SubContextNameInspection extends LocalInspectionTool {
 
         @Override
         public void visitPhpMethodReference(MethodReference reference) {
+            if (!BehatContext.isProperReferenceCallMethodName(reference)) {
+                return;
+            }
+
             PhpClass phpClass = PsiUtils.getClass(reference);
             PsiElement[] parameters = reference.getParameters();
 
-            if (!BehatContext.isReferenceCall(phpClass, reference) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
+            if (!BehatContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
                 return;
             }
 

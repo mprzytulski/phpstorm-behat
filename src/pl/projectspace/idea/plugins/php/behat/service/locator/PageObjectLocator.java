@@ -1,13 +1,13 @@
 package pl.projectspace.idea.plugins.php.behat.service.locator;
 
+import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpClassHierarchyUtils;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -19,7 +19,11 @@ public class PageObjectLocator extends ProjectRelatedService {
      */
     private final static String PAGE_OBJECT_PAGE_CLASS = "\\SensioLabs\\Behat\\PageObjectExtension\\PageObject\\Page";
 
+    public static final List<String> DEFAULT_NAMESPACES = new LinkedList<String>();
 
+    static {
+        //
+    }
 
     /**
      * Configure locator - create instances of base page object classes
@@ -60,7 +64,7 @@ public class PageObjectLocator extends ProjectRelatedService {
         Map<String, PageObject> result = new HashMap<String, PageObject>();
 
         for (PhpClass page : index.getAllSubclasses(PAGE_OBJECT_PAGE_CLASS)) {
-            if (isInProjectScope(page)) {
+            if (isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
                 result.put(page.getName(), new PageObject(page));
             }
         }
@@ -76,6 +80,20 @@ public class PageObjectLocator extends ProjectRelatedService {
      */
     public boolean is(PhpClass phpClass) {
         ensure(initiated);
+
         return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
+    }
+
+    /**
+     * Check if give PhpClass instance is PageObject implementation
+     *
+     * @param methodReference
+     * @return
+     */
+    public boolean is(MethodReference methodReference) {
+        ensure(initiated);
+        PhpClass phpClass = PsiTreeUtil.getParentOfType(methodReference, PhpClass.class);
+
+        return is(phpClass);
     }
 }

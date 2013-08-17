@@ -9,7 +9,7 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinFeature;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
-import pl.projectspace.idea.plugins.php.behat.psi.element.lookup.SimpleTextLookup;
+import pl.projectspace.idea.plugins.commons.php.psi.lookup.SimpleTextLookup;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

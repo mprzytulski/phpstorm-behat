@@ -1,6 +1,5 @@
 package pl.projectspace.idea.plugins.php.behat.code.reference.provider;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
@@ -10,11 +9,9 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
-import pl.projectspace.idea.plugins.php.behat.psi.reference.ArrayElementReference;
-import pl.projectspace.idea.plugins.php.behat.psi.reference.PageObjectReference;
-import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
+import pl.projectspace.idea.plugins.commons.php.psi.reference.ArrayElementReference;
 
 import java.util.Map;
 
@@ -33,6 +30,8 @@ public class PageObjectElementGettersReferenceProvider extends PsiReferenceProvi
         if (!PageObject.is(phpClass)) {
             return new PsiReference[0];
         }
+
+        BehatProject behatProject = (BehatProject)phpClass.getProject().getComponent("BehatProject");
 
         StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
 

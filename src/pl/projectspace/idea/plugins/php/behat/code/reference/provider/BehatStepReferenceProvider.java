@@ -1,6 +1,5 @@
 package pl.projectspace.idea.plugins.php.behat.code.reference.provider;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -13,9 +12,8 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
-import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
+import pl.projectspace.idea.plugins.php.behat.behat.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatStepReference;
-import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 import java.util.HashMap;
 import java.util.Map;

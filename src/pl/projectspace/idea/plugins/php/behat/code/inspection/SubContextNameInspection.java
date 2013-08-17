@@ -9,8 +9,8 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
+import pl.projectspace.idea.plugins.php.behat.behat.context.BehatContext;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>
@@ -37,7 +37,7 @@ public class SubContextNameInspection extends LocalInspectionTool {
                 return;
             }
 
-            PhpClass phpClass = PsiUtils.getClass(reference);
+            PhpClass phpClass = PsiTreeUtils.getClass(reference);
             PsiElement[] parameters = reference.getParameters();
 
             if (!BehatContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {

@@ -1,13 +1,12 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.page;
+package pl.projectspace.idea.plugins.php.behat.behat.page;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.*;
-import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
+import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

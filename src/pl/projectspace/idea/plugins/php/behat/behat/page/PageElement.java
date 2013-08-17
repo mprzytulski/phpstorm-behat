@@ -1,7 +1,7 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.page;
+package pl.projectspace.idea.plugins.php.behat.behat.page;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
+import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

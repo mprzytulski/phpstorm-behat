@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.context;
+package pl.projectspace.idea.plugins.php.behat.behat.context;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;

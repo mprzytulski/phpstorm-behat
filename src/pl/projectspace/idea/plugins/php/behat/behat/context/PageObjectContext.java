@@ -1,9 +1,9 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.context;
+package pl.projectspace.idea.plugins.php.behat.behat.context;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 /**
@@ -30,7 +30,7 @@ public class PageObjectContext extends BehatContext {
      * @return
      */
     public static boolean is(MethodReference reference) {
-        PhpClass phpClass = PsiUtils.getClass(reference);
+        PhpClass phpClass = PsiTreeUtils.getClass(reference);
 
         return (phpClass != null && is(phpClass));
     }

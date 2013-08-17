@@ -2,12 +2,15 @@ package pl.projectspace.idea.plugins.php.behat.service.locator;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
 import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
-import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
+import pl.projectspace.idea.plugins.commons.php.utils.PhpClassUtils;
+import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
 
 import java.util.*;
 
@@ -40,21 +43,11 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
     }
 
     @Override
-    public PhpClass locate(String key) {
-        return null;
-    }
-
-    /**
-     * Get PageObject by given name
-     *
-     * @param name
-     * @return
-     */
-    public PageObject get(String name) {
+    public PageObject locate(String key) {
         Map<String, PageObject> pages = getAll();
 
-        if (pages.keySet().contains(name)) {
-            return pages.get(name);
+        if (pages.keySet().contains(key)) {
+            return pages.get(key);
         }
 
         return null;
@@ -69,9 +62,9 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
         Map<String, PageObject> result = new HashMap<String, PageObject>();
 
         for (PhpClass page : index.getAllSubclasses(PAGE_OBJECT_PAGE_CLASS)) {
-//            if (!isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
-//                result.put(page.getName(), new PageObject(page));
-//            }
+            if (!PhpClassUtils.isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
+                result.put(page.getName(), new PageObject(page));
+            }
         }
 
         return result;
@@ -84,8 +77,7 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
      * @return
      */
     public boolean is(PhpClass phpClass) {
-        return false;
-//        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
+        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
     }
 
     /**
@@ -95,9 +87,7 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
      * @return
      */
     public boolean is(MethodReference methodReference) {
-        PhpClass phpClass = PsiTreeUtil.getParentOfType(methodReference, PhpClass.class);
-
-        return is(phpClass);
+        return is(PsiTreeUtil.getParentOfType(methodReference, PhpClass.class));
     }
 
 }

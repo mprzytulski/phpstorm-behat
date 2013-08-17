@@ -97,23 +97,24 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <!--<php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.PageObjectTypeProvider"/>-->
-        <!--<php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.ContextTypeProvider"/>-->
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.PageObjectTypeProvider"/>
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.ContextTypeProvider"/>
 
-        <!--<completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>-->
-        <!--<completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.ContextCompletionContributor"/>-->
+        <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.ContextCompletionContributor"/>
 
         <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor" />
 
-        <!--<localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"-->
-        <!--implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageObjectNameInspection"-->
-        <!--displayName="Missing page with given name" groupName="Probable bugs" />-->
+        <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
+            implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageObjectNameInspection"
+            displayName="Missing page with given name" groupName="Probable bugs" />
 
-        <!--<localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"-->
-        <!--implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"-->
-        <!--displayName="Missing subcontext with given name" />-->
+        <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
+            implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
+            displayName="Missing subcontext with given name" />
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.service.Locator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
 
 
     </extensions>

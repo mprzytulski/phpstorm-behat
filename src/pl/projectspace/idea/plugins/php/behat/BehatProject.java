@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.service.Locator;
 import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.php.behat.behat.Configuration;
+import pl.projectspace.idea.plugins.php.behat.behat.page.PageObjectFactory;
 import pl.projectspace.idea.plugins.php.behat.service.locator.*;
 
 /**
@@ -20,9 +21,13 @@ public class BehatProject implements ProjectComponent {
     private PhpIndex index;
 
     private Locator locator;
-    public BehatProject(Project project, PhpIndex index, Locator locator) {
+    private final PageObjectFactory pageObjectFactory;
+
+    public BehatProject(Project project, PhpIndex index, Locator locator, PageObjectFactory pageObjectFactory) {
+        this.project = project;
         this.index = index;
         this.locator = locator;
+        this.pageObjectFactory = pageObjectFactory;
 
         locator.registryLocator(new BehatContextLocator(project, index));
         locator.registryLocator(new PageObjectLocator(project, index));
@@ -41,6 +46,10 @@ public class BehatProject implements ProjectComponent {
 
     public PhpIndex getIndex() {
         return index;
+    }
+
+    public PageObjectFactory getPageObjectFactory() {
+        return pageObjectFactory;
     }
 
     @Override

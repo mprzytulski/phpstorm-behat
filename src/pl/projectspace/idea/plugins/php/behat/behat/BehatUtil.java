@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat;
+package pl.projectspace.idea.plugins.php.behat.behat;
 
 import com.jetbrains.php.lang.psi.elements.Method;
 

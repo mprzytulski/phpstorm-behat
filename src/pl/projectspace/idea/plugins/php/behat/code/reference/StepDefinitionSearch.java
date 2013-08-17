@@ -7,7 +7,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 import com.jetbrains.php.lang.psi.elements.Method;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.BehatUtil;
+import pl.projectspace.idea.plugins.php.behat.behat.BehatUtil;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

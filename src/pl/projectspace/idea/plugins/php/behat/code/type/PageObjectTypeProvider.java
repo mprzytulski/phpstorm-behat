@@ -6,9 +6,10 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.*;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.Nullable;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
-import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.behat.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 /**
@@ -28,18 +29,20 @@ public class PageObjectTypeProvider extends AbstractClassTypeProvider {
             return null;
         }
 
-        PhpClass phpClass = PsiUtils.getClass(method);
+        PhpClass phpClass = PsiTreeUtils.getClass(method);
         PsiElement[] parameters = method.getParameters();
+
+        BehatProject behatProject = (BehatProject)phpClass.getProject().getComponent("BehatProject");
 
         if (phpClass == null || !PageObjectContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
             return null;
         }
 
-        PageObjectLocator locator = ServiceManager.getService(psiElement.getProject(), PageObjectLocator.class);
-
         PageObject pageObject = null;
 
-        if ((pageObject= locator.get(((StringLiteralExpressionImpl) parameters[0]).getContents())) == null) {
+        String name = ((StringLiteralExpressionImpl) parameters[0]).getContents();
+
+        if ((pageObject= behatProject.getLocator().locate(name, PageObject.class)) == null) {
             return null;
         }
 

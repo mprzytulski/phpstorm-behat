@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.psi.element.context;
+package pl.projectspace.idea.plugins.php.behat.behat.context;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
@@ -11,8 +11,8 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
-import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
-import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
+import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
+import pl.projectspace.idea.plugins.php.behat.behat.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 import java.util.*;

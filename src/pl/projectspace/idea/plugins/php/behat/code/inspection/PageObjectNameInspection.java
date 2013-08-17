@@ -9,10 +9,10 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectFix;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
-import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
+import pl.projectspace.idea.plugins.php.behat.behat.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 /**
@@ -40,7 +40,7 @@ public class PageObjectNameInspection extends LocalInspectionTool {
                 return;
             }
 
-            PhpClass phpClass = PsiUtils.getClass(reference);
+            PhpClass phpClass = PsiTreeUtils.getClass(reference);
             PsiElement[] parameters = reference.getParameters();
 
             if (!PageObjectContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {

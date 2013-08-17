@@ -9,9 +9,9 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
+import pl.projectspace.idea.plugins.php.behat.behat.context.BehatContext;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatContextReference;
-import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>
@@ -24,7 +24,7 @@ public class SubContextReferenceProvider extends PsiReferenceProvider {
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
         MethodReference methodReference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
 
-        PhpClass phpClass = PsiUtils.getClass(methodReference);
+        PhpClass phpClass = PsiTreeUtils.getClass(methodReference);
 
         if (methodReference == null || !methodReference.getName().equalsIgnoreCase("getSubContext") || !BehatContext.is(phpClass)) {
             return new PsiReference[0];

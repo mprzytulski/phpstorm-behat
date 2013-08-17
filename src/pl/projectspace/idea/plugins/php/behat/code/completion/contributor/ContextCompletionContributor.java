@@ -2,10 +2,13 @@ package pl.projectspace.idea.plugins.php.behat.code.completion.contributor;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
+import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.ContextAnnotationProvider;
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.PageObjectNameProvider;
 import pl.projectspace.idea.plugins.php.behat.code.completion.provider.SubContextNameProvider;
@@ -15,8 +18,10 @@ import pl.projectspace.idea.plugins.php.behat.code.completion.provider.SubContex
  */
 public class ContextCompletionContributor extends CompletionContributor {
 
+    /**
+     * Registry code completion providers
+     */
     public ContextCompletionContributor() {
-
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().withParent(PhpDocComment.class),

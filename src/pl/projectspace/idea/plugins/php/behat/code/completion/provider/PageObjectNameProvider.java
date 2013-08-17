@@ -29,7 +29,7 @@ public class PageObjectNameProvider extends CompletionProvider<CompletionParamet
 
         MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
 
-        if (!PageObjectContext.isProperReferenceMethodName(reference)) {
+        if (!PageObjectContext.isGetPageCallOn(reference)) {
             return;
         }
 

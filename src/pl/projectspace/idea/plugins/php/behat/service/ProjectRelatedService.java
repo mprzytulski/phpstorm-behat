@@ -43,8 +43,6 @@ abstract public class ProjectRelatedService implements ProjectRelatedServiceInte
         }
 
         configure();
-
-        this.initiated = true;
     }
 
     /**

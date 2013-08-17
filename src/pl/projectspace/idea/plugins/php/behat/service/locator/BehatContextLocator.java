@@ -1,26 +1,66 @@
 package pl.projectspace.idea.plugins.php.behat.service.locator;
 
-import com.jetbrains.php.PhpClassHierarchyUtils;
+import com.intellij.openapi.project.Project;
+import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
+import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.ContextFactory;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.PageObjectContext;
 import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
-import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class ContextLocator extends ProjectRelatedService {
+public class BehatContextLocator extends BasePhpClassLocator implements PhpClassLocatorInterface {
+
+    public BehatContextLocator(Project project, PhpIndex index) {
+        super(project, index);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return new ArrayList<Class>(Arrays.asList(BehatContext.class));
+    }
+
+    @Override
+    public PhpClass locate(String key) {
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Base Interface for Behat Context for All Object
      */
-    public static final String BASE_CONTEXT_INTERFACE = "\\Behat\\Behat\\Context\\ExtendedContextInterface";
+    public static final String BASE_CONTEXT_INTERFACE = "\\Behat\\Behat\\Context\\ContextInterface";
 
     /**
      * Base context class
@@ -30,7 +70,7 @@ public class ContextLocator extends ProjectRelatedService {
     /**
      * Base PageObject Object Context class
      */
-    private final static String PAGE_OBJECT_CONTEXT_CLASS = "\\SensioLabs\\Behat\\PageObjectExtension\\Context\\PageObjectContext";
+    private final static String BASE_PAGE_OBJECT_CONTEXT_INTERFACE = "\\SensioLabs\\Behat\\PageObjectExtension\\Context\\PageObjectAwareInterface";
 
     /**
      * Class name of main context
@@ -40,8 +80,7 @@ public class ContextLocator extends ProjectRelatedService {
     public static final LinkedList<String> BUILDIN_CONTEXT_NAMESPACES = new LinkedList<String>();
 
     static {
-        // @todo create list of excluded namespaces
-        // BUILDIN_CONTEXT_NAMESPACES.add("");
+        BUILDIN_CONTEXT_NAMESPACES.add("\\Behat\\Behat\\Snippet\\");
     }
 
     /**
@@ -62,25 +101,14 @@ public class ContextLocator extends ProjectRelatedService {
     /**
      * Configure current service
      */
-    @Override
+//    @Override
     public void configure() {
-        PhpClass baseContext = null;
-
-        if ((baseContext = PsiUtils.getClassByFQN(project, BASE_CONTEXT_CLASS)) != null) {
-            this.baseContext = new BehatContext(baseContext);
-        }
-
         PhpClass mainContext = null;
         if ((mainContext = PsiUtils.getClassByFQN(project, MAIN_CONTEXT_CLASS)) != null) {
             this.mainContext = new BehatContext(mainContext);
         }
 
-        PhpClass pageObjectContext = null;
-        if ((pageObjectContext = PsiUtils.getClassByFQN(project, PAGE_OBJECT_CONTEXT_CLASS)) != null) {
-            basePageObjectContext = new PageObjectContext(pageObjectContext);
-        }
-
-        baseDir = project.getBaseDir().findFileByRelativePath("features/bootstrap");
+//        baseDir = project.getBaseDir().findFileByRelativePath("features/bootstrap");
     }
 
     /**
@@ -107,7 +135,6 @@ public class ContextLocator extends ProjectRelatedService {
      * @return
      */
     public BehatContext getMainContext() {
-        ensure(initiated);
 
         return mainContext;
     }
@@ -118,8 +145,30 @@ public class ContextLocator extends ProjectRelatedService {
      * @return
      */
     public BehatContext getBaseContext() {
-        ensure(initiated);
+
         return baseContext;
+    }
+
+    /**
+     * Checks if give class is subclass of BehatContext
+     *
+     * @param phpClass
+     * @return
+     */
+    public static boolean isSubClassOfBehatContext(PhpClass phpClass) {
+        return PhpIndex.getInstance(phpClass.getProject()).getAllSubclasses(BASE_CONTEXT_INTERFACE)
+            .contains(phpClass);
+    }
+
+    /**
+     * Checks if given class is subclass of PageObject Context
+     *
+     * @param phpClass
+     * @return
+     */
+    public static boolean isSubClassOfPageObjectContext(PhpClass phpClass) {
+        return PhpIndex.getInstance(phpClass.getProject()).getAllSubclasses(BASE_PAGE_OBJECT_CONTEXT_INTERFACE)
+            .contains(phpClass);
     }
 
     /**
@@ -129,8 +178,10 @@ public class ContextLocator extends ProjectRelatedService {
      * @return
      */
     public boolean isBehatContext(PhpClass phpClass) {
-        ensure(initiated);
-        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(baseContext.getDecoratedObject(), phpClass, false) && !isInExcludedNamespace(phpClass, ContextLocator.BUILDIN_CONTEXT_NAMESPACES));
+        return false;
+//        return (phpClass != null
+//                && isSubClassOfBehatContext(phpClass)
+//                && !isInExcludedNamespace(phpClass, BehatContextLocator.BUILDIN_CONTEXT_NAMESPACES));
     }
 
     /**
@@ -140,7 +191,7 @@ public class ContextLocator extends ProjectRelatedService {
      * @return
      */
     public boolean isPageObjectContext(PhpClass phpClass) {
-        ensure(initiated);
-        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePageObjectContext.getDecoratedObject(), phpClass, false));
+        return (isBehatContext(phpClass)
+                && isSubClassOfPageObjectContext(phpClass));
     }
 }

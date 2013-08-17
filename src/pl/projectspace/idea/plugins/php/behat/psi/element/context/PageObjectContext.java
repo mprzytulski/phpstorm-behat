@@ -4,7 +4,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pl.projectspace.idea.plugins.php.behat.psi.utils.PsiUtils;
-import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -22,7 +22,7 @@ public class PageObjectContext extends BehatContext {
      * @return
      */
     public static boolean is(PhpClass phpClass) {
-        return ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isPageObjectContext(phpClass);
+        return ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class).isPageObjectContext(phpClass);
     }
 
     /**
@@ -41,7 +41,7 @@ public class PageObjectContext extends BehatContext {
      * @param reference
      * @return
      */
-    public static boolean isProperReferenceMethodName(MethodReference reference) {
+    public static boolean isGetPageCallOn(MethodReference reference) {
         return (reference != null && reference.getName().equalsIgnoreCase("getPage"));
     }
 

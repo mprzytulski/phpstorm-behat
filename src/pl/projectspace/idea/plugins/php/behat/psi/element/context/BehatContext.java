@@ -13,7 +13,7 @@ import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
 import pl.projectspace.idea.plugins.php.behat.psi.element.PhpClassDecorator;
 import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
-import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 import java.util.*;
 
@@ -22,12 +22,12 @@ import java.util.*;
  */
 public class BehatContext extends PhpClassDecorator {
 
-    private ContextLocator locator;
+    private BehatContextLocator locator;
 
     public BehatContext(PhpClass phpClass) {
         super(phpClass);
 
-        locator = ServiceManager.getService(phpClass.getProject(), ContextLocator.class);
+        locator = ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class);
     }
 
     public List<BehatStep> getStepImplementations() {
@@ -133,10 +133,7 @@ public class BehatContext extends PhpClassDecorator {
      * @return
      */
     public static boolean is(PhpClass phpClass) {
-        if (phpClass == null) {
-            return false;
-        }
-        return ServiceManager.getService(phpClass.getProject(), ContextLocator.class).isBehatContext(phpClass);
+        return (phpClass != null && ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class).isBehatContext(phpClass));
     }
 
     /**

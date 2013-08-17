@@ -16,6 +16,7 @@ import pl.projectspace.idea.plugins.php.behat.code.reference.provider.SubContext
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class BehatReferenceContributor extends PsiReferenceContributor {
+
     @Override
     public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
         registrar.registerReferenceProvider(

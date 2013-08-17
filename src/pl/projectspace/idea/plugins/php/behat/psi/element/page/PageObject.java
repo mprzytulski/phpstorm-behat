@@ -66,7 +66,7 @@ public class PageObject extends PhpClassDecorator {
      * @return
      */
     public static boolean is(PhpClass phpClass) {
-        return ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).is(phpClass);
+        return ((phpClass != null) && ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).is(phpClass));
     }
 
     /**

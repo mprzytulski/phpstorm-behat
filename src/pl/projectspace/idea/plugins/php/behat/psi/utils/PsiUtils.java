@@ -4,11 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.*;
-import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,15 +34,24 @@ public class PsiUtils {
         if (!result.isEmpty()) {
             PhpClass phpClass = null;
             while ((phpClass = result.iterator().next()) != null) {
-                if (!excludedNamespaces.contains(phpClass.getNamespaceName())) {
-                    return phpClass;
-                }
+//                for (String ns : excludedNamespaces) {
+//                    if (!phpClass.getNamespaceName().startsWith(ns)) {
+                        return phpClass;
+//                    }
+//                }
             }
         }
 
         return null;
     }
 
+    /**
+     * Return class by FQN
+     *
+     * @param project
+     * @param fqn
+     * @return
+     */
     public static PhpClass getClassByFQN(final Project project, final String fqn) {
         return getClassByFQN(project, fqn, new LinkedList<String>());
     }
@@ -76,8 +82,13 @@ public class PsiUtils {
         return null;
     }
 
+    /**
+     * Return class for given MethodReference expression (resolving reference)
+     *
+     * @param expression
+     * @return
+     */
     public static PhpClass getClass(MethodReference expression) {
         return getClass(expression, new LinkedList<String>());
     }
-
 }

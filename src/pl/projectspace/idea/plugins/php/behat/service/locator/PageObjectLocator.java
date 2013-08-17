@@ -1,18 +1,20 @@
 package pl.projectspace.idea.plugins.php.behat.service.locator;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.PhpClassHierarchyUtils;
+import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
+import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.php.behat.psi.element.page.PageObject;
-import pl.projectspace.idea.plugins.php.behat.service.ProjectRelatedService;
 
 import java.util.*;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectLocator extends ProjectRelatedService {
+public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLocatorInterface {
 
     /**
      * Base PageObject Object Class
@@ -21,22 +23,25 @@ public class PageObjectLocator extends ProjectRelatedService {
 
     public static final List<String> DEFAULT_NAMESPACES = new LinkedList<String>();
 
-    static {
-        //
-    }
+    private PhpClass basePage;
 
-    /**
-     * Configure locator - create instances of base page object classes
-     */
-    public void configure() {
-        Collection<PhpClass> result;
+    public PageObjectLocator(Project project, PhpIndex index) {
+        super(project, index);
 
-        result = index.getClassesByFQN(PAGE_OBJECT_PAGE_CLASS);
+        Collection<PhpClass> result = index.getClassesByFQN(PAGE_OBJECT_PAGE_CLASS);
         if (!result.isEmpty()) {
             basePage = result.iterator().next();
         }
+    }
 
-        baseDir = project.getBaseDir().findFileByRelativePath("features/bootstrap/Page");
+    @Override
+    public List<Class> getSupportedTypes() {
+        return new ArrayList<Class>(Arrays.asList(PageObject.class));
+    }
+
+    @Override
+    public PhpClass locate(String key) {
+        return null;
     }
 
     /**
@@ -64,9 +69,9 @@ public class PageObjectLocator extends ProjectRelatedService {
         Map<String, PageObject> result = new HashMap<String, PageObject>();
 
         for (PhpClass page : index.getAllSubclasses(PAGE_OBJECT_PAGE_CLASS)) {
-            if (isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
-                result.put(page.getName(), new PageObject(page));
-            }
+//            if (!isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
+//                result.put(page.getName(), new PageObject(page));
+//            }
         }
 
         return result;
@@ -79,9 +84,8 @@ public class PageObjectLocator extends ProjectRelatedService {
      * @return
      */
     public boolean is(PhpClass phpClass) {
-        ensure(initiated);
-
-        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
+        return false;
+//        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
     }
 
     /**
@@ -91,9 +95,9 @@ public class PageObjectLocator extends ProjectRelatedService {
      * @return
      */
     public boolean is(MethodReference methodReference) {
-        ensure(initiated);
         PhpClass phpClass = PsiTreeUtil.getParentOfType(methodReference, PhpClass.class);
 
         return is(phpClass);
     }
+
 }

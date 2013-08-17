@@ -32,7 +32,7 @@ import org.jetbrains.plugins.cucumber.steps.AbstractStepDefinition;
 import org.jetbrains.plugins.cucumber.steps.CucumberStepsIndex;
 import pl.projectspace.idea.plugins.php.behat.code.generator.BehatStepCreator;
 import pl.projectspace.idea.plugins.php.behat.psi.element.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 import java.util.*;
 
@@ -178,7 +178,7 @@ public class BehatJavaExtension implements CucumberJvmExtensionPoint {
 
         final List<GherkinStep> result = new ArrayList<GherkinStep>();
 
-        Collection<BehatContext> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getAll();
+        Collection<BehatContext> contextClasses = ServiceManager.getService(featureFile.getProject(), BehatContextLocator.class).getAll();
 
         for (BehatContext behatStep : contextClasses) {
             for(pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep step : (behatStep).getStepImplementations()) {

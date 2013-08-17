@@ -12,11 +12,11 @@ import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.psi.element.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatStepReference;
-import pl.projectspace.idea.plugins.php.behat.service.locator.ContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,9 +43,10 @@ public class BehatStepReferenceProvider extends PsiReferenceProvider {
             }
         }
 
-        VirtualFile baseContextDir = ServiceManager.getService(element.getProject(), ContextLocator.class).getBaseDir();
+        BehatProject project = ((BehatProject)element.getProject().getComponent("BehatProject"));
+        VirtualFile featuresDirectory = project.getConfiguration().getFeaturesDirectory();
 
-        GlobalSearchScope scope = GlobalSearchScopes.directoryScope(element.getProject(), baseContextDir, true);
+        GlobalSearchScope scope = GlobalSearchScopes.directoryScope(element.getProject(), featuresDirectory, true);
 
         PsiElement[] result = PsiSearchHelper.SERVICE.getInstance(element.getProject())
                 .findCommentsContainingIdentifier(longest, scope);

@@ -13,13 +13,15 @@ import pl.projectspace.idea.plugins.php.behat.code.completion.provider.FeatureAn
  */
 public class FeatureCompletionContributor extends CompletionContributor {
 
+    /**
+     * Registry code contribution annotations
+     */
     public FeatureCompletionContributor() {
-        extend(CompletionType.BASIC, getLocation(), new FeatureAnnotationProvider());
-    }
-
-    private ElementPattern<PsiElement> getLocation() {
-        return PlatformPatterns
-            .psiElement(GherkinTokenTypes.TAG);
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(GherkinTokenTypes.TAG),
+            new FeatureAnnotationProvider()
+        );
     }
 
 }

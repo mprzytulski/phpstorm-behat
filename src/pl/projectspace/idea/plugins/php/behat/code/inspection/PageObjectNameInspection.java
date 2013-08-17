@@ -36,7 +36,7 @@ public class PageObjectNameInspection extends LocalInspectionTool {
 
         @Override
         public void visitPhpMethodReference(MethodReference reference) {
-            if (!PageObjectContext.isProperReferenceMethodName(reference)) {
+            if (!PageObjectContext.isGetPageCallOn(reference)) {
                 return;
             }
 

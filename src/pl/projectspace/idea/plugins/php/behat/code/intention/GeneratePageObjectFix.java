@@ -16,6 +16,7 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.Properties;
@@ -24,7 +25,9 @@ import java.util.Properties;
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class GeneratePageObjectFix implements LocalQuickFix {
-
+    /**
+     * PageObject class template
+     */
     private static final String PAGE_OBJECT_TEMPLATE = "PageObject.php";
 
     @NotNull
@@ -51,6 +54,8 @@ public class GeneratePageObjectFix implements LocalQuickFix {
     private PsiElement createFile(Project project, String className) {
         String fileName = className + '.' + PhpFileType.INSTANCE.getDefaultExtension();
 
+        BehatProject behatProject = ((BehatProject)project.getComponent("BehatProject"));
+
         Properties p = new Properties();
         final FileTemplate template = FileTemplateManager.getInstance().getJ2eeTemplate(PAGE_OBJECT_TEMPLATE);
 
@@ -65,7 +70,7 @@ public class GeneratePageObjectFix implements LocalQuickFix {
             throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(PAGE_OBJECT_TEMPLATE), e);
         }
 
-        VirtualFile featureFileDirectory = ServiceManager.getService(project, PageObjectLocator.class).getBaseDir();
+        VirtualFile featureFileDirectory = behatProject.getConfiguration().getBehatContextBaseDirectory();
         
         final PsiFileFactory factory = PsiFileFactory.getInstance(project);
         final PsiFile file = factory.createFileFromText(fileName, PhpFileType.INSTANCE, text);

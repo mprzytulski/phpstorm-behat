@@ -1,15 +1,13 @@
 package pl.projectspace.idea.plugins.php.behat.service.locator;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.plugins.cucumber.psi.GherkinFileType;
 import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
-import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
-import pl.projectspace.idea.plugins.php.behat.behat.step.BehatStep;
+import pl.projectspace.idea.plugins.php.behat.step.BehatStep;
 
 import java.util.ArrayList;
 import java.util.Arrays;

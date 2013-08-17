@@ -113,9 +113,13 @@
             implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
             displayName="Missing subcontext with given name" />
 
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.service.Locator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
 
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator"/>
+
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat."/>
 
     </extensions>
 

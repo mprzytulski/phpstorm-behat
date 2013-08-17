@@ -1,7 +1,6 @@
 package pl.projectspace.idea.plugins.php.behat.code.inspection;
 
 import com.intellij.codeInspection.*;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
@@ -10,9 +9,10 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
+import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectFix;
-import pl.projectspace.idea.plugins.php.behat.behat.context.PageObjectContext;
-import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 /**
@@ -49,8 +49,9 @@ public class PageObjectNameInspection extends LocalInspectionTool {
 
             String name = ((StringLiteralExpression) parameters[0]).getContents();
 
-            PageObject page = ServiceManager.getService(reference.getProject(), PageObjectLocator.class).get(name);
-            if (page != null) {
+            try {
+                reference.getProject().getComponent(BehatProject.class).getService(PageObjectLocator.class).locate(name);
+            } catch (MissingElementException e) {
                 return;
             }
 

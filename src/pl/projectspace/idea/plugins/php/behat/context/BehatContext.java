@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.behat.context;
+package pl.projectspace.idea.plugins.php.behat.context;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
@@ -10,9 +10,9 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
+import pl.projectspace.idea.plugins.php.behat.code.BehatProjectPhpClass;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
-import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
-import pl.projectspace.idea.plugins.php.behat.behat.step.BehatStep;
+import pl.projectspace.idea.plugins.php.behat.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
 import java.util.*;
@@ -20,14 +20,10 @@ import java.util.*;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class BehatContext extends PhpClassDecorator {
-
-    private BehatContextLocator locator;
+public class BehatContext extends BehatProjectPhpClass {
 
     public BehatContext(PhpClass phpClass) {
         super(phpClass);
-
-        locator = ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class);
     }
 
     public List<BehatStep> getStepImplementations() {
@@ -77,8 +73,12 @@ public class BehatContext extends PhpClassDecorator {
      */
     public Map<String, BehatContext> getSubContexts() {
         HashMap<String, BehatContext> subContexts = new HashMap<String, BehatContext>();
+        BehatContext base = ((BehatContextLocator)getBehatProject().getService(BehatContextLocator.class)).getMainContext();
 
-        BehatContext base = locator.getBaseContext();
+        if (base == null) {
+            return Collections.emptyMap();
+        }
+
         Method useContextMethod = base.getDecoratedObject().findMethodByName("useContext");
         Query<PsiReference> query = ReferencesSearch.search(useContextMethod, new LocalSearchScope(getDecoratedObject()));
 
@@ -123,7 +123,7 @@ public class BehatContext extends PhpClassDecorator {
      * @return
      */
     public BehatContext getMainContext() {
-        return locator.getMainContext();
+        return ((BehatContextLocator)getBehatProject().getService(BehatContextLocator.class)).getMainContext();
     }
 
     /**

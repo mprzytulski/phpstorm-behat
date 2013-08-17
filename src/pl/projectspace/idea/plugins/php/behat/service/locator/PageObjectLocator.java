@@ -6,11 +6,12 @@ import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
 import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.commons.php.utils.PhpClassUtils;
-import pl.projectspace.idea.plugins.php.behat.behat.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.page.PageObject;
+import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.service.locator.exceptions.MissingPageObjectException;
 
 import java.util.*;
 
@@ -43,14 +44,14 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
     }
 
     @Override
-    public PageObject locate(String key) {
+    public PageObject locate(String key) throws MissingElementException {
         Map<String, PageObject> pages = getAll();
 
-        if (pages.keySet().contains(key)) {
-            return pages.get(key);
+        if (!pages.keySet().contains(key)) {
+            throw new MissingPageObjectException("Missing PageObject class named: "+key);
         }
 
-        return null;
+        return pages.get(key);
     }
 
     /**
@@ -89,5 +90,4 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
     public boolean is(MethodReference methodReference) {
         return is(PsiTreeUtil.getParentOfType(methodReference, PhpClass.class));
     }
-
 }

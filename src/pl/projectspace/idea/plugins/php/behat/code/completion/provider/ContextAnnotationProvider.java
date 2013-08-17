@@ -10,7 +10,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
-import pl.projectspace.idea.plugins.php.behat.behat.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
 import pl.projectspace.idea.plugins.commons.php.psi.lookup.SimpleTextLookup;
 
 /**

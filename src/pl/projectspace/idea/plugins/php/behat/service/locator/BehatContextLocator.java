@@ -7,9 +7,9 @@ import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
 import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.commons.php.utils.PhpClassUtils;
-import pl.projectspace.idea.plugins.php.behat.behat.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.behat.context.ContextFactory;
-import pl.projectspace.idea.plugins.php.behat.behat.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.context.ContextFactory;
+import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
 
 import java.util.*;
 
@@ -96,7 +96,6 @@ public class BehatContextLocator extends BasePhpClassLocator implements PhpClass
      * @return
      */
     public BehatContext getMainContext() {
-
         return mainContext;
     }
 

@@ -1,9 +1,11 @@
-package pl.projectspace.idea.plugins.php.behat.behat.page;
+package pl.projectspace.idea.plugins.php.behat.page;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.*;
 import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
+import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.HashMap;
@@ -29,10 +31,15 @@ public class PageObject extends PhpClassDecorator {
             return false;
         }
 
-        PageObject page = ServiceManager.getService(element.getProject(), PageObjectLocator.class)
-                .get(((StringLiteralExpression) parameters[0]).getContents());
+        String name = ((StringLiteralExpression) parameters[0]).getContents();
 
-        return (page != null);
+        try {
+            element.getProject().getComponent(BehatProject.class).getService(PageObjectLocator.class).locate(name);
+
+            return true;
+        } catch (MissingElementException e) {
+            return false;
+        }
     }
 
     public Map<String, PsiElement> getElementLocators() {

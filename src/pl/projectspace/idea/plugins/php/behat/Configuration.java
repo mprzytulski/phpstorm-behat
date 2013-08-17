@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.behat;
+package pl.projectspace.idea.plugins.php.behat;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;

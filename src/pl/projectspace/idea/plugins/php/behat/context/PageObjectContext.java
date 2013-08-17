@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.behat.context;
+package pl.projectspace.idea.plugins.php.behat.context;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.jetbrains.php.lang.psi.elements.MethodReference;

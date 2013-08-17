@@ -10,7 +10,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
-import pl.projectspace.idea.plugins.php.behat.behat.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>

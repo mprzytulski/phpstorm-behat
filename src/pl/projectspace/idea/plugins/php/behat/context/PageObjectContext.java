@@ -11,38 +11,13 @@ import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocato
  */
 public class PageObjectContext extends BehatContext {
 
+    /**
+     * Base PageObject Object Context class
+     */
+    public final static String BASE_PAGE_OBJECT_CONTEXT_INTERFACE = "\\SensioLabs\\Behat\\PageObjectExtension\\Context\\PageObjectAwareInterface";
+
     public PageObjectContext(PhpClass phpClass) {
         super(phpClass);
-    }
-
-    /**
-     * Check if given class is instanceof PageObject Object Context
-     *
-     * @param phpClass
-     * @return
-     */
-    public static boolean is(PhpClass phpClass) {
-        return ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class).isPageObjectContext(phpClass);
-    }
-
-    /**
-     * Check if given method reference call is getPage call
-     * @return
-     */
-    public static boolean is(MethodReference reference) {
-        PhpClass phpClass = PsiTreeUtils.getClass(reference);
-
-        return (phpClass != null && is(phpClass));
-    }
-
-    /**
-     * Check if given reference contains proper page retrieval method
-     *
-     * @param reference
-     * @return
-     */
-    public static boolean isGetPageCallOn(MethodReference reference) {
-        return (reference != null && reference.getName().equalsIgnoreCase("getPage"));
     }
 
 }

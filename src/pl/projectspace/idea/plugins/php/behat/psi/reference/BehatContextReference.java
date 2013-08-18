@@ -9,19 +9,19 @@ import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
  */
 public class BehatContextReference extends PhpClassReference {
 
-    private BehatContext behatStep;
+    private BehatContext context;
 
     /**
-     * @param behatStep
+     * @param context
      * @param element
      */
-    public BehatContextReference(BehatContext behatStep, final StringLiteralExpression element) {
-        super(behatStep.getDecoratedObject(), element);
-        this.behatStep = behatStep;
+    public BehatContextReference(BehatContext context, final StringLiteralExpression element) {
+        super(context.getDecoratedObject(), element);
+        this.context = context;
     }
 
-    public BehatContext getBehatStep() {
-        return behatStep;
+    public BehatContext getContext() {
+        return context;
     }
 
 }

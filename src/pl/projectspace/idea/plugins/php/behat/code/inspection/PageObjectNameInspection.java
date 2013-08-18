@@ -3,6 +3,7 @@ package pl.projectspace.idea.plugins.php.behat.code.inspection;
 import com.intellij.codeInspection.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiReference;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
@@ -13,7 +14,11 @@ import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.Missi
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.code.intention.GeneratePageObjectFix;
 import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
+import pl.projectspace.idea.plugins.php.behat.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -35,27 +40,16 @@ public class PageObjectNameInspection extends LocalInspectionTool {
         }
 
         @Override
-        public void visitPhpMethodReference(MethodReference reference) {
-            if (!PageObjectContext.isGetPageCallOn(reference)) {
-                return;
-            }
-
-            PhpClass phpClass = PsiTreeUtils.getClass(reference);
-            PsiElement[] parameters = reference.getParameters();
-
-            if (!PageObjectContext.is(phpClass) || parameters.length != 1 || !(parameters[0] instanceof StringLiteralExpression)) {
-                return;
-            }
-
-            String name = ((StringLiteralExpression) parameters[0]).getContents();
-
+        public void visitPhpMethodReference(MethodReference psiElement) {
             try {
-                reference.getProject().getComponent(BehatProject.class).getService(PageObjectLocator.class).locate(name);
-            } catch (MissingElementException e) {
+                PageObjectResolver service = psiElement.getProject().getComponent(BehatProject.class).getService(PageObjectResolver.class);
+                service.resolve(psiElement);
+            } catch (InvalidReferenceMethodCall e) {
+                PsiElement[] parameters = psiElement.getParameters();
+                holder.registerProblem(parameters[0], "Invalid Page Object class name", new GeneratePageObjectFix());
+            } catch (InvalidMethodArgumentsException e) {
                 return;
             }
-
-            holder.registerProblem(parameters[0], "Invalid Page Object class name", new GeneratePageObjectFix());
         }
     }
 }

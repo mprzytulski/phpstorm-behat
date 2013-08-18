@@ -25,23 +25,6 @@ public class PageObject extends PhpClassDecorator {
         super(phpClass);
     }
 
-    public static boolean isValidPageCall(MethodReference element) {
-        PsiElement[] parameters = element.getParameters();
-        if (parameters.length != 1 || (!(parameters[0] instanceof StringLiteralExpression))) {
-            return false;
-        }
-
-        String name = ((StringLiteralExpression) parameters[0]).getContents();
-
-        try {
-            element.getProject().getComponent(BehatProject.class).getService(PageObjectLocator.class).locate(name);
-
-            return true;
-        } catch (MissingElementException e) {
-            return false;
-        }
-    }
-
     public Map<String, PsiElement> getElementLocators() {
         Field elements = getDecoratedObject().findFieldByName("elements", false);
         Map<String, PsiElement> map = new HashMap<String, PsiElement>();
@@ -65,23 +48,4 @@ public class PageObject extends PhpClassDecorator {
         return map;
     }
 
-    /**
-     * Check if given class is instance of Page Object
-     *
-     * @param phpClass
-     * @return
-     */
-    public static boolean is(PhpClass phpClass) {
-        return ((phpClass != null) && ServiceManager.getService(phpClass.getProject(), PageObjectLocator.class).is(phpClass));
-    }
-
-    /**
-     * Check if given reference is used in instance of Page Object
-     *
-     * @param methodReference
-     * @return
-     */
-    public static boolean is(MethodReference methodReference) {
-        return ServiceManager.getService(methodReference.getProject(), PageObjectLocator.class).is(methodReference);
-    }
 }

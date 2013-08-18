@@ -10,8 +10,11 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.ArrayElementReference;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
 import java.util.Map;
 
@@ -23,29 +26,25 @@ public class PageObjectElementGettersReferenceProvider extends PsiReferenceProvi
     @NotNull
     @Override
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
+        try {
+            PageObjectResolver service = psiElement.getProject().getComponent(BehatProject.class).getService(PageObjectResolver.class);
 
-        MethodReference reference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
-        PhpClass phpClass = PsiTreeUtil.getParentOfType(reference, PhpClass.class);
+            PageObject page = service.resolve(psiElement).getPageObject();
 
-        if (!PageObject.is(phpClass)) {
+            StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
+
+            Map<String, PsiElement> getters = page.getElementLocators();
+
+            if (!getters.containsKey(name.getContents())) {
+                return new PsiReference[0];
+            }
+
+            return new PsiReference[] { new ArrayElementReference(getters.get(name.getContents()), name) };
+        } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
+            return new PsiReference[0];
+        } catch (InvalidMethodArgumentsException e) {
             return new PsiReference[0];
         }
-
-        BehatProject behatProject = (BehatProject)phpClass.getProject().getComponent("BehatProject");
-
-        StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
-
-        PageObject page = new PageObject(phpClass);
-
-        Map<String, PsiElement> getters = page.getElementLocators();
-
-        if (!getters.containsKey(name.getContents())) {
-            return new PsiReference[0];
-        }
-
-        PsiReference[] ref =  { new ArrayElementReference(getters.get(name.getContents()), name) };
-
-        return ref;
     }
 
 }

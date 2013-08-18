@@ -11,9 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
+import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.PageObjectReference;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
+import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -24,23 +27,12 @@ public class PageObjectReferenceProvider extends PsiReferenceProvider {
     @Override
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
         try {
-            MethodReference reference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
+            PageObjectResolver service = psiElement.getProject().getComponent(BehatProject.class).getService(PageObjectResolver.class);
 
-            if (!PageObjectContext.isGetPageCallOn(reference) || !PageObjectContext.is(reference)) {
-                return new PsiReference[0];
-            }
-
-            StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
-
-            PageObject page = null;
-
-            page = psiElement.getProject().getComponent(BehatProject.class)
-                .getService(PageObjectLocator.class).locate(name.getContents());
-
-            PsiReference[] ref = { new PageObjectReference(page, name) };
-
-            return ref;
-        } catch (MissingElementException e) {
+            return new PsiReference[] {service.resolve(psiElement)};
+        } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
+            return new PsiReference[0];
+        } catch (InvalidMethodArgumentsException e) {
             return new PsiReference[0];
         }
     }

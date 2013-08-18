@@ -6,12 +6,10 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
-import com.jetbrains.php.lang.psi.elements.PhpClass;
-import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
-import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
-import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatContextReference;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.service.resolver.SubContextResolver;
+import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 
 /**
  * @author Daniel Ancuta <whisller@gmail.com>
@@ -24,24 +22,13 @@ public class SubContextReferenceProvider extends PsiReferenceProvider {
     public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
         MethodReference methodReference = PsiTreeUtil.getParentOfType(psiElement, MethodReference.class);
 
-        PhpClass phpClass = PsiTreeUtils.getClass(methodReference);
+        try {
+            SubContextResolver service = methodReference.getProject().getComponent(BehatProject.class).getService(SubContextResolver.class);
 
-        if (methodReference == null || !methodReference.getName().equalsIgnoreCase("getSubContext") || !BehatContext.is(phpClass)) {
+            return new PsiReference[] { service.resolve(methodReference) };
+        } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
             return new PsiReference[0];
         }
-
-        StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
-
-        BehatContext context = new BehatContext(phpClass);
-
-        BehatContext subContext = null;
-        if ((subContext = context.getSubContext(name.getContents())) == null) {
-            return new PsiReference[0];
-        }
-
-        PsiReference[] ref = { new BehatContextReference(subContext, name) };
-
-        return ref;
     }
 
 }

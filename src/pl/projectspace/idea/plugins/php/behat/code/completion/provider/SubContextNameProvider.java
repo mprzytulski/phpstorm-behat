@@ -10,8 +10,16 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
-import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
 import pl.projectspace.idea.plugins.commons.php.psi.lookup.SimpleTextLookup;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.page.PageObject;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.validator.BehatContextValidator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -23,21 +31,21 @@ public class SubContextNameProvider extends CompletionProvider<CompletionParamet
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
 
-        MethodReference reference = (MethodReference)PsiTreeUtil.getParentOfType(position, MethodReference.class);
+        MethodReference reference = PsiTreeUtil.getParentOfType(position, MethodReference.class);
 
-        if (!BehatContext.isProperReferenceCallMethodName(reference)) {
+        BehatContextValidator validator = reference.getProject()
+                .getComponent(BehatProject.class).getService(BehatContextValidator.class);
+
+        PhpClass phpClass = reference.getProject()
+                .getComponent(BehatProject.class).getService(PsiTreeUtils.class).getClass(reference);
+
+        if (validator.isBehatContext(phpClass)) {
             return;
         }
 
-        PhpClass phpClass = PsiTreeUtils.getClass(reference);
+        BehatContext behatContext = new BehatContext(phpClass);
 
-        if (!BehatContext.is(phpClass)) {
-            return;
-        }
-
-        BehatContext behatStep = new BehatContext(phpClass);
-
-        for (String name : behatStep.getSubContexts().keySet()) {
+        for (String name : behatContext.getSubContexts().keySet()) {
             result.addElement(new SimpleTextLookup(name));
         }
     }

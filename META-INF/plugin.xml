@@ -115,11 +115,15 @@
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
 
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.validator.BehatContextValidator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContextValidator"/>
+
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
+
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator"/>
 
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat."/>
+        <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat."/>-->
 
     </extensions>
 

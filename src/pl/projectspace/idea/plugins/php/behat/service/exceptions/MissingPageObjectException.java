@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.service.locator.exceptions;
+package pl.projectspace.idea.plugins.php.behat.service.exceptions;
 
 import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
 

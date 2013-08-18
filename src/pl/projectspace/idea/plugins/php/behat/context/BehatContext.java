@@ -12,6 +12,8 @@ import com.jetbrains.php.lang.psi.elements.*;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.code.BehatProjectPhpClass;
 import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
+import pl.projectspace.idea.plugins.php.behat.context.exceptions.MissingContextException;
+import pl.projectspace.idea.plugins.php.behat.service.validator.BehatContextValidator;
 import pl.projectspace.idea.plugins.php.behat.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
 
@@ -21,6 +23,28 @@ import java.util.*;
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class BehatContext extends BehatProjectPhpClass {
+
+    /**
+     * Base Interface for Behat Context for All Object
+     */
+    public static final String BASE_CONTEXT_INTERFACE = "\\Behat\\Behat\\Context\\ContextInterface";
+
+    /**
+     * Base context class
+     */
+    public static final String BASE_CONTEXT_CLASS = "\\Behat\\Behat\\Context\\BehatContext";
+
+    /**
+     * Class name of main context
+     */
+    public static final String MAIN_CONTEXT_CLASS = "\\FeatureContext";
+
+    public static final LinkedList<String> BUILDIN_CONTEXT_NAMESPACES = new LinkedList<String>();
+
+    static {
+        BUILDIN_CONTEXT_NAMESPACES.add("\\Behat\\Behat\\Snippet\\");
+    }
+
 
     public BehatContext(PhpClass phpClass) {
         super(phpClass);
@@ -107,11 +131,11 @@ public class BehatContext extends BehatProjectPhpClass {
      * @param name
      * @return
      */
-    public BehatContext getSubContext(String name) {
+    public BehatContext getSubContext(String name) throws MissingContextException {
         Map<String, BehatContext> subs = getSubContexts();
 
         if (!subs.keySet().contains(name)) {
-            return null;
+            throw new MissingContextException("Missing named context: " + name);
         }
 
         return subs.get(name);
@@ -133,7 +157,7 @@ public class BehatContext extends BehatProjectPhpClass {
      * @return
      */
     public static boolean is(PhpClass phpClass) {
-        return (phpClass != null && ServiceManager.getService(phpClass.getProject(), BehatContextLocator.class).isBehatContext(phpClass));
+        return (phpClass != null && ServiceManager.getService(phpClass.getProject(), BehatContextValidator.class).isBehatContext(phpClass));
     }
 
     /**

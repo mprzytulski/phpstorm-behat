@@ -1,17 +1,14 @@
 package pl.projectspace.idea.plugins.php.behat.service.locator;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
-import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pl.projectspace.idea.plugins.commons.php.service.locator.BasePhpClassLocator;
 import pl.projectspace.idea.plugins.commons.php.service.locator.PhpClassLocatorInterface;
 import pl.projectspace.idea.plugins.commons.php.utils.PhpClassUtils;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
-import pl.projectspace.idea.plugins.php.behat.service.locator.exceptions.MissingPageObjectException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.MissingPageObjectException;
 
 import java.util.*;
 
@@ -71,23 +68,4 @@ public class PageObjectLocator extends BasePhpClassLocator implements PhpClassLo
         return result;
     }
 
-    /**
-     * Check if give PhpClass instance is PageObject implementation
-     *
-     * @param phpClass
-     * @return
-     */
-    public boolean is(PhpClass phpClass) {
-        return (phpClass != null && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, false));
-    }
-
-    /**
-     * Check if give PhpClass instance is PageObject implementation
-     *
-     * @param methodReference
-     * @return
-     */
-    public boolean is(MethodReference methodReference) {
-        return is(PsiTreeUtil.getParentOfType(methodReference, PhpClass.class));
-    }
 }

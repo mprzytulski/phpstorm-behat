@@ -1,6 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat;
 
 import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.php.PhpIndex;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +31,8 @@ public class BehatProject implements ProjectComponent {
         return index;
     }
 
-    public <T>T getService(Class<T> service) {
-        return (T) project.getPicoContainer().getComponentInstance(service);
+    public <T>T getService(@NotNull Class<T> service) {
+        return (T) ServiceManager.getService(project, service);
     }
 
     @Override

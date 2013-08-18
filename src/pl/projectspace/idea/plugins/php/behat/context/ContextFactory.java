@@ -2,6 +2,10 @@ package pl.projectspace.idea.plugins.php.behat.context;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator;
+import pl.projectspace.idea.plugins.php.behat.service.validator.BehatContextValidator;
+import pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContextValidator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +28,17 @@ public class ContextFactory {
             return map.get(phpClass.getFQN());
         }
 
+        BehatContextValidator behatContextValidator = phpClass.getProject()
+            .getComponent(BehatProject.class).getService(BehatContextValidator.class);
+
+        PageObjectContextValidator pageObjectContextValidator = phpClass.getProject().getComponent(BehatProject.class)
+            .getService(PageObjectContextValidator.class);
+
         BehatContext context = null;
-        if (PageObjectContext.is(phpClass)) {
+
+        if (behatContextValidator.isBehatContext(phpClass)) {
             context = new PageObjectContext(phpClass);
-        } else if (BehatContext.is(phpClass)) {
+        } else if (pageObjectContextValidator.isPageObjectContext(phpClass)) {
             context = new BehatContext(phpClass);
         }
 

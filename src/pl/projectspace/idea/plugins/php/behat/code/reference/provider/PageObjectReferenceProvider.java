@@ -15,6 +15,7 @@ import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenc
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.PageObjectReference;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
@@ -29,10 +30,12 @@ public class PageObjectReferenceProvider extends PsiReferenceProvider {
         try {
             PageObjectResolver service = psiElement.getProject().getComponent(BehatProject.class).getService(PageObjectResolver.class);
 
-            return new PsiReference[] {service.resolve(psiElement)};
+            return new PsiReference[] { service.resolve(psiElement) };
         } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
             return new PsiReference[0];
         } catch (InvalidMethodArgumentsException e) {
+            return new PsiReference[0];
+        } catch (InvalidMethodNameResolveException e) {
             return new PsiReference[0];
         }
     }

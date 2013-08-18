@@ -12,6 +12,7 @@ import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
 import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.SubContextResolver;
@@ -35,6 +36,8 @@ public class PageObjectTypeProvider extends AbstractClassTypeProvider {
         } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
             return null;
         } catch (InvalidMethodArgumentsException e) {
+            return null;
+        } catch (InvalidMethodNameResolveException e) {
             return null;
         }
     }

@@ -23,13 +23,13 @@ public class ContextAnnotationProvider extends CompletionProvider<CompletionPara
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
 
-        PhpClass phpClass = PsiTreeUtil.getParentOfType(position, PhpClass.class);
-        if (phpClass == null || !BehatContext.is(phpClass)) {
-            return;
-        }
-
-        for (Object annotation : ArrayUtils.addAll(BehatAnnotation.tags, BehatAnnotation.hook)) {
-            result.addElement(new SimpleTextLookup("@" + (String)annotation));
-        }
+//        PhpClass phpClass = PsiTreeUtil.getParentOfType(position, PhpClass.class);
+//        if (phpClass == null || !BehatContext.is(phpClass)) {
+//            return;
+//        }
+//
+//        for (Object annotation : ArrayUtils.addAll(BehatAnnotation.tags, BehatAnnotation.hook)) {
+//            result.addElement(new SimpleTextLookup("@" + (String)annotation));
+//        }
     }
 }

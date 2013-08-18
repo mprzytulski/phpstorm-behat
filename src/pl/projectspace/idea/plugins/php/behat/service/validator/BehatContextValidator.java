@@ -40,13 +40,13 @@ public class BehatContextValidator {
         return (methodReference != null && isValidMethodName(methodReference) && gotValidParameters(methodReference));
     }
 
+    public boolean isValidMethodName(MethodReference reference) {
+        return reference.getName().equalsIgnoreCase("getSubContext");
+    }
+
     private boolean gotValidParameters(MethodReference methodReference) {
         PsiElement[] parameters = methodReference.getParameters();
 
         return (parameters.length == 1 && (parameters[0] instanceof StringLiteralExpression));
-    }
-
-    private boolean isValidMethodName(MethodReference reference) {
-        return reference.getName().equalsIgnoreCase("getSubContext");
     }
 }

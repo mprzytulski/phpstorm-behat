@@ -13,6 +13,7 @@ import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenc
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.PageObjectReference;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContextValidator;
 
@@ -20,12 +21,16 @@ import pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContex
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class PageObjectResolver {
-    public PageObjectReference resolve(PsiElement element) throws InvalidReferenceMethodCall, InvalidMethodArgumentsException {
+    public PageObjectReference resolve(PsiElement element) throws InvalidReferenceMethodCall, InvalidMethodArgumentsException, InvalidMethodNameResolveException {
         try {
             MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
 
             BehatProject behatProject = element.getProject().getComponent(BehatProject.class);
             PageObjectContextValidator validator = behatProject.getService(PageObjectContextValidator.class);
+
+            if (!validator.isValidMethodName(methodReference)) {
+                throw new InvalidMethodNameResolveException("Resolving object on invalid method");
+            }
 
             if (!validator.isValidCall(methodReference)) {
                 throw new InvalidReferenceMethodCall("Tried to get Sub Context on invalid method reference - wrong method name.");

@@ -5,9 +5,9 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.ide.actions.OpenFileAction;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -17,7 +17,6 @@ import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
-import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 
 import java.util.Properties;
 
@@ -70,12 +69,14 @@ public class GeneratePageObjectFix implements LocalQuickFix {
             throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(PAGE_OBJECT_TEMPLATE), e);
         }
 
-        VirtualFile featureFileDirectory = behatProject.getConfiguration().getBehatContextBaseDirectory();
-        
+        String dirPath = behatProject.getConfiguration().getBehatConfiguration().getDefaultProfile().getPaths().getFeaturesDir();
+
+        VirtualFile dir = project.getBaseDir().findFileByRelativePath(dirPath);
+
         final PsiFileFactory factory = PsiFileFactory.getInstance(project);
         final PsiFile file = factory.createFileFromText(fileName, PhpFileType.INSTANCE, text);
 
-        PsiDirectory directory = file.getManager().findDirectory(featureFileDirectory);
+        PsiDirectory directory = file.getManager().findDirectory(dir);
 
         return directory.add(file);
     }

@@ -17,6 +17,7 @@ import pl.projectspace.idea.plugins.php.behat.context.PageObjectContext;
 import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
 import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
@@ -48,6 +49,8 @@ public class PageObjectNameInspection extends LocalInspectionTool {
                 PsiElement[] parameters = psiElement.getParameters();
                 holder.registerProblem(parameters[0], "Invalid Page Object class name", new GeneratePageObjectFix());
             } catch (InvalidMethodArgumentsException e) {
+                return;
+            } catch (InvalidMethodNameResolveException e) {
                 return;
             }
         }

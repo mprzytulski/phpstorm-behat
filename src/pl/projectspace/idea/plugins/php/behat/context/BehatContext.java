@@ -97,14 +97,14 @@ public class BehatContext extends BehatProjectPhpClass {
      */
     public Map<String, BehatContext> getSubContexts() {
         HashMap<String, BehatContext> subContexts = new HashMap<String, BehatContext>();
-        BehatContext base = ((BehatContextLocator)getBehatProject().getService(BehatContextLocator.class)).getMainContext();
+        BehatContext baseContext = (getBehatProject().getService(BehatContextLocator.class)).getMainContext();
 
-        if (base == null) {
+        if (baseContext == null) {
             return Collections.emptyMap();
         }
 
-        Method useContextMethod = base.getDecoratedObject().findMethodByName("useContext");
-        Query<PsiReference> query = ReferencesSearch.search(useContextMethod, new LocalSearchScope(getDecoratedObject()));
+        Method useContextMethod = baseContext.getDecoratedObject().findMethodByName("useContext");
+        Query<PsiReference> query = ReferencesSearch.search(useContextMethod, new LocalSearchScope(baseContext.getDecoratedObject()));
 
         for (PsiReference use : query.findAll()) {
             MethodReference method = (MethodReference) use;
@@ -147,26 +147,7 @@ public class BehatContext extends BehatProjectPhpClass {
      * @return
      */
     public BehatContext getMainContext() {
-        return ((BehatContextLocator)getBehatProject().getService(BehatContextLocator.class)).getMainContext();
+        return (getBehatProject().getService(BehatContextLocator.class)).getMainContext();
     }
 
-    /**
-     * Check if given PhpClass instance is Behat context
-     *
-     * @param phpClass
-     * @return
-     */
-    public static boolean is(PhpClass phpClass) {
-        return (phpClass != null && ServiceManager.getService(phpClass.getProject(), BehatContextValidator.class).isBehatContext(phpClass));
-    }
-
-    /**
-     * Check if given reference contains proper context method
-     *
-     * @param reference
-     * @return
-     */
-    public static boolean isProperReferenceCallMethodName(MethodReference reference) {
-        return (reference != null && reference.getName().equalsIgnoreCase("getSubContext"));
-    }
 }

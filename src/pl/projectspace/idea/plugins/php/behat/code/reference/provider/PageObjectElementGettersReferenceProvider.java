@@ -14,6 +14,7 @@ import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenc
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.ArrayElementReference;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
+import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
 import java.util.Map;
@@ -43,6 +44,8 @@ public class PageObjectElementGettersReferenceProvider extends PsiReferenceProvi
         } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
             return new PsiReference[0];
         } catch (InvalidMethodArgumentsException e) {
+            return new PsiReference[0];
+        } catch (InvalidMethodNameResolveException e) {
             return new PsiReference[0];
         }
     }

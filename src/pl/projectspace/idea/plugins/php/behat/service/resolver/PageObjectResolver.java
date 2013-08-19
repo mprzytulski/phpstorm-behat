@@ -23,32 +23,14 @@ import pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContex
 public class PageObjectResolver {
     public PageObjectReference resolve(PsiElement element) throws InvalidReferenceMethodCall, InvalidMethodArgumentsException, InvalidMethodNameResolveException {
         try {
-            MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
-
             BehatProject behatProject = element.getProject().getComponent(BehatProject.class);
-            PageObjectContextValidator validator = behatProject.getService(PageObjectContextValidator.class);
-
-            if (!validator.isValidMethodName(methodReference)) {
-                throw new InvalidMethodNameResolveException("Resolving object on invalid method");
-            }
-
-            if (!validator.isValidCall(methodReference)) {
-                throw new InvalidReferenceMethodCall("Tried to get Sub Context on invalid method reference - wrong method name.");
-            }
-
-            PhpClass phpClass = behatProject.getService(PsiTreeUtils.class).getClass(element);
-            if (!validator.isPageObjectContext(phpClass)) {
-                throw new InvalidReferenceMethodCall("Tried to get PageObject context on invalid method reference - no context object.");
-            }
 
             StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) element);
 
             PageObjectLocator pageObjectLocator = behatProject.getService(PageObjectLocator.class);
             PageObject page = pageObjectLocator.locate(name.getContents());
 
-            return new PageObjectReference(new PageObject(phpClass), name);
-        } catch (FailedToLocateContainingClassException e) {
-            throw new InvalidReferenceMethodCall(e.getMessage());
+            return new PageObjectReference(page, name);
         } catch (MissingElementException e) {
             throw new InvalidReferenceMethodCall(e.getMessage());
         }

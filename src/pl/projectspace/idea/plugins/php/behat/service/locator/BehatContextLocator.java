@@ -34,7 +34,11 @@ public class BehatContextLocator extends BasePhpClassLocator implements PhpClass
     public BehatContextLocator(Project project, PhpIndex index) {
         super(project, index);
 
-        PhpClass mainContext = project.getComponent(BehatProject.class).getService(PsiTreeUtils.class).getClassByFQN(BehatContext.MAIN_CONTEXT_CLASS);
+        BehatProject behatProject = project.getComponent(BehatProject.class);
+
+        String mainContextClass = behatProject.getConfig().getDefaultProfile().getContext().getMainContextClass();
+
+        PhpClass mainContext = behatProject.getService(PsiTreeUtils.class).getClassByFQN(mainContextClass);
         this.mainContext = new BehatContext(mainContext);
     }
 

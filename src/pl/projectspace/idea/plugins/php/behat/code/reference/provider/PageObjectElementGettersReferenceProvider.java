@@ -9,12 +9,15 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.impl.StringLiteralExpressionImpl;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
+import pl.projectspace.idea.plugins.commons.php.service.locator.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.context.exceptions.InvalidReferenceMethodCall;
 import pl.projectspace.idea.plugins.php.behat.page.PageObject;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.ArrayElementReference;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodArgumentsException;
 import pl.projectspace.idea.plugins.php.behat.service.exceptions.InvalidMethodNameResolveException;
+import pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.service.resolver.PageObjectResolver;
 
 import java.util.Map;
@@ -26,13 +29,16 @@ public class PageObjectElementGettersReferenceProvider extends PsiReferenceProvi
 
     @NotNull
     @Override
-    public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement, @NotNull ProcessingContext processingContext) {
+    public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext processingContext) {
         try {
-            PageObjectResolver service = psiElement.getProject().getComponent(BehatProject.class).getService(PageObjectResolver.class);
+            PhpClass phpClass = PsiTreeUtil.getParentOfType(element, PhpClass.class);
 
-            PageObject page = service.resolve(psiElement).getPageObject();
+            BehatProject project = element.getProject().getComponent(BehatProject.class);
 
-            StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) psiElement);
+            PageObjectLocator locator = project.getService(PageObjectLocator.class);
+            PageObject page = locator.locate(phpClass.getName());
+
+            StringLiteralExpressionImpl name = ((StringLiteralExpressionImpl) element);
 
             Map<String, PsiElement> getters = page.getElementLocators();
 
@@ -41,11 +47,7 @@ public class PageObjectElementGettersReferenceProvider extends PsiReferenceProvi
             }
 
             return new PsiReference[] { new ArrayElementReference(getters.get(name.getContents()), name) };
-        } catch (InvalidReferenceMethodCall invalidReferenceMethodCall) {
-            return new PsiReference[0];
-        } catch (InvalidMethodArgumentsException e) {
-            return new PsiReference[0];
-        } catch (InvalidMethodNameResolveException e) {
+        } catch (MissingElementException e) {
             return new PsiReference[0];
         }
     }

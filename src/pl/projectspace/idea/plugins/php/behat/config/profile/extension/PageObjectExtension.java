@@ -42,4 +42,14 @@ public class PageObjectExtension extends Extension {
     public void setElementNamespace(String elementNamespace) {
         this.elementNamespace = elementNamespace;
     }
+
+    public String getBasePageName() {
+        String pageName = "\\Page";
+
+        if (pageNamespace.equals("\\")) {
+            return pageName;
+        }
+
+        return pageNamespace.concat(pageName);
+    }
 }

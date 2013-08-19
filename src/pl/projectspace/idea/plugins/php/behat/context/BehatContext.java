@@ -34,11 +34,6 @@ public class BehatContext extends BehatProjectPhpClass {
      */
     public static final String BASE_CONTEXT_CLASS = "\\Behat\\Behat\\Context\\BehatContext";
 
-    /**
-     * Class name of main context
-     */
-    public static final String MAIN_CONTEXT_CLASS = "\\FeatureContext";
-
     public static final LinkedList<String> BUILDIN_CONTEXT_NAMESPACES = new LinkedList<String>();
 
     static {

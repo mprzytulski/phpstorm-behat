@@ -5,10 +5,9 @@ import java.util.Map;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-interface ExtensionInterface {
+public interface ExtensionInterface {
 
     public String getName();
 
     public Map<String, String> getParameters();
-
 }

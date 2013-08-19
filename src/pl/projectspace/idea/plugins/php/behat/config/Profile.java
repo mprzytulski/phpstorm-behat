@@ -5,11 +5,11 @@ import pl.projectspace.idea.plugins.php.behat.config.profile.Filters;
 import pl.projectspace.idea.plugins.php.behat.config.profile.Formatter;
 import pl.projectspace.idea.plugins.php.behat.config.profile.Paths;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.Extension;
+import pl.projectspace.idea.plugins.php.behat.config.profile.extension.ExtensionInterface;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.MinkExtension;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +22,7 @@ public class Profile {
     private Filters filters;
     private Paths paths;
     private Formatter formatter;
-    private Map<String, Extension> extensions = new HashMap<String, Extension>();
+    private Map<String, ExtensionInterface> extensions = new HashMap<String, ExtensionInterface>();
 
     public Profile(String name, Map<String, Object> definition) {
         this.name = name;
@@ -88,9 +88,13 @@ public class Profile {
         this.formatter = formatter;
     }
 
+    public ExtensionInterface getExtension(String name) {
+        return extensions.get(name);
+    }
+
     private void loadExtensions(Map<String, Map<String, Object>> extensions) {
         for (Map.Entry<String, Map<String, Object>> entry: extensions.entrySet()) {
-            Extension extension = null;
+            ExtensionInterface extension = null;
             if (entry.getKey().equals("SensioLabs\\Behat\\PageObjectExtension\\Extension")) {
                 extension = new PageObjectExtension(entry.getValue());
             } else if (entry.getKey().equals("Behat\\MinkExtension\\Extension")) {
@@ -99,7 +103,7 @@ public class Profile {
                 extension = new Extension(entry.getKey(), entry.getValue());
             }
 
-            this.extensions.put(entry.getKey(), extension);
+            this.extensions.put(extension.getName(), extension);
         }
     }
 

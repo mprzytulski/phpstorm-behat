@@ -69,7 +69,7 @@ public class GeneratePageObjectFix implements LocalQuickFix {
             throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(PAGE_OBJECT_TEMPLATE), e);
         }
 
-        String dirPath = behatProject.getConfiguration().getBehatConfiguration().getDefaultProfile().getPaths().getFeaturesDir();
+        String dirPath = behatProject.getConfig().getDefaultProfile().getPaths().getFeaturesDir();
 
         VirtualFile dir = project.getBaseDir().findFileByRelativePath(dirPath);
 

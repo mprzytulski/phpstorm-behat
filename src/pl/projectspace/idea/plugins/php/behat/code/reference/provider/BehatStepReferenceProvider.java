@@ -43,7 +43,7 @@ public class BehatStepReferenceProvider extends PsiReferenceProvider {
 
         BehatProject project = ((BehatProject)element.getProject().getComponent("BehatProject"));
 
-        String dirPath = project.getConfiguration().getBehatConfiguration().getDefaultProfile().getPaths().getFeaturesDir();
+        String dirPath = project.getConfig().getDefaultProfile().getPaths().getFeaturesDir();
 
         VirtualFile featuresDirectory = element.getProject().getBaseDir().findFileByRelativePath(dirPath);
 

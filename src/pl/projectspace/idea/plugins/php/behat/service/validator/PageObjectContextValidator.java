@@ -47,14 +47,7 @@ public class PageObjectContextValidator implements MethodCallValidator {
     }
 
     public boolean isValidCall(MethodReference methodReference) throws InvalidMethodArgumentsException {
-        if (methodReference == null) {
-            return false;
-        }
-        if (!gotValidParameters(methodReference)) {
-            throw new InvalidMethodArgumentsException("Invalid arguments for getPage call");
-        }
-
-        return true;
+        return ((methodReference != null) && isValidMethodName(methodReference) && gotValidParameters(methodReference));
     }
 
     private boolean gotValidParameters(MethodReference methodReference) {
@@ -63,7 +56,7 @@ public class PageObjectContextValidator implements MethodCallValidator {
         return (parameters.length == 1 && (parameters[0] instanceof StringLiteralExpression));
     }
 
-    public boolean isValidMethodName(MethodReference reference) {
+    private boolean isValidMethodName(MethodReference reference) {
         return (reference != null && reference.getName().equalsIgnoreCase("getPage"));
     }
 

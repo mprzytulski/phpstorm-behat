@@ -19,24 +19,24 @@ public class BehatReferenceContributor extends PsiReferenceContributor {
 
     @Override
     public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-//        registrar.registerReferenceProvider(
-//            PlatformPatterns.psiElement(GherkinStep.class),
-//            new BehatStepReferenceProvider()
-//        );
-//
-//        registrar.registerReferenceProvider(
-//            PlatformPatterns.psiElement(StringLiteralExpression.class)
-//                .withLanguage(PhpLanguage.INSTANCE)
-//                .withParent(ParameterList.class),
-//            new PageObjectReferenceProvider()
-//        );
-//
-//        registrar.registerReferenceProvider(
-//                PlatformPatterns.psiElement(StringLiteralExpression.class)
-//                        .withLanguage(PhpLanguage.INSTANCE)
-//                        .withParent(ParameterList.class),
-//                new PageObjectElementGettersReferenceProvider()
-//        );
+        registrar.registerReferenceProvider(
+            PlatformPatterns.psiElement(GherkinStep.class),
+            new BehatStepReferenceProvider()
+        );
+
+        registrar.registerReferenceProvider(
+            PlatformPatterns.psiElement(StringLiteralExpression.class)
+                .withLanguage(PhpLanguage.INSTANCE)
+                .withParent(ParameterList.class),
+            new PageObjectReferenceProvider()
+        );
+
+        registrar.registerReferenceProvider(
+                PlatformPatterns.psiElement(StringLiteralExpression.class)
+                        .withLanguage(PhpLanguage.INSTANCE)
+                        .withParent(ParameterList.class),
+                new PageObjectElementGettersReferenceProvider()
+        );
 
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(StringLiteralExpression.class)

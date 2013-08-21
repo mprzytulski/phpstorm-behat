@@ -95,16 +95,13 @@
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetPageMethodTypeProvider"/>
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetElementMethodTypeProvider"/>
 
-        <!--<completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.context.S"/>-->
+        <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.feature.FeatureCompletionContributor"/>
 
         <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.context.ContextCompletionContributor"/>
         <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectCompletionContributor"/>
 
-        <!--<completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectCompletionContributor"/>-->
-        <!--<completion.contributor language="yaml" implementationClass="pl.projectspace.idea.plugins.php.behat.config.ConfigurationCompletionContributor"/>-->
-
-        <!--<psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.context.BehatReferenceContributor" />-->
         <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.context.ContextReferenceContributor" />
+        <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.feature.step.BehatStepReferenceContributor" />
         <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectReferenceContributor" />
 
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"

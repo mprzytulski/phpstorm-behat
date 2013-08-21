@@ -33,7 +33,7 @@ public class GetPageMethodDecorator extends MethodCallDecorator {
 
     @Override
     protected Object resolveType() throws MissingElementException {
-        if (!hasParameter(0)) {
+        if (!hasParameter(0, StringLiteralExpression.class)) {
             throw new MissingElementException("Missing parameter");
         }
 

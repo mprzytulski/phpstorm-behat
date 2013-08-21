@@ -31,7 +31,7 @@ public class GetElementMethodDecorator extends MethodCallDecorator {
 
     @Override
     protected Object resolveType() throws MissingElementException {
-        if (!hasParameter(0) || !(getParameter(0) instanceof StringLiteralExpression)) {
+        if (!hasParameter(0, StringLiteralExpression.class)) {
             throw new MissingElementException("Missing parameter");
         }
 

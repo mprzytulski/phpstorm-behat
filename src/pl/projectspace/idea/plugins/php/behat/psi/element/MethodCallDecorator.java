@@ -11,14 +11,14 @@ import java.util.List;
  */
 public abstract class MethodCallDecorator extends BehatMethod {
     public MethodCallDecorator(PsiElement element, String expectedName) throws InvalidArgumentException {
-        this(element, Arrays.asList(new String[]{expectedName}));
+        this(element, Arrays.asList(new String[]{ expectedName }));
     }
 
     public MethodCallDecorator(PsiElement element, List<String> expectedNames) throws InvalidArgumentException {
         super(element);
 
         for (String method : expectedNames) {
-            if (!this.element.getName().equalsIgnoreCase(method)) {
+            if (this.element.getName().equalsIgnoreCase(method)) {
                 return;
             }
         }

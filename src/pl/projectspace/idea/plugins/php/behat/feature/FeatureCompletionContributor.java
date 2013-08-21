@@ -1,10 +1,10 @@
-package pl.projectspace.idea.plugins.php.behat.core.completion.contributor;
+package pl.projectspace.idea.plugins.php.behat.feature;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PlatformPatterns;
 import org.jetbrains.plugins.cucumber.psi.GherkinTokenTypes;
-import pl.projectspace.idea.plugins.php.behat.core.completion.provider.FeatureAnnotationProvider;
+import pl.projectspace.idea.plugins.php.behat.feature.FeatureAnnotationProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

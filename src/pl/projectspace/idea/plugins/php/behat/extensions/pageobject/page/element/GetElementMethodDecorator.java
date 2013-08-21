@@ -8,6 +8,8 @@ import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.PageObject;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageObjectLocator;
 import pl.projectspace.idea.plugins.php.behat.psi.element.MethodCallDecorator;
 
+import java.util.Arrays;
+
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
@@ -16,20 +18,20 @@ public class GetElementMethodDecorator extends MethodCallDecorator {
     protected final PageObject pageObject;
 
     public GetElementMethodDecorator(PsiElement element) throws InvalidArgumentException, MissingElementException {
-        super(element, "getElement");
+        super(element, Arrays.asList(new String[] { "getElement", "hasElement" }));
 
         pageObject = behatProject.getService(PageObjectLocator.class)
-            .locate(getTarget().getFQN());
+            .locate(getTarget().getName());
     }
 
     @Override
-    public PageObject getReturnType() throws MissingElementException {
-        return (PageObject) super.getReturnType();
+    public PageElement getReturnType() throws MissingElementException {
+        return (PageElement) super.getReturnType();
     }
 
     @Override
     protected Object resolveType() throws MissingElementException {
-        if (!hasParameter(0)) {
+        if (!hasParameter(0) || !(getParameter(0) instanceof StringLiteralExpression)) {
             throw new MissingElementException("Missing parameter");
         }
 

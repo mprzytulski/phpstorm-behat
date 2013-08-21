@@ -2,10 +2,11 @@ package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator;
 
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import org.apache.commons.lang3.text.WordUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
-import pl.projectspace.idea.plugins.php.behat.core.locator.BehatLocator;
+import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element.PageElement;
 
 import java.util.HashMap;
@@ -26,12 +27,14 @@ public class PageElementLocator extends BehatLocator {
 
     @Override
     public <T> T locate(String name) throws MissingElementException {
+        String normalised = normaliseName(name);
+
         Map<String, PageElement> pages = getAll();
-        if (!pages.containsKey(name)) {
+        if (!pages.containsKey(normalised)) {
             throw new MissingElementException("Failed to locate Page Element named: " + name);
         }
 
-        return (T) pages.get(name);
+        return (T) pages.get(normalised);
     }
 
     public Map<String, PageElement> getAll() {
@@ -44,6 +47,10 @@ public class PageElementLocator extends BehatLocator {
         }
 
         return result;
+    }
+
+    private String normaliseName(String name) {
+        return WordUtils.capitalize(name).replaceAll(" ", "");
     }
 
 }

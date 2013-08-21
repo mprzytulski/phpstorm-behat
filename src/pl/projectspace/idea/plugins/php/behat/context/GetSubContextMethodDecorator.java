@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
-import pl.projectspace.idea.plugins.php.behat.BehatContext;
 import pl.projectspace.idea.plugins.php.behat.psi.element.MethodCallDecorator;
 
 /**

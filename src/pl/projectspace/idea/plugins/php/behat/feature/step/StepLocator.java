@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.step;
+package pl.projectspace.idea.plugins.php.behat.feature.step;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -7,7 +7,7 @@ import com.jetbrains.php.PhpIndex;
 import org.jetbrains.plugins.cucumber.psi.GherkinFileType;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
-import pl.projectspace.idea.plugins.php.behat.core.locator.BehatLocator;
+import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

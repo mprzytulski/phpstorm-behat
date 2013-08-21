@@ -1,7 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.extensions.pageobject;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
-import pl.projectspace.idea.plugins.php.behat.BehatContext;
+import pl.projectspace.idea.plugins.php.behat.context.BehatContext;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

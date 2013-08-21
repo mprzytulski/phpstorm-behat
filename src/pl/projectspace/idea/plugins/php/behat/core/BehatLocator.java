@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.core.locator;
+package pl.projectspace.idea.plugins.php.behat.core;
 
 import com.jetbrains.php.PhpIndex;
 import pl.projectspace.idea.plugins.commons.php.code.locator.GenericObjectLocator;

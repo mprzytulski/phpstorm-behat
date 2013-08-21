@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.core.reference.provider;
+package pl.projectspace.idea.plugins.php.behat.feature.step;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -12,7 +12,7 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
-import pl.projectspace.idea.plugins.php.behat.step.BehatStep;
+import pl.projectspace.idea.plugins.php.behat.feature.step.BehatStep;
 import pl.projectspace.idea.plugins.php.behat.psi.reference.BehatStepReference;
 
 import java.util.HashMap;

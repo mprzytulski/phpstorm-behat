@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.core.completion.provider;
+package pl.projectspace.idea.plugins.php.behat.context;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;

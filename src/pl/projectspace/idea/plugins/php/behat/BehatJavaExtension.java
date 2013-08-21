@@ -180,7 +180,7 @@ public class BehatJavaExtension implements CucumberJvmExtensionPoint {
 //        Collection<BehatContext> contextClasses = ServiceManager.getService(featureFile.getProject(), ContextLocator.class).getAll();
 //
 //        for (BehatContext behatStep : contextClasses) {
-//            for(pl.projectspace.idea.plugins.php.behat.step.BehatStep step : (behatStep).getStepImplementations()) {
+//            for(pl.projectspace.idea.plugins.php.behat.feature.step.BehatStep step : (behatStep).getStepImplementations()) {
 //                result.add(step.getDefinition());
 //            }
 //        }

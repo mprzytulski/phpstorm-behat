@@ -55,14 +55,7 @@
       ]]>
   </change-notes>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="129.757"/>
-
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
 
   <application-components>
     <!-- Add your application components here -->
@@ -76,20 +69,20 @@
     </project-components>
 
 
-    <actions>
-        <action id="CreateFeature" class="pl.projectspace.idea.plugins.php.behat.action.CreateFeatureAction"
-                text="Create new feature file">
-            <add-to-group group-id="NewGroup" anchor="last"/>
-        </action>
-        <action id="GenerateActionForStep" class="pl.projectspace.idea.plugins.php.behat.action.GenerateActionForStep"
-                text="Generate method for this step">
-            <add-to-group group-id="GenerateGroup" anchor="last"/>
-        </action>
-        <action id="GeneratePageObject" class="pl.projectspace.idea.plugins.php.behat.action.GeneratePageObject"
-                text="Generate Page Object ">
-            <add-to-group group-id="GenerateGroup" anchor="last"/>
-        </action>
-    </actions>
+    <!--<actions>-->
+        <!--<action id="CreateFeature" class="pl.projectspace.idea.plugins.php.behat.action.CreateFeatureAction"-->
+                <!--text="Create new feature file">-->
+            <!--<add-to-group group-id="NewGroup" anchor="last"/>-->
+        <!--</action>-->
+        <!--<action id="GenerateActionForStep" class="pl.projectspace.idea.plugins.php.behat.action.GenerateActionForStep"-->
+                <!--text="Generate method for this step">-->
+            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
+        <!--</action>-->
+        <!--<action id="GeneratePageObject" class="pl.projectspace.idea.plugins.php.behat.action.GeneratePageObject"-->
+                <!--text="Generate Page Object ">-->
+            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
+        <!--</action>-->
+    <!--</actions>-->
 
     <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
         <cucumberJvmExtensionPoint implementation="pl.projectspace.idea.plugins.php.behat.BehatJavaExtension"/>
@@ -97,33 +90,39 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.PageObjectTypeProvider"/>
-        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.code.type.ContextTypeProvider"/>
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.context.GetSubContextTypeProvider"/>
 
-        <completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.FeatureCompletionContributor"/>
-        <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.code.completion.contributor.ContextCompletionContributor"/>
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetPageMethodTypeProvider"/>
+        <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetElementMethodTypeProvider"/>
 
-        <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.code.reference.contributor.BehatReferenceContributor" />
+        <!--<completion.contributor language="Gherkin" implementationClass="pl.projectspace.idea.plugins.php.behat.context.S"/>-->
+
+        <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.context.ContextCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectCompletionContributor"/>
+
+        <!--<completion.contributor language="PHP" implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectCompletionContributor"/>-->
+        <!--<completion.contributor language="yaml" implementationClass="pl.projectspace.idea.plugins.php.behat.config.ConfigurationCompletionContributor"/>-->
+
+        <!--<psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.context.BehatReferenceContributor" />-->
+        <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.context.ContextReferenceContributor" />
+        <psi.referenceContributor implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectReferenceContributor" />
 
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
-            implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.PageObjectNameInspection"
+            implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectNameInspection"
             displayName="Missing page with given name" groupName="Probable bugs" />
 
         <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
-            implementationClass="pl.projectspace.idea.plugins.php.behat.code.inspection.SubContextNameInspection"
+            implementationClass="pl.projectspace.idea.plugins.php.behat.context.GetSubContextNameInspection"
             displayName="Missing subcontext with given name" />
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
 
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.validator.BehatContextValidator"/>
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.validator.PageObjectContextValidator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.context.ContextLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageObjectLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageElementLocator"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageObjectContextLocator"/>
 
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.BehatContextLocator"/>
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.PageObjectLocator"/>
-
-        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.service.locator.StepLocator"/>
-
-        <!--<projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat."/>-->
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.feature.step.StepLocator"/>
 
     </extensions>
 

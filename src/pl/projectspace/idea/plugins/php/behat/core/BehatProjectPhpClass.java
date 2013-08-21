@@ -9,6 +9,8 @@ import pl.projectspace.idea.plugins.php.behat.BehatProject;
  */
 abstract public class BehatProjectPhpClass extends PhpClassDecorator {
 
+    protected final BehatProject behat;
+
     /**
      * Create PhpClass decorator
      *
@@ -16,6 +18,8 @@ abstract public class BehatProjectPhpClass extends PhpClassDecorator {
      */
     public BehatProjectPhpClass(PhpClass phpClass) {
         super(phpClass);
+
+        behat = element.getProject().getComponent(BehatProject.class);
     }
 
     /**
@@ -24,11 +28,7 @@ abstract public class BehatProjectPhpClass extends PhpClassDecorator {
      * @return
      */
     public BehatProject getBehatProject() {
-        if (element != null) {
-            return (BehatProject)element.getProject().getComponent("BehatProject");
-        }
-
-        return null;
+        return behat;
     }
 
 }

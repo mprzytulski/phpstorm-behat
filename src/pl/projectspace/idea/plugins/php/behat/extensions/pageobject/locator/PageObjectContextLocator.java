@@ -4,7 +4,7 @@ import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
-import pl.projectspace.idea.plugins.php.behat.core.locator.BehatLocator;
+import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.PageObjectContext;
 
 import java.util.HashMap;

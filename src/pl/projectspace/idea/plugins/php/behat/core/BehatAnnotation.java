@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.core.annotation;
+package pl.projectspace.idea.plugins.php.behat.core;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>

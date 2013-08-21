@@ -1,4 +1,4 @@
-package pl.projectspace.idea.plugins.php.behat.core.completion.provider;
+package pl.projectspace.idea.plugins.php.behat.feature;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -8,7 +8,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.cucumber.psi.GherkinFeature;
-import pl.projectspace.idea.plugins.php.behat.core.annotation.BehatAnnotation;
+import pl.projectspace.idea.plugins.php.behat.core.BehatAnnotation;
 import pl.projectspace.idea.plugins.commons.php.psi.lookup.SimpleTextLookup;
 
 /**

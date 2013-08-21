@@ -5,7 +5,7 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocTag;
 import com.jetbrains.php.lang.psi.elements.Method;
 import org.jetbrains.plugins.cucumber.psi.GherkinStep;
-import pl.projectspace.idea.plugins.php.behat.code.annotation.BehatAnnotation;
+import pl.projectspace.idea.plugins.php.behat.core.annotation.BehatAnnotation;
 
 import java.util.ArrayList;
 import java.util.Arrays;

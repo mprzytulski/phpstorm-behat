@@ -44,12 +44,10 @@ public class PageObjectExtension extends Extension {
     }
 
     public String getBasePageName() {
-        String pageName = "\\Page";
+        return "\\SensioLabs\\Behat\\PageObjectExtension\\PageObject\\Page";
+    }
 
-        if (pageNamespace.equals("\\")) {
-            return pageName;
-        }
-
-        return pageNamespace.concat(pageName);
+    public String getBaseElementName() {
+        return "\\SensioLabs\\Behat\\PageObjectExtension\\PageObject\\Element";
     }
 }

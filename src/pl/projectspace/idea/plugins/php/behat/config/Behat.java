@@ -1,7 +1,5 @@
 package pl.projectspace.idea.plugins.php.behat.config;
 
-import pl.projectspace.idea.plugins.php.behat.config.exception.ConfigurationException;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class Behat extends pl.projectspace.idea.plugins.commons.php.code.yml.File {
+public class Behat {
 
     private Map<String, Profile> profiles = new HashMap<String, Profile>();
 
@@ -23,10 +21,6 @@ public class Behat extends pl.projectspace.idea.plugins.commons.php.code.yml.Fil
 
     public Map<String, Profile> getProfiles() {
         return profiles;
-    }
-
-    public void setProfiles(Map<String, Profile> profiles) {
-        this.profiles = profiles;
     }
 
     public void addProfile(String name, Profile profile) {

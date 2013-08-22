@@ -1,13 +1,16 @@
 package pl.projectspace.idea.plugins.php.behat.context;
 
+import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.jetbrains.php.lang.psi.stubs.indexes.PhpInterfaceIndex;
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.PageObjectContext;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +29,7 @@ public class ContextLocator extends BehatLocator {
      */
     private BehatContext mainContext;
 
-
+    private PhpClass behatContextInterface;
 
 
     public ContextLocator(BehatProject behat, PhpIndex index) {
@@ -36,6 +39,11 @@ public class ContextLocator extends BehatLocator {
 
         PhpClass mainContext = behat.getService(PsiTreeUtils.class).getClassByFQN(mainContextClass);
         this.mainContext = new BehatContext(mainContext);
+
+        Collection<PhpClass> interfaces = index.getInterfacesByFQN(BehatContext.BASE_CONTEXT_INTERFACE);
+        if (!interfaces.isEmpty()) {
+            this.behatContextInterface = (PhpClass) interfaces.toArray()[0];
+        }
     }
 
     @Override
@@ -71,5 +79,17 @@ public class ContextLocator extends BehatLocator {
      */
     public BehatContext getMainContext() {
         return mainContext;
+    }
+
+    public boolean is(PhpClass phpClass) {
+        if (this.behatContextInterface.getFQN().equals(phpClass.getFQN())) {
+            return true;
+        }
+        for (PhpClass item : phpClass.getSupers()) {
+            if (is(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

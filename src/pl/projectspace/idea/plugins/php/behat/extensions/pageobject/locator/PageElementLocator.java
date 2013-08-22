@@ -1,8 +1,10 @@
 package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator;
 
+import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.apache.commons.lang3.text.WordUtils;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
@@ -18,11 +20,14 @@ import java.util.Map;
 public class PageElementLocator extends BehatLocator {
 
     private final PageObjectExtension extension;
+    private final PhpClass baseElement;
 
     public PageElementLocator(BehatProject behat, PhpIndex index) {
         super(behat, index);
 
         extension = (PageObjectExtension) behat.getConfig().getDefaultProfile().getExtension("PageObjects");
+        String baseElementName = extension.getBaseElementName();
+        baseElement = behat.getService(PsiTreeUtils.class).getClassByFQN(baseElementName);
     }
 
     @Override
@@ -51,6 +56,10 @@ public class PageElementLocator extends BehatLocator {
 
     private String normaliseName(String name) {
         return WordUtils.capitalize(name).replaceAll(" ", "");
+    }
+
+    public boolean is(PhpClass phpClass) {
+        return PhpClassHierarchyUtils.isSuperClass(baseElement, phpClass, true);
     }
 
 }

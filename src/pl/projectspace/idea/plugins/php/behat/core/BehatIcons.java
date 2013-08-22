@@ -10,6 +10,7 @@ import javax.swing.*;
 public class BehatIcons {
 
     public static final Icon Icon = load("/pl/projectspace/idea/plugins/php/behat/icons/behat_16_16.png");
+    public static final Icon File = load("/pl/projectspace/idea/plugins/php/behat/icons/behat_file_16_16.png");
 
     private static Icon load(String path)
     {

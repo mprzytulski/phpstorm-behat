@@ -1,5 +1,6 @@
 package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator;
 
+import com.jetbrains.php.PhpClassHierarchyUtils;
 import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import pl.projectspace.idea.plugins.commons.php.code.locator.GenericObjectLocator;
@@ -57,6 +58,10 @@ public class PageObjectLocator extends GenericObjectLocator {
         }
 
         return result;
+    }
+
+    public boolean is(PhpClass phpClass) {
+        return PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, true);
     }
 
 }

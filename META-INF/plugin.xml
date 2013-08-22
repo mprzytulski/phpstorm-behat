@@ -78,6 +78,8 @@
         <internalFileTemplate name="Page Object Element" />
         <internalFileTemplate name="Feature File" />
 
+        <iconProvider implementation="pl.projectspace.idea.plugins.php.behat.core.BehatIconProvider"/>
+
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.context.GetSubContextTypeProvider"/>
 
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetPageMethodTypeProvider"/>
@@ -102,6 +104,7 @@
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.utils.FileFactory"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.utils.BehatUtils"/>
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.context.ContextLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageObjectLocator"/>

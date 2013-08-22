@@ -1,0 +1,29 @@
+<?php
+#parse("PHP File Header.php")
+
+#if (${NAMESPACE})
+
+namespace ${NAMESPACE};
+
+#end
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page as BasePage;
+
+class ${CLASS_NAME} extends BasePage
+{
+    /**
+     * Web page path
+     *
+     * @var string
+     */
+    protected $path = '/';
+
+    /**
+     * Inline elements definition
+     *
+     * @var array
+     */
+    protected $elements = array(
+        'Sample inline selector' => array('css', '.selector')
+    );
+
+}

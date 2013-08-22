@@ -1,0 +1,19 @@
+<?php
+#parse("PHP File Header.php")
+
+#if (${NAMESPACE})
+
+namespace ${NAMESPACE};
+
+#end
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+
+class ${CLASS_NAME} extends Element
+{
+    /**
+     * Element selector
+     *
+     * @var array
+     */
+    protected $selector = array('css' => '.breadcrumbs');
+}

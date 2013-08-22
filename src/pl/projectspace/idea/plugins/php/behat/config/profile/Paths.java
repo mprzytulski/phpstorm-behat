@@ -7,9 +7,9 @@ import java.util.Map;
  */
 public class Paths {
 
-    public String features = "features";
+    protected String features = "features";
 
-    public String bootstrap = "features/bootstrap";
+    protected String bootstrap = "features/bootstrap";
 
     public Paths(Map<String, String> paths) {
         if (paths.containsKey("features")) {

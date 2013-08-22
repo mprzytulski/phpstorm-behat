@@ -64,31 +64,17 @@
     <project-components>
         <component>
             <implementation-class>pl.projectspace.idea.plugins.php.behat.BehatProject</implementation-class>
-            <loadForDefaultProject />
         </component>
     </project-components>
-
-
-    <!--<actions>-->
-        <!--<action id="CreateFeature" class="pl.projectspace.idea.plugins.php.behat.action.CreateFeatureAction"-->
-                <!--text="Create new feature file">-->
-            <!--<add-to-group group-id="NewGroup" anchor="last"/>-->
-        <!--</action>-->
-        <!--<action id="GenerateActionForStep" class="pl.projectspace.idea.plugins.php.behat.action.GenerateActionForStep"-->
-                <!--text="Generate method for this step">-->
-            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
-        <!--</action>-->
-        <!--<action id="GeneratePageObject" class="pl.projectspace.idea.plugins.php.behat.action.GeneratePageObject"-->
-                <!--text="Generate Page Object ">-->
-            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
-        <!--</action>-->
-    <!--</actions>-->
 
     <extensions defaultExtensionNs="org.jetbrains.plugins.cucumber.steps">
         <cucumberJvmExtensionPoint implementation="pl.projectspace.idea.plugins.php.behat.BehatJavaExtension"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <internalFileTemplate name="Behat Context" />
+        <internalFileTemplate name="Feature File" />
 
         <php.typeProvider2 implementation="pl.projectspace.idea.plugins.php.behat.context.GetSubContextTypeProvider"/>
 
@@ -106,13 +92,14 @@
 
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
             implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectNameInspection"
-            displayName="Missing page with given name" groupName="Probable bugs" />
+            displayName="Missing page with given name" groupName="Invalid reference" />
 
         <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
             implementationClass="pl.projectspace.idea.plugins.php.behat.context.GetSubContextNameInspection"
-            displayName="Missing subcontext with given name" />
+            displayName="Missing subcontext with given name" groupName="Invalid reference" />
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils"/>
+        <projectService serviceImplementation="pl.projectspace.idea.plugins.commons.php.utils.FileFactory"/>
 
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.context.ContextLocator"/>
         <projectService serviceImplementation="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageObjectLocator"/>
@@ -127,4 +114,14 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>cucumber</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
+    <actions>
+        <action id="CreateContext" class="pl.projectspace.idea.plugins.php.behat.context.action.CreateContext"
+                text="New Behat context" description="Create Behat context file">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+        <action id="CreateFeatureFile" class="pl.projectspace.idea.plugins.php.behat.context.action.CreateFeatureFile"
+                text="New feature file" description="Create new feature file" icon="/org/jetbrains/plugins/cucumber/icons/cucumber.png">
+            <add-to-group group-id="NewGroup" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>

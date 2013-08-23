@@ -1,5 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.config.profile;
 
+import pl.projectspace.idea.plugins.php.behat.config.Behat;
+
 import java.util.Map;
 
 /**
@@ -7,17 +9,23 @@ import java.util.Map;
  */
 public class Paths {
 
+    private final Behat behat;
     protected String features = "features";
 
     protected String bootstrap = "features/bootstrap";
 
-    public Paths(Map<String, String> paths) {
+    public Paths(Behat behat, Map<String, String> paths) {
+        this.behat = behat;
         if (paths.containsKey("features")) {
             this.features = paths.get("features");
         }
 
         if (paths.containsKey("bootstrap")) {
             this.bootstrap = paths.get("bootstrap");
+        }
+
+        if (!features.endsWith("/")) {
+            features = features + "/";
         }
     }
 
@@ -29,7 +37,7 @@ public class Paths {
         this.features = features;
     }
 
-    public String getBootstrap() {
+    public String getBootstrapDir() {
         return bootstrap;
     }
 

@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class BehatProject implements ProjectComponent {
 
-    private final Behat config = new Behat();
+    private final Behat config;
 
     protected Project project;
     private PhpIndex index;
@@ -27,6 +27,8 @@ public class BehatProject implements ProjectComponent {
     public BehatProject(Project project, PhpIndex index) {
         this.project = project;
         this.index = index;
+
+        config = new Behat(project);
 
         loadConfiguration();
     }
@@ -71,7 +73,7 @@ public class BehatProject implements ProjectComponent {
             HashMap<String, Object> profiles = (HashMap<String, Object>) Yaml.load(new File(file));
 
             for (Map.Entry<String, Object> entry : profiles.entrySet()) {
-                Profile profile = new Profile(entry.getKey(), (Map<String, Object>) entry.getValue());
+                Profile profile = new Profile(config, entry.getKey(), (Map<String, Object>) entry.getValue());
                 config.addProfile(entry.getKey(), profile);
             }
         } catch (FileNotFoundException e) {

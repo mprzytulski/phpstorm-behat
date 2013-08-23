@@ -128,11 +128,11 @@
                 text="New feature file" description="Create new feature file" icon="/org/jetbrains/plugins/cucumber/icons/cucumber.png">
             <add-to-group group-id="NewGroup" anchor="first"/>
         </action>
-        <action id="CreatePageObjectElementFile" class="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.CreatePageObjectElementFile"
+        <action id="CreatePageObjectElementFile" class="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.CreatePageObjectFile"
                 text="New Page Object" description="Create Behat Page Object class" icon="/pl/projectspace/idea/plugins/php/behat/icons/behat_16_16.png">
             <add-to-group group-id="NewGroup" anchor="first"/>
         </action>
-        <action id="CreatePageObjectFile" class="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.CreatePageObjectFile"
+        <action id="CreatePageObjectFile" class="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.CreatePageObjectElementFile"
                 text="New Page Object Element" description="Create Behat Page Objects Element class" icon="/pl/projectspace/idea/plugins/php/behat/icons/behat_16_16.png">
             <add-to-group group-id="NewGroup" anchor="first"/>
         </action>

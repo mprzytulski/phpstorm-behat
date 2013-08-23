@@ -1,5 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.config.profile;
 
+import pl.projectspace.idea.plugins.php.behat.config.Behat;
+
 import java.util.Map;
 
 /**
@@ -7,11 +9,13 @@ import java.util.Map;
  */
 public class Filters {
 
+    private final Behat behat;
     private String tags;
 
     private String name;
 
-    public Filters(Map<String, String> filters) {
+    public Filters(Behat behat, Map<String, String> filters) {
+        this.behat = behat;
         if (filters.containsKey("tags")) {
             this.tags = filters.get("tags");
         }

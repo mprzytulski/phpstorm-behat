@@ -17,6 +17,7 @@ import java.util.Map;
  */
 public class Profile {
 
+    private final Behat behat;
     private String name;
     private Context context;
     private Filters filters;
@@ -24,23 +25,24 @@ public class Profile {
     private Formatter formatter;
     private Map<String, ExtensionInterface> extensions = new HashMap<String, ExtensionInterface>();
 
-    public Profile(String name, Map<String, Object> definition) {
+    public Profile(Behat behat, String name, Map<String, Object> definition) {
+        this.behat = behat;
         this.name = name;
 
         if (definition.containsKey("context")) {
-            this.context = new Context((Map<String, Object>) definition.get("context"));
+            this.context = new Context(behat, (Map<String, Object>) definition.get("context"));
         }
 
         if (definition.containsKey("filters")) {
-            this.filters = new Filters((Map<String, String>) definition.get("filters"));
+            this.filters = new Filters(behat, (Map<String, String>) definition.get("filters"));
         }
 
         if (definition.containsKey("paths")) {
-            this.paths = new Paths((Map<String, String>) definition.get("paths"));
+            this.paths = new Paths(behat, (Map<String, String>) definition.get("paths"));
         }
 
         if (definition.containsKey("formatter")) {
-            this.formatter = new Formatter((Map<String, Object>) definition.get("formatter"));
+            this.formatter = new Formatter(behat, (Map<String, Object>) definition.get("formatter"));
         }
 
         if (definition.containsKey("extensions")) {
@@ -96,11 +98,11 @@ public class Profile {
         for (Map.Entry<String, Map<String, Object>> entry: extensions.entrySet()) {
             ExtensionInterface extension = null;
             if (entry.getKey().equals("SensioLabs\\Behat\\PageObjectExtension\\Extension")) {
-                extension = new PageObjectExtension(entry.getValue());
+                extension = new PageObjectExtension(behat, entry.getValue());
             } else if (entry.getKey().equals("Behat\\MinkExtension\\Extension")) {
-                extension = new MinkExtension(entry.getValue());
+                extension = new MinkExtension(behat, entry.getValue());
             } else {
-                extension = new Extension(entry.getKey(), entry.getValue());
+                extension = new Extension(behat, entry.getKey(), entry.getValue());
             }
 
             this.extensions.put(extension.getName(), extension);

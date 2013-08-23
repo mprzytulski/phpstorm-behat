@@ -2,6 +2,8 @@ package pl.projectspace.idea.plugins.php.behat.core;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import pl.projectspace.idea.plugins.commons.php.action.DirectoryAction;
+import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatAction;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -9,15 +11,20 @@ import pl.projectspace.idea.plugins.commons.php.action.DirectoryAction;
 public abstract class BehatDirectoryAction extends DirectoryAction {
 
     @Override
+    @BehatAction
     public void update(AnActionEvent e) {
         project = e.getProject();
 
-        String relativePath = getRelativeDirectory();
+        String relativePath = null;
+        String requiredDir = null;
+        if (BehatProject.isEnabled()) {
+            relativePath = getRelativeDirectory();
 
-        String requiredDir = getActionDirectory();
+            requiredDir = getActionDirectory();
 
-        if (!requiredDir.startsWith("/")) {
-            requiredDir = "/" + requiredDir;
+            if (!requiredDir.startsWith("/")) {
+                requiredDir = "/" + requiredDir;
+            }
         }
 
         if (relativePath == null || !requiredDir.equals(relativePath)) {

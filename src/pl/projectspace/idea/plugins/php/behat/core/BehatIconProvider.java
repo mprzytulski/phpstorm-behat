@@ -23,6 +23,10 @@ public class BehatIconProvider extends IconProvider {
     @Nullable
     @Override
     public Icon getIcon(@NotNull PsiElement element, @Iconable.IconFlags int i) {
+        if (!BehatProject.isEnabled()) {
+            return null;
+        }
+
         BehatUtils validator = getUtils(element);
         if ((element instanceof PhpFile)) {
             for (PsiNamedElement el : ((PhpFile)element).getTopLevelDefs().values()) {

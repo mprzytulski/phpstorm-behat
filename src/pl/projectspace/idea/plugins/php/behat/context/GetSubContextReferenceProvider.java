@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.PhpClassReference;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatReferenceProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -18,6 +19,7 @@ public class GetSubContextReferenceProvider extends PsiReferenceProvider {
 
     @NotNull
     @Override
+    @BehatReferenceProvider
     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext processingContext) {
         MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
 

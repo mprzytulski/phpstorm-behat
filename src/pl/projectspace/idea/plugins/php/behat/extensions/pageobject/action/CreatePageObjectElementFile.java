@@ -21,7 +21,9 @@ public class CreatePageObjectElementFile extends DirectoryAction {
 
     @Override
     protected DialogWrapper getDialog() {
-        return new CreatePageObjectDialog(project, "Create new Page Object", "Enter Page Object name");
+//        String location = ((PageObjectExtension) project.getComponent(BehatProject.class).getConfig().getDefaultProfile().getPaths().
+
+        return new CreatePageObjectDialog(project, "Create new Page Object", "Enter Page Object name", "");
     }
 
     @Override

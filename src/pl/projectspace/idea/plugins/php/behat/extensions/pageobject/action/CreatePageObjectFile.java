@@ -25,7 +25,7 @@ public class CreatePageObjectFile extends DirectoryAction {
 
     @Override
     protected DialogWrapper getDialog() {
-        return new CreatePageObjectDialog(project, "Create new Page Object class", "Enter new class name");
+        return new CreatePageObjectDialog(project, "Create new Page Object class", "Enter new class name", "");
     }
 
     @Override

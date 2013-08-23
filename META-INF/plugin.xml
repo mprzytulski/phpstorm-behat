@@ -1,11 +1,11 @@
 <idea-plugin version="2">
   <id>pl.projectspace.idea.plugins.php.behat</id>
   <name>Behat</name>
-  <version>0.3</version>
+  <version>0.3.1</version>
   <vendor email="michal@przytulski.pl" url="http://przytulski.pl"></vendor>
 
   <description><![CDATA[
-      <p>Very simple but useful plugin for faster behat development.</p>
+      <p>Useful plugin for faster Behat development.</p>
 
       <h3>General:</h3>
       <ul>
@@ -38,7 +38,12 @@
       ]]></description>
 
   <change-notes><![CDATA[
-      <h3>0 .3</h3>
+      <h3>0.3.1</h3>
+      <ul>
+          <li>detecting Behat installation</li>
+      </ul>
+
+      <h3>0.3</h3>
       <ul>
           <li>fixed few bugs with element locations</li>
           <li>custom icon files for Behat related php files</li>

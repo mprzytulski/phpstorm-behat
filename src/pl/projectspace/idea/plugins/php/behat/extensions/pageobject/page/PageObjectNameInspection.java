@@ -6,12 +6,13 @@ import pl.projectspace.idea.plugins.commons.php.code.inspection.GenericMethodPar
 import pl.projectspace.idea.plugins.commons.php.psi.element.MethodDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.core.BehatMethodParameterInspection;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.action.GeneratePageObjectFix;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectNameInspection extends GenericMethodParameterInspection {
+public class PageObjectNameInspection extends BehatMethodParameterInspection {
 
     @Override
     protected MethodDecorator createDecoratedMethod(MethodReference reference) throws MissingElementException, InvalidArgumentException {

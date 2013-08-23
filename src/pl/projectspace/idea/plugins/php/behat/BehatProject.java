@@ -3,6 +3,7 @@ package pl.projectspace.idea.plugins.php.behat;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.jetbrains.php.PhpIndex;
 import org.ho.yaml.Yaml;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,8 @@ import java.util.Map;
 public class BehatProject implements ProjectComponent {
 
     private final Behat config = new Behat();
+
+    private static boolean enabled = false;
 
     protected Project project;
     private PhpIndex index;
@@ -67,15 +70,26 @@ public class BehatProject implements ProjectComponent {
 
     private void loadConfiguration() {
         try {
-            String file = project.getBaseDir().findFileByRelativePath("behat.yml").getCanonicalPath();
-            HashMap<String, Object> profiles = (HashMap<String, Object>) Yaml.load(new File(file));
+            VirtualFile file = project.getBaseDir().findFileByRelativePath("behat.yml");
+
+            if (file == null) {
+                return;
+            }
+            String filePath = file.getCanonicalPath();
+            HashMap<String, Object> profiles = (HashMap<String, Object>) Yaml.load(new File(filePath));
 
             for (Map.Entry<String, Object> entry : profiles.entrySet()) {
                 Profile profile = new Profile(entry.getKey(), (Map<String, Object>) entry.getValue());
                 config.addProfile(entry.getKey(), profile);
             }
+
+            enabled = true;
         } catch (FileNotFoundException e) {
             return;
         }
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
     }
 }

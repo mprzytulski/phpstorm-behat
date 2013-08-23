@@ -6,6 +6,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDirectory;
@@ -17,6 +18,7 @@ import pl.projectspace.idea.plugins.commons.php.action.DirectoryAction;
 import pl.projectspace.idea.plugins.commons.php.utils.FileFactory;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.context.action.dialog.CreateFeatureDialog;
+import pl.projectspace.idea.plugins.php.behat.context.action.dialog.TestDialog;
 import pl.projectspace.idea.plugins.php.behat.core.BehatDirectoryAction;
 
 import java.io.IOException;
@@ -26,6 +28,18 @@ import java.util.Properties;
  * @author Michal Przytulski <michal@przytulski.pl>
  */
 public class CreateFeatureFile extends BehatDirectoryAction {
+
+    @Override
+    public void actionPerformed(AnActionEvent anActionEvent) {
+        project = anActionEvent.getProject();
+
+        CreateFeatureDialog dialog = new CreateFeatureDialog(project);
+        dialog.show();
+
+//        if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
+//            onOk(dialog);
+//        }
+    }
 
     @Override
     protected DialogWrapper getDialog() {

@@ -2,15 +2,15 @@ package pl.projectspace.idea.plugins.php.behat.context;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
-import pl.projectspace.idea.plugins.commons.php.code.inspection.GenericMethodParameterInspection;
 import pl.projectspace.idea.plugins.commons.php.psi.element.MethodDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.php.behat.core.BehatMethodParameterInspection;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class GetSubContextNameInspection extends GenericMethodParameterInspection {
+public class GetSubContextNameInspection extends BehatMethodParameterInspection {
 
     @Override
     protected MethodDecorator createDecoratedMethod(MethodReference reference) throws MissingElementException, InvalidArgumentException {

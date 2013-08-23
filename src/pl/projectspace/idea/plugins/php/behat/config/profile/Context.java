@@ -1,5 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.config.profile;
 
+import pl.projectspace.idea.plugins.php.behat.config.Behat;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,11 +10,13 @@ import java.util.Map;
  */
 public class Context {
 
+    private final Behat behat;
     private String klass = "\\FeatureContext";
 
     private Map<String, String> parameters = new HashMap<String, String>();
 
-    public Context(Map<String, Object> context) {
+    public Context(Behat behat, Map<String, Object> context) {
+        this.behat = behat;
         if (context.containsKey("class")) {
             this.klass = (String)context.get("class");
         }

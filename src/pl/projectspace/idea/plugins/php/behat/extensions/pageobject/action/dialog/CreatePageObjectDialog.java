@@ -3,6 +3,7 @@ package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.dial
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nullable;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
@@ -13,21 +14,21 @@ import java.awt.*;
 
 public class CreatePageObjectDialog extends DialogWrapper {
     private final Project project;
+    private VirtualFile destinationDirectory;
     private String title;
-    private String info;
-    private String path;
+    private String name;
 
     private JPanel contentPane;
     private JTextField nameField;
     private JLabel nameLabel;
     private JLabel locationLabel;
 
-    public CreatePageObjectDialog(@Nullable Project project, String title, String info, String path) {
+    public CreatePageObjectDialog(@Nullable Project project, VirtualFile destinationDirectory, String title, String name) {
         super(project);
         this.project = project;
+        this.destinationDirectory = destinationDirectory;
         this.title = title;
-        this.info = info;
-        this.path = path;
+        this.name = name;
         init();
     }
 
@@ -35,13 +36,14 @@ public class CreatePageObjectDialog extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         setTitle(title);
+        setResizable(false);
 
         contentPane = new JPanel();
-        contentPane.setPreferredSize(new Dimension(480, 100));
+        contentPane.setPreferredSize(new Dimension(480, 80));
 
         nameField = new JTextField();
-        nameLabel = new JLabel(info);
-        locationLabel = new JLabel("Location: " + path);
+        nameLabel = new JLabel(name);
+        locationLabel = new JLabel("Element location: " + destinationDirectory.getPath().replace(project.getBasePath(), ""));
 
         GroupLayout layout = new GroupLayout(contentPane);
         contentPane.setLayout(layout);
@@ -57,6 +59,7 @@ public class CreatePageObjectDialog extends DialogWrapper {
             layout.createSequentialGroup()
                 .addComponent(nameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(nameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(locationLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
 
@@ -64,7 +67,7 @@ public class CreatePageObjectDialog extends DialogWrapper {
     }
 
     public String getName() {
-        return nameField.getText();
+        return nameField.getText().trim();
     }
 
     @Nullable
@@ -73,6 +76,10 @@ public class CreatePageObjectDialog extends DialogWrapper {
         String name = nameField.getText().trim();
         if (name.equals("")) {
             return new ValidationInfo("Element name can not be empty.", nameField);
+        }
+
+        if (!name.matches("[a-zA-z0-9_\\-]+")) {
+            return new ValidationInfo("Element name should contain only letters, numbers and '-', '_' signs.", nameField);
         }
 
         try {

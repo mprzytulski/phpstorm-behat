@@ -1,27 +1,17 @@
 package pl.projectspace.idea.plugins.php.behat.context.action;
 
-import com.intellij.ide.actions.OpenFileAction;
-import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import org.jetbrains.plugins.cucumber.psi.GherkinFile;
 import org.jetbrains.plugins.cucumber.psi.GherkinFileType;
-import pl.projectspace.idea.plugins.commons.php.action.DirectoryAction;
 import pl.projectspace.idea.plugins.commons.php.utils.FileFactory;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.context.action.dialog.CreateFeatureDialog;
-import pl.projectspace.idea.plugins.php.behat.context.action.dialog.TestDialog;
 import pl.projectspace.idea.plugins.php.behat.core.BehatDirectoryAction;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -36,9 +26,9 @@ public class CreateFeatureFile extends BehatDirectoryAction {
         CreateFeatureDialog dialog = new CreateFeatureDialog(project);
         dialog.show();
 
-//        if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-//            onOk(dialog);
-//        }
+        if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
+            onOk(dialog);
+        }
     }
 
     @Override
@@ -56,7 +46,7 @@ public class CreateFeatureFile extends BehatDirectoryAction {
     protected void onOk(DialogWrapper dialog) {
         try {
             PsiDirectory dir = getSelectedDirectory();
-            Properties properties = new Properties();
+            Properties properties = FileTemplateManager.getInstance().getDefaultProperties();
             properties.setProperty("FEATURE_TITLE", ((CreateFeatureDialog) dialog).getName());
 
             StringBuffer sb = new StringBuffer();

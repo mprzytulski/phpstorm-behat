@@ -1,5 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.config.profile;
 
+import pl.projectspace.idea.plugins.php.behat.config.Behat;
+
 import java.util.Map;
 
 /**
@@ -7,11 +9,13 @@ import java.util.Map;
  */
 public class Formatter {
 
+    private final Behat behat;
     public String name;
 
     public Map<String, String> parameters;
 
-    public Formatter(Map<String, Object> formatter) {
+    public Formatter(Behat behat, Map<String, Object> formatter) {
+        this.behat = behat;
         if (formatter.containsKey("name")) {
             this.name = (String)formatter.get("name");
         }

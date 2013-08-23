@@ -1,5 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.config;
 
+import com.intellij.openapi.project.Project;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +12,10 @@ import java.util.Map;
 public class Behat {
 
     private Map<String, Profile> profiles = new HashMap<String, Profile>();
+    private Project project;
 
-    public Behat() {
-
+    public Behat(Project project) {
+        this.project = project;
     }
 
     public Map<String, Class> getAllowedElements() {
@@ -35,4 +38,7 @@ public class Behat {
         return getProfile("default");
     }
 
+    public Project getProject() {
+        return project;
+    }
 }

@@ -1,16 +1,21 @@
 <idea-plugin version="2">
   <id>pl.projectspace.idea.plugins.php.behat</id>
   <name>Behat</name>
-  <version>0.2.1</version>
+  <version>0.3</version>
   <vendor email="michal@przytulski.pl" url="http://przytulski.pl"></vendor>
 
   <description><![CDATA[
       <p>Very simple but useful plugin for faster behat development.</p>
 
+      <h3>General:</h3>
+      <ul>
+          <li>Custom icon for Behat Context and PageObjects files</li>
+      </ul>
+
       <h3>Feature file:</h3>
       <ul>
           <li>tag auto completion</li>
-          <li>reference provider for gherking steps</li>
+          <li>reference provider for Gherkin steps</li>
       </ul>
 
       <h3>Behat context:</h3>
@@ -26,13 +31,23 @@
 
       <h3>Page Objects extension:</h3>
       <ul>
-          <li>reference provider for getElement method of PageObject classes</li>
-          <li>type hinting for getPage() method</li>
+          <li>reference provider for getElement and hasElement method of PageObject classes</li>
+          <li>type hinting for getPage() and getElement() methods</li>
           <li>parameter auto completion for getPage() method with names of available pages in current project</li>
       </ul>
       ]]></description>
 
   <change-notes><![CDATA[
+      <h3>0 .3</h3>
+      <ul>
+          <li>fixed few bugs with element locations</li>
+          <li>custom icon files for Behat related php files</li>
+          <li>templated for PageObject and Element classes</li>
+          <li>custom create new feature file dialog window</li>
+          <li>reference provider for hasElement methods of PageObject classes</li>
+          <li>Type hinting for getElement() methods which returning Element classes</li>
+          <li>refactored code</li>
+      </ul>
       <h3>0.2.1</h3>
       <ul>
           <li>fixed application freeze during searching and indexing</li>

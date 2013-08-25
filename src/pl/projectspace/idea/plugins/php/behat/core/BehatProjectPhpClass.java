@@ -1,6 +1,7 @@
 package pl.projectspace.idea.plugins.php.behat.core;
 
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import pl.projectspace.idea.plugins.commons.php.ProjectComponent;
 import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 
@@ -31,4 +32,8 @@ abstract public class BehatProjectPhpClass extends PhpClassDecorator {
         return behat;
     }
 
+    @Override
+    protected ProjectComponent getComponent() {
+        return behat;
+    }
 }

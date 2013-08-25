@@ -1,12 +1,11 @@
 package pl.projectspace.idea.plugins.php.behat;
 
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.jetbrains.php.PhpIndex;
 import org.ho.yaml.Yaml;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.commons.php.ProjectComponent;
 import pl.projectspace.idea.plugins.php.behat.config.Behat;
 import pl.projectspace.idea.plugins.php.behat.config.Profile;
 
@@ -18,50 +17,21 @@ import java.util.Map;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class BehatProject implements ProjectComponent {
+public class BehatProject extends ProjectComponent {
 
     private final Behat config;
 
     private static boolean enabled = false;
 
-    protected Project project;
-    private PhpIndex index;
-
     public BehatProject(Project project, PhpIndex index) {
-        this.project = project;
-        this.index = index;
-
+        super(project, index);
         config = new Behat(project);
 
         loadConfiguration();
     }
 
-    public PhpIndex getIndex() {
-        return index;
-    }
-
-    public <T>T getService(@NotNull Class<T> service) {
-        return (T) ServiceManager.getService(project, service);
-    }
-
     public Behat getConfig() {
         return config;
-    }
-
-    @Override
-    public void projectOpened() {
-    }
-
-    @Override
-    public void projectClosed() {
-    }
-
-    @Override
-    public void initComponent() {
-    }
-
-    @Override
-    public void disposeComponent() {
     }
 
     @NotNull

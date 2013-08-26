@@ -13,6 +13,7 @@ import pl.projectspace.idea.plugins.commons.php.utils.FileFactory;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
 import pl.projectspace.idea.plugins.php.behat.context.action.dialog.CreateFeatureDialog;
+import pl.projectspace.idea.plugins.php.behat.core.BehatDirectoryAction;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.dialog.CreatePageObjectDialog;
 
 import java.util.Properties;
@@ -20,7 +21,7 @@ import java.util.Properties;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class CreatePageObjectFile extends DirectoryAction {
+public class CreatePageObjectFile extends BehatDirectoryAction {
 
     PageObjectExtension extension;
 

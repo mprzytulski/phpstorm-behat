@@ -25,6 +25,10 @@ public class BehatProject extends ProjectComponent {
 
     public BehatProject(Project project, PhpIndex index) {
         super(project, index);
+
+
+
+        enabled = false;
         config = new Behat(project);
 
         loadConfiguration();

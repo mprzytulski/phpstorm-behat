@@ -16,6 +16,9 @@ import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
+import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
+import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.CreatePageObjectFile;
+import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.dialog.CreatePageObjectDialog;
 
 import java.util.Properties;
 
@@ -27,11 +30,16 @@ public class GeneratePageObjectFix implements LocalQuickFix {
      * PageObject class template
      */
     private static final String PAGE_OBJECT_TEMPLATE = "PageObject.php";
+    private String pageObjectName;
+
+    public GeneratePageObjectFix(String pageObjectName) {
+        this.pageObjectName = pageObjectName;
+    }
 
     @NotNull
     @Override
     public String getName() {
-        return "Create new Page Object class";
+        return "Create new Page Object: '" + pageObjectName + "'";
     }
 
     @NotNull
@@ -45,38 +53,8 @@ public class GeneratePageObjectFix implements LocalQuickFix {
         if (!(problemDescriptor.getPsiElement() instanceof StringLiteralExpression)) {
             return;
         }
-        PhpFile phpFile = (PhpFile) createFile(project, ((StringLiteralExpression) problemDescriptor.getPsiElement()).getContents());
-        OpenFileAction.openFile(phpFile.getVirtualFile(), project);
-    }
 
-    private PsiElement createFile(Project project, String className) {
-        String fileName = className + '.' + PhpFileType.INSTANCE.getDefaultExtension();
-
-        BehatProject behatProject = ((BehatProject)project.getComponent("BehatProject"));
-
-        Properties p = new Properties();
-        final FileTemplate template = FileTemplateManager.getInstance().getJ2eeTemplate(PAGE_OBJECT_TEMPLATE);
-
-        Properties properties = new Properties();
-        properties.put("CLASS_NAME", className);
-
-        String text;
-        try {
-            text = template.getText(properties);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Unable to load template for " + FileTemplateManager.getInstance().internalTemplateToSubject(PAGE_OBJECT_TEMPLATE), e);
-        }
-
-        String dirPath = behatProject.getConfig().getDefaultProfile().getPaths().getFeaturesDir();
-
-        VirtualFile dir = project.getBaseDir().findFileByRelativePath(dirPath);
-
-        final PsiFileFactory factory = PsiFileFactory.getInstance(project);
-        final PsiFile file = factory.createFileFromText(fileName, PhpFileType.INSTANCE, text);
-
-        PsiDirectory directory = file.getManager().findDirectory(dir);
-
-        return directory.add(file);
+        CreatePageObjectFile action = new CreatePageObjectFile();
+        action.createFile(pageObjectName, problemDescriptor.getPsiElement().getProject());
     }
 }

@@ -1,7 +1,11 @@
 <?php
+#parse("PHP File Header.php")
 
-namespace ${NAMESPACE}
+#if (${NAMESPACE})
 
+namespace ${NAMESPACE};
+
+#end
 use Behat\Behat\Context\BehatContext;
 
 /**

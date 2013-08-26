@@ -27,8 +27,8 @@ public class PageObjectExtension extends Extension {
                 this.elementNamespace = (String) names.get("element");
             }
 
-            if (elementNamespace.equals("\\\\") && !pageNamespace.equals("\\\\")) {
-                elementNamespace = pageNamespace.concat("\\\\Element");
+            if (elementNamespace.equals("\\") && !pageNamespace.equals("\\")) {
+                elementNamespace = pageNamespace.concat("\\Element");
             }
         }
     }

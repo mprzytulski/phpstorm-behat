@@ -21,14 +21,11 @@ public abstract class BehatDirectoryAction extends DirectoryAction {
             relativePath = getRelativeDirectory();
             requiredDir = getActionDirectory();
 
-            relativePath = relativePath.replaceAll("^/", "");
-            relativePath = relativePath.replaceAll("/$", "");
-
-            requiredDir = requiredDir.replaceAll("^/", "");
-            requiredDir = requiredDir.replaceAll("/$", "");
+            relativePath = relativePath.replaceAll("^/", "").replaceAll("/$", "");
+            requiredDir = requiredDir.replaceAll("^/", "").replaceAll("/$", "");
         }
 
-        if (relativePath == null || !requiredDir.equals(relativePath)) {
+        if (relativePath == null || !relativePath.startsWith(requiredDir)) {
             e.getPresentation().setVisible(false);
             e.getPresentation().setEnabled(false);
         }

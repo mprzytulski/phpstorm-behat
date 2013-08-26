@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>pl.projectspace.idea.plugins.php.behat</id>
   <name>Behat</name>
-  <version>0.3.1</version>
+  <version>0.3.2</version>
   <vendor email="michal@przytulski.pl" url="http://przytulski.pl"></vendor>
 
   <description><![CDATA[
@@ -31,6 +31,7 @@
 
       <h3>Page Objects extension:</h3>
       <ul>
+          <li>quick fix for missing PageObjects and PageObject elements</li>
           <li>reference provider for getElement and hasElement method of PageObject classes</li>
           <li>type hinting for getPage() and getElement() methods</li>
           <li>parameter auto completion for getPage() method with names of available pages in current project</li>
@@ -38,6 +39,15 @@
       ]]></description>
 
   <change-notes><![CDATA[
+      <h3>0.3.2</h3>
+      <ul>
+          <li>added getElement inspection<li>
+          <li>added quick fix for getElement and getPage methods</li>
+          <li>fixed NullPointer when accessing context menu with more than one element selected</li>
+          <li>fixed Behat installation detection after project reload / new project creation <a href="https://github.com/mprzytulski/phpstorm-behat/issues/10">#10</a>, thanks <a href="https://github.com/MaXal">MaXal<a/></li>
+          <li>fixed NPE during feature file edition <a href="https://github.com/mprzytulski/phpstorm-behat/issues/11">#11</a>, thanks <a href="https://github.com/MaXal">MaXal<a/></li>
+      </ul>
+
       <h3>0.3.1</h3>
       <ul>
           <li>detecting Behat installation</li>
@@ -117,6 +127,10 @@
         <localInspection language="PHP" shortName="InvalidPageNameReference" enabledByDefault="true" level="ERROR"
             implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.PageObjectNameInspection"
             displayName="Missing page with given name" groupName="Invalid reference" />
+
+        <localInspection language="PHP" shortName="InvalidPageObjectsElementNameReference" enabledByDefault="true" level="ERROR"
+                         implementationClass="pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element.PageObjectElementNameInspection"
+                         displayName="Missing Page Object Element with given name" groupName="Invalid reference" />
 
         <localInspection language="PHP" shortName="InvalidSubcontextNameReference" enabledByDefault="true" level="ERROR"
             implementationClass="pl.projectspace.idea.plugins.php.behat.context.GetSubContextNameInspection"

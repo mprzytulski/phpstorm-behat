@@ -6,6 +6,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.apache.commons.lang3.text.WordUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.commons.php.utils.PhpStringUtils;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
 import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
@@ -32,7 +33,7 @@ public class PageElementLocator extends BehatLocator {
 
     @Override
     public <T> T locate(String name) throws MissingElementException {
-        String normalised = normaliseName(name);
+        String normalised = PhpStringUtils.normaliseToClassName(name);
 
         Map<String, PageElement> pages = getAll();
         if (!pages.containsKey(normalised)) {
@@ -46,16 +47,12 @@ public class PageElementLocator extends BehatLocator {
         Map<String, PageElement> result = new HashMap<String, PageElement>();
 
         for (PhpClass element : index.getAllSubclasses(extension.getBaseElementName())) {
-            if (element.getFQN().startsWith(extension.getElementNamespace())) {
+            if (PhpStringUtils.belongsToNamespace(element.getFQN(), extension.getElementNamespace())) {
                 result.put(element.getName(), new PageElement(element));
             }
         }
 
         return result;
-    }
-
-    private String normaliseName(String name) {
-        return WordUtils.capitalize(name).replaceAll(" ", "");
     }
 
     public boolean is(PhpClass phpClass) {

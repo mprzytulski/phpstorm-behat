@@ -139,6 +139,7 @@ public class CreateFeatureDialog extends DialogWrapper {
                 Normalizer.normalize(
                     name.getText(), Normalizer.Form.NFD
                 ).replaceAll("[^\\p{ASCII}]","").replaceAll(" ", "-")
+                    .toLowerCase()
                     .concat(".feature")
             );
         }

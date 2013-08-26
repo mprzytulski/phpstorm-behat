@@ -25,7 +25,7 @@ public abstract class BehatDirectoryAction extends DirectoryAction {
             requiredDir = requiredDir.replaceAll("^/", "").replaceAll("/$", "");
         }
 
-        if (relativePath == null || !requiredDir.equals(relativePath)) {
+        if (relativePath == null || !relativePath.startsWith(requiredDir)) {
             e.getPresentation().setVisible(false);
             e.getPresentation().setEnabled(false);
         }

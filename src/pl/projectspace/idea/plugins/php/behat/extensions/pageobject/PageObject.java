@@ -6,6 +6,7 @@ import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import pl.projectspace.idea.plugins.commons.php.psi.element.PhpClassDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.commons.php.utils.PhpStringUtils;
 import pl.projectspace.idea.plugins.php.behat.core.BehatProjectPhpClass;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.locator.PageElementLocator;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element.PageElement;

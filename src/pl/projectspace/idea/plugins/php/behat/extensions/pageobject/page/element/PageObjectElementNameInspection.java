@@ -7,6 +7,8 @@ import pl.projectspace.idea.plugins.commons.php.psi.element.MethodDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.commons.php.utils.PhpStringUtils;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.DependsOnPlugin;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.RequireMethod;
 import pl.projectspace.idea.plugins.php.behat.core.BehatMethodParameterInspection;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.GetPageMethodDecorator;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.action.GeneratePageObjectElementFix;
@@ -15,6 +17,8 @@ import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.action.
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
+@DependsOnPlugin("behat")
+@RequireMethod("getElement")
 public class PageObjectElementNameInspection extends BehatMethodParameterInspection {
 
     @Override

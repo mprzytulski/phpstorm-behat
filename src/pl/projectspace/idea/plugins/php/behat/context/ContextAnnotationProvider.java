@@ -6,15 +6,15 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatNameProvider;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.DependsOnPlugin;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
+@DependsOnPlugin("behat")
 public class ContextAnnotationProvider extends CompletionProvider<CompletionParameters>
 {
     @Override
-    @BehatNameProvider
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();

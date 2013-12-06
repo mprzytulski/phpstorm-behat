@@ -5,11 +5,15 @@ import com.jetbrains.php.lang.psi.elements.MethodReference;
 import pl.projectspace.idea.plugins.commons.php.psi.element.MethodDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.DependsOnPlugin;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.RequireMethod;
 import pl.projectspace.idea.plugins.php.behat.core.BehatMethodParameterInspection;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
+@DependsOnPlugin("behat")
+@RequireMethod("getSubContext")
 public class GetSubContextNameInspection extends BehatMethodParameterInspection {
 
     @Override

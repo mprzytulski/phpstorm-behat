@@ -1,5 +1,6 @@
 package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element;
 
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
@@ -9,11 +10,11 @@ import com.jetbrains.php.lang.psi.elements.ArrayHashElement;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import org.jetbrains.annotations.NotNull;
+import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.ArrayElementReference;
 import pl.projectspace.idea.plugins.commons.php.psi.reference.PhpClassReference;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
-import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatReferenceProvider;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
@@ -22,7 +23,6 @@ public class ElementReferenceProvider extends PsiReferenceProvider {
 
     @NotNull
     @Override
-    @BehatReferenceProvider
     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext processingContext) {
         MethodReference methodReference = PsiTreeUtil.getParentOfType(element, MethodReference.class);
 
@@ -42,10 +42,10 @@ public class ElementReferenceProvider extends PsiReferenceProvider {
 
             return new PsiReference[] { ref };
         } catch (InvalidArgumentException e) {
-            return new PsiReference[0];
         } catch (MissingElementException e) {
-            return new PsiReference[0];
         }
+
+        return new PsiReference[0];
     }
 
 }

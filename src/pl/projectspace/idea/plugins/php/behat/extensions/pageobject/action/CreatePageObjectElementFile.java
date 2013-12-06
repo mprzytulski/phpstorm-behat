@@ -6,14 +6,11 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.jetbrains.php.lang.PhpFileType;
-import pl.projectspace.idea.plugins.commons.php.action.DirectoryAction;
 import pl.projectspace.idea.plugins.commons.php.utils.FileFactory;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
 import pl.projectspace.idea.plugins.php.behat.core.BehatDirectoryAction;
-import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatAction;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.action.dialog.CreatePageObjectDialog;
 
 import java.util.Properties;

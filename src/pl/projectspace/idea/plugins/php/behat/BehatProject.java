@@ -7,6 +7,7 @@ import org.ho.yaml.Yaml;
 import org.ho.yaml.exception.YamlException;
 import org.jetbrains.annotations.NotNull;
 import pl.projectspace.idea.plugins.commons.php.ProjectComponent;
+import pl.projectspace.idea.plugins.commons.php.StateComponentInterface;
 import pl.projectspace.idea.plugins.php.behat.config.Behat;
 import pl.projectspace.idea.plugins.php.behat.config.Profile;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class BehatProject extends ProjectComponent {
+public class BehatProject extends ProjectComponent implements StateComponentInterface {
 
     private final Behat config;
 
@@ -27,8 +28,6 @@ public class BehatProject extends ProjectComponent {
 
     public BehatProject(Project project, PhpIndex index) {
         super(project, index);
-
-
 
         enabled = false;
         config = new Behat(project);
@@ -43,22 +42,25 @@ public class BehatProject extends ProjectComponent {
     @NotNull
     @Override
     public String getComponentName() {
-        return "BehatProject";
+        return "behat";
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     private void loadConfiguration() {
         try {
             VirtualFile file = project.getBaseDir().findFileByRelativePath("behat.yml");
 
-            if (file == null) {
-                return;
-            }
-            String filePath = file.getCanonicalPath();
-            HashMap<String, Object> profiles = (HashMap<String, Object>) Yaml.load(new File(filePath));
+            if (file != null) {
+                String filePath = file.getCanonicalPath();
+                HashMap<String, Object> profiles = (HashMap<String, Object>) Yaml.load(new File(filePath));
 
-            for (Map.Entry<String, Object> entry : profiles.entrySet()) {
-                Profile profile = new Profile(config, entry.getKey(), (Map<String, Object>) entry.getValue());
-                config.addProfile(entry.getKey(), profile);
+                for (Map.Entry<String, Object> entry : profiles.entrySet()) {
+                    Profile profile = new Profile(config, entry.getKey(), (Map<String, Object>) entry.getValue());
+                    config.addProfile(entry.getKey(), profile);
+                }
             }
 
             enabled = true;
@@ -68,9 +70,26 @@ public class BehatProject extends ProjectComponent {
         catch (FileNotFoundException e) {
             return;
         }
+
+        ensureDefaultProfile();
     }
 
-    public static boolean isEnabled() {
-        return enabled;
+    private void ensureDefaultProfile() {
+        if (config.hasProfile("default")) {
+            return;
+        }
+
+        HashMap<String, String> paths = new HashMap<String, String>();
+        paths.put("features", "features");
+
+        HashMap<String, String> context = new HashMap<String, String>();
+        context.put("class", "FeatureContext");
+
+        HashMap<String, Object> settings = new HashMap<String, Object>();
+        settings.put("paths", paths);
+        settings.put("context", context);
+
+        Profile profile = new Profile(config, "default", settings);
+        config.addProfile("default", profile);
     }
 }

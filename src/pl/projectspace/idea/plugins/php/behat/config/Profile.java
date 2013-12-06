@@ -94,6 +94,10 @@ public class Profile {
         return extensions.get(name);
     }
 
+    public boolean hasExtension(String extension) {
+        return extensions.containsKey(extension);
+    }
+
     private void loadExtensions(Map<String, Map<String, Object>> extensions) {
         for (Map.Entry<String, Map<String, Object>> entry: extensions.entrySet()) {
             ExtensionInterface extension = null;

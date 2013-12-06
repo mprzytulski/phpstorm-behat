@@ -40,13 +40,11 @@ public class BehatStepReferenceProvider extends PsiReferenceProvider {
                 maxLen = phrase.length();
             }
         }
-        BehatProject project = ((BehatProject)element.getProject().getComponent("BehatProject"));
+        BehatProject project = ((BehatProject)element.getProject().getComponent(BehatProject.class));
 
         String dirPath = project.getConfig().getDefaultProfile().getPaths().getFeaturesDir();
 
-
         VirtualFile featuresDirectory = element.getProject().getBaseDir().findFileByRelativePath(dirPath);
-
 
         GlobalSearchScope scope = GlobalSearchScopes.directoryScope(element.getProject(), featuresDirectory, true);
 

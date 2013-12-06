@@ -38,4 +38,9 @@ public class StepLocator extends BehatLocator {
     public <T> T locate(String key) throws MissingElementException {
         return null;
     }
+
+    @Override
+    protected void setup() {
+
+    }
 }

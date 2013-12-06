@@ -19,6 +19,10 @@ public class PageObjectContextLocator extends BehatLocator {
         super(behat, index);
     }
 
+    @Override
+    protected void setup() {
+    }
+
     /**
      * Get list of all available Behat Contexts in project scope
      *

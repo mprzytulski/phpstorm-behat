@@ -5,7 +5,6 @@ import pl.projectspace.idea.plugins.commons.php.code.type.GenericMethodCallTypeP
 import pl.projectspace.idea.plugins.commons.php.psi.element.MethodDecorator;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
-import pl.projectspace.idea.plugins.php.behat.core.annotations.BehatTypeProvider;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element.GetElementMethodDecorator;
 
 /**
@@ -13,7 +12,6 @@ import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element
  */
 public class GetElementMethodTypeProvider extends GenericMethodCallTypeProvider {
     @Override
-    @BehatTypeProvider
     protected MethodDecorator getMethod(MethodReference method) throws InvalidArgumentException, MissingElementException {
         return new GetElementMethodDecorator(method);
     }

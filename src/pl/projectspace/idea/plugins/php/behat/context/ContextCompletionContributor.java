@@ -16,11 +16,11 @@ public class ContextCompletionContributor extends CompletionContributor {
      * Registry core completion providers
      */
     public ContextCompletionContributor() {
-        extend(
-            CompletionType.BASIC,
-            PlatformPatterns.psiElement().withParent(PhpDocComment.class),
-            new ContextAnnotationProvider()
-        );
+//        extend(
+//            CompletionType.BASIC,
+//            PlatformPatterns.psiElement().withParent(PhpDocComment.class),
+//            new ContextAnnotationProvider()
+//        );
 
         extend(
             CompletionType.BASIC,

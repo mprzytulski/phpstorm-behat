@@ -34,6 +34,10 @@ public class Behat {
         return profiles.get(name);
     }
 
+    public boolean hasProfile(String name) {
+        return profiles.containsKey(name);
+    }
+
     public Profile getDefaultProfile() {
         return getProfile("default");
     }

@@ -6,9 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Michal Przytulski <michal@przytulski.pl>
+ * Created by mprzytulski on 05/12/2013.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface BehatAction {
+@Target(ElementType.TYPE)
+public @interface DependsOnBehatExtension {
+    String value();
 }

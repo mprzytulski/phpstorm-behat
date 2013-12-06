@@ -1,7 +1,11 @@
 package pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
+import com.jetbrains.php.lang.psi.elements.Variable;
+import com.jetbrains.php.lang.psi.elements.impl.MethodReferenceImpl;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.PageObject;
@@ -20,8 +24,33 @@ public class GetElementMethodDecorator extends MethodCallDecorator {
     public GetElementMethodDecorator(PsiElement element) throws InvalidArgumentException, MissingElementException {
         super(element, Arrays.asList(new String[] { "getElement", "hasElement" }));
 
-        pageObject = behatProject.getService(PageObjectLocator.class)
-            .locate(getTarget().getName());
+        MethodReferenceImpl method = PsiTreeUtil.getPrevSiblingOfType(element.getLastChild(), MethodReferenceImpl.class);
+
+        Variable variable = null;
+        try {
+            variable = (Variable) element.getLastChild().getPrevSibling().getPrevSibling().getPrevSibling().getPrevSibling().getPrevSibling();
+        } catch (NullPointerException e) {
+        } catch (ClassCastException e) {
+        }
+
+
+        String pageName = null;
+        if (variable != null && variable.getName().equalsIgnoreCase("this")) {
+            PhpClass klass = PsiTreeUtil.getParentOfType(element, PhpClass.class);
+            pageName = (klass != null) ? klass.getName() : null;
+        } else if (method != null && method.getName().equalsIgnoreCase("getPage") && method.getParameters().length > 0) {
+            pageName = ((StringLiteralExpression)(method.getParameters()[0])).getContents();
+        }
+
+        if (pageName != null) {
+            this.pageObject = behatProject.getService(PageObjectLocator.class).locate(pageName);
+        } else {
+            pageObject = null;
+        }
+    }
+
+    public PageObject getPageObject() {
+        return pageObject;
     }
 
     @Override
@@ -31,7 +60,7 @@ public class GetElementMethodDecorator extends MethodCallDecorator {
 
     @Override
     protected Object resolveType() throws MissingElementException {
-        if (!hasParameter(0, StringLiteralExpression.class)) {
+        if (pageObject == null || !hasParameter(0, StringLiteralExpression.class)) {
             throw new MissingElementException("Missing parameter");
         }
 

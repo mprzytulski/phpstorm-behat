@@ -144,4 +144,9 @@ public class BehatContext extends BehatProjectPhpClass {
         return getDecoratedObject().getFQN();
     }
 
+    @Override
+    public boolean hasRelatedClass() {
+        return false;
+    }
+
 }

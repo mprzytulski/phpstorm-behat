@@ -7,9 +7,13 @@ import pl.projectspace.idea.plugins.commons.php.code.locator.GenericObjectLocato
 import pl.projectspace.idea.plugins.commons.php.psi.PsiTreeUtils;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
 import pl.projectspace.idea.plugins.commons.php.utils.PhpClassUtils;
+import pl.projectspace.idea.plugins.commons.php.utils.PhpStringUtils;
 import pl.projectspace.idea.plugins.php.behat.BehatProject;
 import pl.projectspace.idea.plugins.php.behat.config.profile.extension.PageObjectExtension;
+import pl.projectspace.idea.plugins.php.behat.core.BehatLocator;
+import pl.projectspace.idea.plugins.php.behat.core.annotations.DependsOnBehatExtension;
 import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.PageObject;
+import pl.projectspace.idea.plugins.php.behat.extensions.pageobject.page.element.PageElement;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,23 +23,27 @@ import java.util.Map;
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
-public class PageObjectLocator extends GenericObjectLocator {
+@DependsOnBehatExtension("PageObjects")
+public class PageObjectLocator extends BehatLocator {
 
-    private BehatProject behat;
-
-    private static final List<String> DEFAULT_NAMESPACES = new LinkedList<String>() {{
+    protected static final List<String> DEFAULT_NAMESPACES = new LinkedList<String>() {{
         add("\\SensioLabs\\Behat\\PageObjectExtension\\PageObject");
     }};
 
-    PhpClass basePage;
+    protected PhpClass basePage;
 
     public PageObjectLocator(BehatProject behat, PhpIndex index) {
-        super(index);
-        this.behat = behat;
+        super(behat, index);
+    }
 
-        PageObjectExtension extension = (PageObjectExtension) behat.getConfig().getDefaultProfile().getExtension("PageObjects");
-        String basePageName = extension.getBasePageName();
-        basePage = behat.getService(PsiTreeUtils.class).getClassByFQN(basePageName);
+    @Override
+    protected void setup() {
+        if (behat.getConfig().getDefaultProfile().hasExtension("PageObjects")) {
+            PageObjectExtension extension = (PageObjectExtension) behat.getConfig().getDefaultProfile().getExtension("PageObjects");
+
+            String basePageName = extension.getBasePageName();
+            basePage = behat.getService(PsiTreeUtils.class).getClassByFQN(basePageName);
+        }
     }
 
     @Override
@@ -51,17 +59,25 @@ public class PageObjectLocator extends GenericObjectLocator {
     public Map<String, PageObject> getAll() {
         Map<String, PageObject> result = new HashMap<String, PageObject>();
 
-        for (PhpClass page : index.getAllSubclasses(basePage.getFQN())) {
-            if (!PhpClassUtils.isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
-                result.put(page.getName(), new PageObject(page));
-            }
-        }
+        getAllFromExtension(result);
 
         return result;
     }
 
     public boolean is(PhpClass phpClass) {
-        return PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, true);
+        return (basePage != null) && PhpClassHierarchyUtils.isSuperClass(basePage, phpClass, true);
+    }
+
+    protected void getAllFromExtension(Map<String, PageObject> result) {
+        if (basePage == null) {
+            return;
+        }
+
+        for (PhpClass page : index.getAllSubclasses(basePage.getFQN())) {
+            if (!PhpClassUtils.isInExcludedNamespace(page, PageObjectLocator.DEFAULT_NAMESPACES)) {
+                result.put(page.getName(), new PageObject(page));
+            }
+        }
     }
 
 }

@@ -4,11 +4,13 @@ import com.intellij.psi.PsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.InvalidArgumentException;
 import pl.projectspace.idea.plugins.commons.php.psi.exceptions.MissingElementException;
+import pl.projectspace.idea.plugins.commons.php.utils.annotation.DependsOnPlugin;
 import pl.projectspace.idea.plugins.php.behat.psi.element.MethodCallDecorator;
 
 /**
  * @author Michal Przytulski <michal@przytulski.pl>
  */
+@DependsOnPlugin("behat")
 public class GetSubContextMethodDecorator extends MethodCallDecorator {
 
     protected BehatContext context;

@@ -28,6 +28,11 @@ public class PageObject extends BehatProjectPhpClass {
         super(phpClass);
     }
 
+    @Override
+    public boolean hasRelatedClass() {
+        return false;
+    }
+
     public PageElement getElement(String name) throws MissingElementException {
         Map<String, PageElement> all = getElements();
 
